@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 
 # Create your models here.
@@ -33,18 +34,27 @@ class Category(models.Model):
 # region post model
 class Post(models.Model):
     title = models.CharField(max_length=1000)
-    body = models.TextField(blank=True, null=True, max_length=1000)
-    author = models.ForeignKey(User, related_name='user_posts', on_delete=models.CASCADE)
+    body = models.TextField(blank=True, null=True, max_length=100000000)
+    author = models.ForeignKey(User,on_delete=models.CASCADE , related_name='user_posts')
     created = models.DateTimeField(auto_now_add=True)
-    likes = models.ForeignKey(User, related_name='user_like', on_delete=models.CASCADE)
-    save = models.ForeignKey(User, related_name='user_save', on_delete=models.CASCADE)
+
+    likes = models.ManyToManyField(User, related_name='user_like', blank=True)
+    slug = models.SlugField(max_length=1000)
+    thumbnail = models.ImageField(upload_to='article-thumbnail/')
     category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return f'{self.title} by {self.author}'
+        return self.title
 
     class Meta:
         ordering = ["-created"]
+
+    def save(self, *args, **kwargs):
+        self.slug = self.title.replace(' ', '-')
+        super(Post, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('blog_app:blog page', args=[self.slug])
 
 
 # endregion
@@ -58,7 +68,7 @@ class Comment(models.Model):
     reply = models.ForeignKey('self', related_name='replies', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'a comment for {self.post} by {self.author}'
+        return f'a comment for {self.post} by {self.user}'
 # endregion
 
 

@@ -1,12 +1,13 @@
  {% load static %}
-<nav>
+{% with user=request.user %}
+    <nav>
         <div class="container nav__container">
-            <a href="../blog/index.html" class="nav__logo">EGATOR</a>
+            <a href="{% url 'blog_app:home' %}" class="nav__logo">EGATOR</a>
             <ul class="nav__items">
-                <li><a href="{% url 'blog:blogs' %}">Blogs</a></li>
-                <li><a href="../blog/about.html">About</a></li>
-                <li><a href="../blog/services.html">Services</a></li>
-                <li><a href="../blog/contact.html">Contact</a></li>
+                <li><a href="{% url 'blog_app:blogs' %}">Blogs</a></li>
+                <li><a href="../blog_app/about.html">About</a></li>
+                <li><a href="../blog_app/services.html">Services</a></li>
+                <li><a href="../blog_app/contact.html">Contact</a></li>
 
                 <!-- start login block -->
                 {% if user %}
@@ -20,12 +21,12 @@
                         {% endif %}
                     </div>
                     <ul>
-                        <li><a href="../blog/dashboard.html">Dashboard</a></li>
+                        <li><a href="../blog_app/dashboard.html">Dashboard</a></li>
                         <li><a href="logout.html">Log Out</a></li>
                     </ul>
                 </li>
                     {% else %}
-                      <li><a href="../blog/signin.html">Sign In</a></li>
+                      <li><a href="../blog_app/signin.html">Sign In</a></li>
                 {% endif %}
 
 
@@ -40,3 +41,4 @@
             <button class="" id="close__nav-btn"><i class="uil uil-multiply"></i></button>
         </div>
     </nav>
+{% endwith %}

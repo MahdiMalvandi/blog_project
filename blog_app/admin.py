@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import *
-from django.contrib.auth.admin import UserAdmin
+
 
 
 # Register your models here.
@@ -12,6 +12,8 @@ class Admin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = []
+    list_display = ["title", "author"]
+    fields = ["title", "body", "thumbnail", "author", "slug"]
+
 
 admin.site.register(Category)

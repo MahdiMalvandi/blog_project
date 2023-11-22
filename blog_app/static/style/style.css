@@ -294,7 +294,7 @@ footer ul li {
   margin-top: 4rem;
 }
 
-/* blog */
+/* blog_app */
 
 /* search */
 .search__bar {
@@ -878,7 +878,7 @@ font-size: .9rem;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
   }
-  /* blog */
+  /* blog_app */
   .search__bar-container {
     width: 60%;
   }
@@ -942,7 +942,7 @@ font-size: .9rem;
     gap: 2rem;
     text-align: center;
   }
-  /* blog */
+  /* blog_app */
   .search__bar-container {
     width: var(--container-width-md);
   }
