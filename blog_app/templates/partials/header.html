@@ -5,9 +5,9 @@
             <a href="{% url 'blog_app:home' %}" class="nav__logo">EGATOR</a>
             <ul class="nav__items">
                 <li><a href="{% url 'blog_app:blogs' %}">Blogs</a></li>
-                <li><a href="../blog_app/about.html">About</a></li>
-                <li><a href="../blog_app/services.html">Services</a></li>
-                <li><a href="../blog_app/contact.html">Contact</a></li>
+                <li><a href="{% url 'blog_app:about' %}">About</a></li>
+                <li><a href="{% url 'blog_app:services' %}">Services</a></li>
+                <li><a href="{% url 'blog_app:contact' %}">Contact</a></li>
 
                 <!-- start login block -->
                 {% if user %}

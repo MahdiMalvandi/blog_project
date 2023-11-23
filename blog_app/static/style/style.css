@@ -83,7 +83,7 @@ a {
 img {
   display: block;
   width: 100%;
-  object-fit: cover;
+
 }
 form {
   display: flex;
@@ -194,7 +194,15 @@ nav button {
   border: 1rem solid var(--color-gray-900);
   overflow: hidden;
   margin-bottom: 1.6rem;
-  height: fit-content;
+  height: 19rem;
+}
+.post__title {
+  margin: .5rem 0 ;
+}
+.post__body {
+  overflow: hidden; display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 6;
 }
 .post:hover .post__thumbnail img {
   filter: saturate(0);
@@ -226,8 +234,12 @@ nav button {
 /* posts */
 .posts__container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+}
+.post img{
+  height: 100%;
+
 }
 /* categories  button */
 .category__buttons {

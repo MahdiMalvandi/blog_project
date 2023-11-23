@@ -1,24 +1,18 @@
 
 {% extends 'parent/base.html' %}
 {% load static %}
-
 {% block title %}
-Blogs
+
 {% endblock %}
 
 {% block content %}
 <main>
-    <!-- start search form -->
-    <section class="search__bar">
-        <form action="" class="container search__bar-container">
-            <div class="">
-                <i class="uil uil-search"></i>
-                <input type="search" name="query" placeholder="Search..." autocomplete="off">
-            </div>
-            <button type="submit" class="btn">Go</button>
-        </form>
+    <section class="title-section">
+            {% if category %}
+                <h1 class="title">{{ category }}'s Blog</h1>
+            {% endif %}
+
     </section>
-    <!-- end search form -->
 
     <section class="posts">
         <div class="container posts__container">
@@ -31,8 +25,7 @@ Blogs
                     <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
                 </div>
                 <div class="post__info">
-                   <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
-
+                    <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
                     <h3 class="post__title"><a href="{% url 'blog_app:blog page' post %}" class="">{{ post.title }}</a></h3>
                     <p class="post__body">{{ post.body }}</p>
                         <div class="post__author">
@@ -60,6 +53,7 @@ Blogs
 
 
 
+
         </div>
     </section>
 
@@ -81,8 +75,5 @@ Blogs
 
 </main>
 {% endblock %}
-
-
-
 
 
