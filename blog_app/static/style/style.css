@@ -239,7 +239,6 @@ nav button {
 }
 .post img{
   height: 100%;
-
 }
 /* categories  button */
 .category__buttons {
@@ -435,9 +434,11 @@ footer ul li {
   justify-content: space-between;
   align-items: center;
   border-radius: var(--card-border-radius-3);
-  cursor: pointer;
-}
 
+}
+.uil-copy-alt{
+    cursor: pointer;
+}
 .news-posts__container {
   padding: 0 1rem;
 }
@@ -512,6 +513,10 @@ select,
   gap: 2rem;
   margin-top: 2rem;
 }
+.comment__body{
+  width: 75%;
+}
+
 .comment,
 .comments-reply {
   background-color: var(--color-gray-700);
@@ -520,17 +525,20 @@ select,
 }
 .reply-svg {
   fill: var(--color-gray-200);
-  width: 4rem;
+  width: 2rem;
   height: fit-content;
+  position: absolute;
+  right: 0;
 }
 .comments-reply {
   display: flex;
   gap: 1rem;
 }
-.comment {
+.comment-content {
   display: flex;
-  justify-content: space-between;
+
   gap: 1rem;
+  position: relative;
 }
 .comment-date {
   font-size: 12px;
@@ -543,7 +551,7 @@ select,
   font-size: 12px;
 
   text-align: center;
-  width: 3rem;
+  width: 3.1rem;
   border-radius: var(--card-border-radius-1);
   background-color: var(--color-gray-900);
   height: 30px;
@@ -560,7 +568,10 @@ select,
 }
 .stars-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.1rem;
+  justify-content: center;
+  height: 1rem;
 }
 .star {
   fill: #ccbe00;
@@ -783,6 +794,11 @@ font-size: .9rem;
 .sidebar__toggle {
   display: none;
 }
+@media screen and (max-width: 1700px) {
+  .posts__container{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 /* media queries */
 @media screen and (max-width: 1024px) {
   .container {
@@ -921,8 +937,8 @@ font-size: .9rem;
   }
 }
 @media screen and (max-width: 800px) {
-  .blog-text {
-    width: 100%;
+  .post {
+    width: 100% !important;
   }
   .short-link-container {
     display: none;
@@ -1010,4 +1026,19 @@ font-size: .9rem;
   #hide__sidebar-btn {
     display: none;
   }
+  .star {
+  width: 1rem;
+  height: 1rem;
+}.comment, .comments-reply{
+     padding: 1rem;
+   }
+ .blog-text, .comments{
+   padding: 1rem 1.3rem 2rem;
+ }
+.comment__info{
+  display: block;
+}
+.stars-container{
+  float: right;
+}
 }

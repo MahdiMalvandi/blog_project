@@ -7,10 +7,6 @@ def get_all_category():
     return Category.objects.all()
 
 
-
-
-
-
 def home(request):
     if request.GET.get('q'):
         post = get_object_or_404(Post, id=request.GET.get('q'))
@@ -34,11 +30,14 @@ def get_blog_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(id=post.id)
     short_link = request.build_absolute_uri('/')[:-1] + f'?q={post.id}'
+    comments = Comment.objects.select_related('user', 'post').filter(post=post, reply__post=None)
+
     context = {
         'post': post,
         'categories': get_all_category(),
         'similar_posts': similar_posts,
-        'short_link': short_link
+        'short_link': short_link,
+        'comments': comments
     }
     return render(request, 'blog_app/post.html', context)
 

@@ -24,7 +24,7 @@
                             {% endif %}
                         </div>
                         <div class="post__author-info">
-                            <h5>By : {{ post.author.first_name }} {{ post.author.last_name }}</h5>
+                            <h5>By : {{ post.author.get_full_name }} </h5>
                             <small>{{ post.created }}</small>
                         </div>
                     </div>
@@ -37,10 +37,16 @@
                     <h2 class="comments__title title">Comments</h2>
                     <div class="comments__comment-box">
                         <div class="comment-box__user-info-container">
-                            <img src="images/user.png" alt="" class="user-info__image">
+
+                                      {% if request.user.profile %}
+                            <img src="{{ request.user.profile.url }}" alt="" class="user-info__image">
+                            {% else %}
+                                <img src="{% static 'images/user-avatar.jpg' %}" class="user-info__image" alt="">
+
+                            {% endif %}
                             <div class="user-info__data">
                                 <h4 class="user-info__username">
-                                    <a href="">mahdiml6</a>
+                                    <a href="">{{ request.user.get_full_name }}</a>
                                 </h4>
                                 <p class="user-info__new-comment">
                                     New Comment
@@ -66,23 +72,30 @@
                     </div>
                     <div class="comments__users-comments">
                         <!-- if there are no comments -->
-                        <!-- <p class="no-comment-text">
-                        There are no comments
-                    </p> -->
-                        <!-- if there are comments -->
+                        {% if post.post_comments %}
                         <div class="comments-container">
-                            <div class="comment">
-                                <div class="comment__user-profile">
-                                    <img src="images/user.png" alt="" class="user-profile">
-                                    <p class="user-position">user</p>
-                                </div>
-                                <div class="comment__body">
+
+                            {% for comment in comments %}
+                                <div class="comment">
+                                    <div class="comment-content">
+                                        <div class="comment__user-profile">
+
+                            {% if comment.user.profile %}
+                            <img src="{{ comment.user.profile.url }}" alt="" class="user-profile">
+                            {% else %}
+                                <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
+
+                            {% endif %}
+
+                                    <p class="user-position">{{ comment.user.position }}</p>
+                        </div>
+                                        <div class="comment__body">
                                     <div class="comment__info">
                                         <div class="">
                                             <h4 class="user-name">
-                                                mahdi Malvandi
+                                                {{ comment.user.get_full_name }}
                                             </h4>
-                                            <p class="comment-date">2/3/2022</p>
+                                            <p class="comment-date">{{ comment.created|date:'d/m/Y'}}</p>
                                         </div>
                                         <div class="stars-container">
 
@@ -95,35 +108,11 @@
                                         </div>
                                     </div>
                                     <div class="comment__text">
-                                        <p class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
-                                            dolore labore laudantium amet, debitis praesentium officiis vel qui
-                                            consequuntur dignissimos.</p>
+                                        <p class="">{{ comment.body }}</p>
                                     </div>
                                     <!-- if comment has reply -->
-                                    <div class="comments-reply-container">
-                                        <div class="comments-reply">
-                                            <div class="comment__user-profile">
-                                                <img src="images/user.png" alt="" class="user-profile">
-                                                <p class="user-position">user</p>
-                                            </div>
-                                            <div class="comment__body">
-                                                <div class="comment__info">
-                                                    <h4 class="user-name">
-                                                        mahdi Malvandi
-                                                    </h4>
-                                                    <p class="comment-date">2/3/2022</p>
-                                                </div>
-                                                <div class="comment__text">
-                                                    <p class="">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                                        Illum dolore labore lauda.</p>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
                                 </div>
-
-                                <svg version="1.1" id="Layer_1" class="reply-svg" xmlns="http://www.w3.org/2000/svg"
+                                        <svg version="1.1" id="Layer_1" class="reply-svg" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                     viewBox="0 0 122.88 98.86" style="enable-background:new 0 0 122.88 98.86"
                                     xml:space="preserve">
@@ -138,10 +127,53 @@
                                             d="M122.88,49.43L73.95,98.86V74.23C43.01,67.82,18.56,74.89,0,98.42c3.22-48.4,36.29-71.76,73.95-73.31l0-25.11 L122.88,49.43L122.88,49.43z" />
                                     </g>
                                 </svg>
-                            </div>
+                                    </div>
 
-                        </div>
+                                    {% if comment.replies %}
+                                     {% for reply in comment.replies.all %}
+                                        <div class="comments-reply-container">
+                                        <div class="comments-reply">
+                                            <div class="comment__user-profile">
+                                                  {% if reply.user.profile %}
+                                                    <img src="{{ reply.user.profile.url }}" alt="" class="user-profile">
+                                                    {% else %}
+                                                        <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
+                                                    {% endif %}
+                                                <p class="user-position">{{ reply.user.position }}</p>
+                                            </div>
+                                            <div class="comment__body">
+                                                <div class="comment__info">
+                                                    <div class="">
+                                                    <h4 class="user-name">{{ reply.user.get_full_name }}</h4>
+                                                    <p class="comment-date">{{ reply.created|date:'d/m/Y' }}</p></div>
+                                                </div>
+                                                <div class="comment__text">
+                                                    <p class="">{{ reply.body }}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                     {% endfor %}
+
+                                    {% endif %}
+
+</div>
+
+                            {% endfor %}
+ </div>
+
+
+
+                            {% else %}
+                            <p class="no-comment-text">
+                        There are no comments
+                    </p>
+                        {% endif %}
                     </div>
+                        <!-- if there are comments -->
+
+
                 </div>
             </div>
             <div class="short-link-container">
@@ -198,4 +230,7 @@
 </main>
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'assets/post.js' %}"></script>
+{% endblock %}
 

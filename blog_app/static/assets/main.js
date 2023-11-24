@@ -35,9 +35,3 @@ navCloseBtn.addEventListener("click", closeNav);
 // showSidebarBtn.addEventListener("click", showSidebar);
 // hideSidebarBtn.addEventListener("click", hideSidebar);
 
-const copyBtn = document.querySelector(".uil.uil-copy-alt")
-const copyText = () => {
-  const link = copyBtn.parentElement.firstElementChild.innerHTML
-  navigator.clipboard.writeText(link)
-}
-copyBtn.addEventListener("click", copyText)
