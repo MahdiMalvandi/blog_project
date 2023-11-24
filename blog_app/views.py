@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 
 
@@ -7,7 +7,14 @@ def get_all_category():
     return Category.objects.all()
 
 
+
+
+
+
 def home(request):
+    if request.GET.get('q'):
+        post = get_object_or_404(Post, id=request.GET.get('q'))
+        return redirect('blog_app:blog page', post.slug)
     context = {
         'categories': get_all_category(),
     }
@@ -26,10 +33,12 @@ def blogs(request):
 def get_blog_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(id=post.id)
+    short_link = request.build_absolute_uri('/')[:-1] + f'?q={post.id}'
     context = {
         'post': post,
         'categories': get_all_category(),
-        'similar_posts': similar_posts
+        'similar_posts': similar_posts,
+        'short_link': short_link
     }
     return render(request, 'blog_app/post.html', context)
 

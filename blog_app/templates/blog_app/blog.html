@@ -33,7 +33,7 @@ Blogs
                 <div class="post__info">
                    <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
 
-                    <h3 class="post__title"><a href="{% url 'blog_app:blog page' post %}" class="">{{ post.title }}</a></h3>
+                    <h3 class="post__title">{{ post.title }}</h3>
                     <p class="post__body">{{ post.body }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">

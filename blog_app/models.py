@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 
 
+
+
 # Create your models here.
 
 # region users model
@@ -35,11 +37,11 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=1000)
     body = models.TextField(blank=True, null=True, max_length=100000000)
-    author = models.ForeignKey(User,on_delete=models.CASCADE , related_name='user_posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_posts')
     created = models.DateTimeField(auto_now_add=True)
-
+    short_link = models.CharField(max_length=100)
     likes = models.ManyToManyField(User, related_name='user_like', blank=True)
-    slug = models.SlugField(max_length=1000)
+    slug = models.SlugField(max_length=1000, blank=True, null=True)
     thumbnail = models.ImageField(upload_to='article-thumbnail/')
     category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, default=1)
 
@@ -72,5 +74,7 @@ class Comment(models.Model):
 # endregion
 
 
-# region users model
+# region url models
+
+
 # endregion
