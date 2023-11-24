@@ -1,9 +1,9 @@
 <footer>
         <div class="footer__socials">
             <a href=""><i class="uil uil-youtube"></i></a>
-            <a href=""><i class="uil uil-github"></i></a>
-            <a href=""><i class="uil uil-linkedin"></i></a>
-            <a href=""><i class="uil uil-telegram"></i></a>
+            <a href="https://github.com/MahdiMalvandi"><i class="uil uil-github"></i></a>
+            <a href="https://www.linkedin.com/in/mahdi-malvandi-8a2924293?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="uil uil-linkedin"></i></a>
+            <a href="https://t.me/Mahdi_ml6"><i class="uil uil-telegram"></i></a>
             <a href=""><i class="uil uil-youtube"></i></a>
         </div>
         <div class="container footer__container">
@@ -41,11 +41,11 @@
             <article>
                 <h4>Permailinks</h4>
                 <ul>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Blogs</a></li>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Services</a></li>
-                    <li><a href="">Contact</a></li>
+                    <li><a href="{% url 'blog_app:home' %}">Home</a></li>
+                    <li><a href="{% url 'blog_app:blogs' %}">Blogs</a></li>
+                    <li><a href="{% url 'blog_app:about' %}">About</a></li>
+                    <li><a href="{% url 'blog_app:services' %}">Services</a></li>
+                    <li><a href="{% url 'blog_app:contact' %}">Contact</a></li>
                 </ul>
             </article>
         </div>

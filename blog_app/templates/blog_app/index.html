@@ -310,12 +310,9 @@ Blog Site
     <!-- start category buttons section -->
     <section class="category__buttons">
         <div class="container category__buttons-container">
-            <a href="" class="category__button">music</a>
-            <a href="" class="category__button">wild life</a>
-            <a href="" class="category__button">travel</a>
-            <a href="" class="category__button">art</a>
-            <a href="" class="category__button">scinse</a>
-            <a href="" class="category__button">food</a>
+            {% for category in categories %}
+            <a href="{% url 'blog_app:category posts' category.text %}" class="category__button">{{ category.text }}</a>
+            {% endfor %}
         </div>
     </section>
     <!-- end category buttons section -->

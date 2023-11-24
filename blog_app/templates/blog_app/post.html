@@ -154,19 +154,20 @@
                 </div>
                 <div class="news-posts">
                     <h2 class="news-posts__title title">
-                        News Posts
+                        Similar Posts
                     </h2>
                     <div class="news-posts__container ">
                         <!-- new post start -->
-                        <div class="news-post__content">
-                            <a class="new-post-content__text text-md">why we must to use python?</a>
-                        </div>
-                        <div class="news-post__content">
-                            <a class="new-post-content__text text-md">why we must lo to use python?</a>
-                        </div>
-                        <div class="news-post__content">
-                            <a class="new-post-content__text text-md">why we must to use python?</a>
-                        </div>
+                        {% if similar_posts %}
+                        {% for similar_post in similar_posts %}
+                            <div class="news-post__content">
+                            <a href="{% url 'blog_app:blog page' similar_post.slug %}" class="new-post-content__text text-md">{{ similar_post.title }}</a>
+                            </div>
+                        {% endfor %}
+                            {% else %}
+                            <p class="new-post-content__text text-md">There is no similar post</p>
+                        {% endif %}
+
                         <!-- new post ended -->
                     </div>
                 </div>
@@ -177,7 +178,11 @@
                     <div class="categories__container">
                         <!-- cotegory start -->
                         <div class="category">
-                            <a class="category__text text-md">python</a>
+
+                            {% for category in categories %}
+                                <a href="{% url 'blog_app:category posts' category %}" class="category__text text-md">{{ category }}</a>
+                            {% endfor %}
+
                         </div>
 
                         <!-- category -->

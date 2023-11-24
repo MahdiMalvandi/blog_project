@@ -3,10 +3,13 @@ from .models import *
 
 
 # Create your views here.
+def get_all_category():
+    return Category.objects.all()
+
 
 def home(request):
     context = {
-
+        'categories': get_all_category(),
     }
     return render(request, 'blog_app/index.html', context)
 
@@ -14,16 +17,19 @@ def home(request):
 def blogs(request):
     posts = Post.objects.select_related('author', 'category').all()
     context = {
-        'posts': posts
+        'posts': posts,
+        'categories': get_all_category(),
     }
     return render(request, 'blog_app/blog.html', context)
 
 
 def get_blog_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
-
+    similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(id=post.id)
     context = {
-        'post': post
+        'post': post,
+        'categories': get_all_category(),
+        'similar_posts': similar_posts
     }
     return render(request, 'blog_app/post.html', context)
 
