@@ -61,3 +61,15 @@ def about_us(request):
 
 def contact(request):
     return render(request, 'blog_app/contact.html')
+
+
+def get_user_info(request, username):
+    user = get_object_or_404(User, username=username)
+    context = {
+        'user': user
+    }
+    return render(request, 'blog_app/user-profile.html', context=context)
+
+
+def profile(request):
+    return render(request, 'blog_app/dashboard.html')

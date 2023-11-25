@@ -45,7 +45,7 @@ Blogs
                             {% endif %}
                             </div>
                             <div class="post__author-info">
-                                <h5>By : {{ post.author.first_name }} {{ post.author.last_name }}</h5>
+                                <h5>By : <a href="{% url 'blog_app:user info'  post.author.username %}">{{ post.author.get_full_name }}</a></h5>
                                 <small>{{ post.created }}</small>
                             </div>
                         </div>

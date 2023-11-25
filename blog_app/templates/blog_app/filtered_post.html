@@ -25,8 +25,9 @@
                     <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
                 </div>
                 <div class="post__info">
-                    <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
-                    <h3 class="post__title"><a href="{% url 'blog_app:blog page' post %}" class="">{{ post.title }}</a></h3>
+                   <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
+
+                    <h3 class="post__title"><a href="{% url 'blog_app:blog page' post.slug %}">{{ post.title }}</a></h3>
                     <p class="post__body">{{ post.body }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">
@@ -38,7 +39,7 @@
                             {% endif %}
                             </div>
                             <div class="post__author-info">
-                                <h5>By : {{ post.author.first_name }} {{ post.author.last_name }}</h5>
+                                <h5>By : <a href="{% url 'blog_app:user info'  post.author.username %}">{{ post.author.get_full_name }}</a></h5>
                                 <small>{{ post.created }}</small>
                             </div>
                         </div>
