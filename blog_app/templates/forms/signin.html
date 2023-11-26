@@ -20,9 +20,11 @@
             <div class="alert__message success">
                 <p>This is an error message</p>
             </div>
-            <form action="" enctype="multipart/form-data">
-                <input type="text" placeholder="Username or Email">
-                <input type="password" placeholder="Create Password">
+            <form method="post">
+{% csrf_token %}
+                <input type="text" placeholder="Username or Email" name="username">
+                <input type="password" placeholder="Create Password" name="password">
+                {{ form.errors }}
                 <button type="submit" class="btn">Sign In</button>
                 <small>Don't have account? 
                     <a href="signup.html">Sign Up</a>
@@ -32,7 +34,7 @@
     </section>
 
 
-    <script src="main.js"></script>
+
 </body>
 
 </html>

@@ -29,6 +29,7 @@ class SignUpForm(forms.ModelForm):
             return email
 
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=20, required=True)
-    password = forms.CharField(max_length=50, required=True)
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=63)
+    password = forms.CharField(max_length=63)
+

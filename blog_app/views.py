@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.contrib.auth import login, authenticate, logout
 from .models import *
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -73,12 +74,12 @@ def get_user_info(request, username):
     return render(request, 'blog_app/user-profile.html', context=context)
 
 
+@login_required( redirect_field_name='next_page')
 def profile(request):
     return render(request, 'blog_app/dashboard.html')
 
 
 def signup(request):
-
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -93,13 +94,21 @@ def signup(request):
     return render(request, 'forms/signup.html', context=context)
 
 
-
 def login_view(request):
+
     if request.method == 'POST':
+
         form = LoginForm(request.POST)
         if form.is_valid():
-            form.save()
-            login(request)
+
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                if request.GET.get('next_page'):
+                    return redirect(request.GET.get('next_page'))
+
             return redirect('blog_app:home')
     else:
         form = LoginForm()
