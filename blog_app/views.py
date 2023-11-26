@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from .forms import *
+from django.contrib.auth import login, authenticate, logout
 from .models import *
 
 
@@ -73,3 +75,40 @@ def get_user_info(request, username):
 
 def profile(request):
     return render(request, 'blog_app/dashboard.html')
+
+
+def signup(request):
+
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            login(request)
+            return redirect('blog_app:home')
+    else:
+        form = SignUpForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'forms/signup.html', context=context)
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            form.save()
+            login(request)
+            return redirect('blog_app:home')
+    else:
+        form = LoginForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'forms/signin.html', context=context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('blog_app:home')

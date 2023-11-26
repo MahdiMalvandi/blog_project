@@ -1,0 +1,89 @@
+{% load static %}
+{% load registration %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog website</title>
+
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <section class="form__section">
+        <div class="container form__section-container">
+
+            <h2>Sign Up</h2>
+{% if form.errors %}
+ <div class="alert__message error">
+    {% for field, errors in form.errors.items %}
+    {% for error in errors %}
+                {{ error }}
+                {% endfor %}
+                {% endfor %}
+    </div>
+{% endif %}
+
+
+            <form class="sign-up-form" method="post">
+                {% csrf_token %}
+
+                <div>
+
+                    <input type="text" placeholder="First Name" name="first_name" {% if form.first_name.value %}
+                    value="{{ form.first_name.value }}"
+                    {% endif %} >
+                    {{ form.first_name.errors }}
+                </div>
+                <div>
+
+                    <input type="text" placeholder="Last Name" name="last_name" {% if form.last_name.value %}
+                    value="{{ form.last_name.value }}"
+                    {% endif %} >
+                    {{ form.last_name.errors }}
+                </div>
+                <div>
+
+                    <input type="text" placeholder="Username" name="username" {% if form.username.value %}
+                    value="{{ form.username.value }}"
+                    {% endif %} >
+                    {{ form.username.errors }}
+                </div>
+                <div>
+
+                    <input type="email" placeholder="Email" name="email" {% if form.email.value %}
+                    value="{{ form.email.value }}"
+                    {% endif %} >
+                    {{ form.email.errors }}
+                </div>
+                <div>
+
+                    <input type="password" placeholder="Create Password" name="password" {% if form.password.value %}
+                    value="{{ form.password.value }}"
+                    {% endif %} >
+                    {{ form.password.errors }}
+                </div>
+                <div>
+                        <input type="password" placeholder="Confirm Password" name="password_repeat" {% if form.password_repeat.value %}
+                        value="{{ form.password_repeat.value }}"
+                        {% endif %} >
+                    {{ form.password_repeat.errors }}
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+                <small>Already have an account? 
+                    <a href="signin.html">Sign In</a>
+                </small>
+            </form>
+        </div>
+    </section>
+
+
+
+</body>
+
+</html>

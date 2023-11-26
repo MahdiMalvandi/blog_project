@@ -21,12 +21,12 @@
                         {% endif %}
                     </div>
                     <ul>
-                        <li><a href="../blog_app/dashboard.html">Dashboard</a></li>
-                        <li><a href="logout.html">Log Out</a></li>
+                        <li><a href="{% url 'blog_app:profile'%}">Dashboard</a></li>
+                        <li><a href="{% url 'blog_app:log out' %}">Log Out</a></li>
                     </ul>
                 </li>
                     {% else %}
-                      <li><a href="../blog_app/signin.html">Sign In</a></li>
+                      <li><a href="../forms/signin.html">Sign In</a></li>
                 {% endif %}
 
 

@@ -794,6 +794,9 @@ font-size: .9rem;
 .sidebar__toggle {
   display: none;
 }
+.sign-up-form div input{
+  width: 100%;
+}
 @media screen and (max-width: 1700px) {
   .posts__container{
     grid-template-columns: repeat(3, 1fr);
