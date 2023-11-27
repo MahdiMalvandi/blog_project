@@ -196,6 +196,10 @@ nav button {
   margin-bottom: 1.6rem;
   height: 19rem;
 }
+.most_popular_thumbnail{
+  height: 25rem;
+}
+
 .post__title {
   margin: .5rem 0 ;
 }
@@ -222,6 +226,11 @@ nav button {
 /* featured */
 .featured {
   margin-top: 8rem;
+}
+.most_popular_thumbnail img{
+  object-fit: cover;
+  height: 100%;
+;
 }
 .featured__container {
   display: grid;

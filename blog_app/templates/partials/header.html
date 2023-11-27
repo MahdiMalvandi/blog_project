@@ -1,6 +1,8 @@
  {% load static %}
 {% with user=request.user %}
+
     <nav>
+
         <div class="container nav__container">
             <a href="{% url 'blog_app:home' %}" class="nav__logo">EGATOR</a>
             <ul class="nav__items">
@@ -10,7 +12,7 @@
                 <li><a href="{% url 'blog_app:contact' %}">Contact</a></li>
 
                 <!-- start login block -->
-                {% if user %}
+                {% if user.is_authenticated %}
                 <li class="nav__profile">
                     <div class="avatar">
 
@@ -26,7 +28,8 @@
                     </ul>
                 </li>
                     {% else %}
-                      <li><a href="../forms/signin.html">Sign In</a></li>
+
+                      <li><a href="{% url 'blog_app:login' %}">Sign In</a></li>
                 {% endif %}
 
 

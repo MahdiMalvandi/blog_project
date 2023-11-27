@@ -1,4 +1,5 @@
 {% extends 'parent/base.html' %}
+{% load static %}
 {% block title %}
 Blog Site
 {% endblock %}
@@ -8,23 +9,27 @@ Blog Site
     <!-- feature post -->
     <section class="featured">
         <div class="container  featured__container">
-            <div class="post__thumbnail">
-                <img src="./images/blog1.jpg" alt="">
+            <div class="post__thumbnail most_popular_thumbnail">
+                <img src="{{most_popular_post.thumbnail.url}}" alt="{{ most_popular_post.title }}">
             </div>
             <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h2 class="post__title"><a href="post.html">Lorem ipsum dolor s adipisicing elit.
-                        Ullam eligendi dolorum aut delectus?</a></h2>
-                <p class="post__body">Lorem ipsum dolor,pti, nam
-                    recusandae. Ducimus eveniet r adipid, alias earum reiciendis, commodi placeat distinctio atque, obcaecati nesciunt minus tenetur culpa sequi animi hic odio tempora voluptatem numquam aspernatur?</p>
+                <a href="{% url 'blog_app:category posts' most_popular_post.category %}" class="category__button">{{ most_popular_post.category }}</a>
+                <h2 class="post__title"><a href="{% url 'blog_app:blog page' most_popular_post.slug %}">{{ most_popular_post.title }}</a></h2>
+                <p class="post__body">{{ most_popular_post.body }}</p>
                 <div class="post__author">
-                    <div class="post__author-avatar">
-                        <img src="/images/avatar11.jpg" alt="">
-                    </div>
-                    <div class="post__author-info">
-                        <h5>By : Mary Danso</h5>
-                        <small>June 10, 2022 - 07:23</small>
-                    </div>
+                      <div class="post__author-avatar">
+                            {% if most_popular_post.author.profile %}
+                            <img src="{{ most_popular_post.author.profile.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+
+                            {% endif %}
+                            </div>
+                            <div class="post__author-info">
+                                <h5>By : <a href="{% url 'blog_app:user info'  most_popular_post.author.username %}">{{ most_popular_post.author.get_full_name }}</a></h5>
+                                <small>{{ most_popular_post.created }}</small>
+                            </div>
+
                 </div>
             </div>
         </div>
@@ -32,274 +37,47 @@ Blog Site
     <!-- end feature post -->
 
     <section class="posts">
-        <div class="container posts__container">
+        <div class="container ">
 
             <!-- start post card -->
-            <article class="post">
+           <section class="popular_posts r">
+                <h2>Popular posts</h2>
+               <div class="posts__container">
+                    {% for popular_post in popular_posts %}
+                        <article class="post">
                 <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
+                    <img src="{{ popular_post.thumbnail.url }}" alt="{{ popular_post.title }}">
                 </div>
                 <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
+                   <a href="{% url 'blog_app:category posts'   popular_post.category.text %}" class="category__button">{{ popular_post.category.text }}</a>
+
+                    <h3 class="post__title"><a href="{% url 'blog_app:blog page' popular_post.slug %}">{{ popular_post.title }}</a></h3>
+                    <p class="post__body">{{ popular_post.body }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
+                            {% if popular_post.author.profile %}
+                            <img src="{{ popular_post.author.profile.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+
+                            {% endif %}
                             </div>
                             <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
+                                <h5>By : <a href="{% url 'blog_app:user info'  popular_post.author.username %}">{{ popular_post.author.get_full_name }}</a></h5>
+                                <small>{{ popular_post.created }}</small>
                             </div>
                         </div>
                 </div>
             </article>
+                    {% endfor %}
+
+               </div>
+           </section>
             <!-- end post card -->
 
 
-            <article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog3.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog5.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article><article class="post">
-                <div class="post__thumbnail">
-                    <img src="images/blog2.jpg" alt="">
-                </div>
-                <div class="post__info">
-                    <a href="" class="category__button">Wild Life</a>
-                    <h3 class="post__title"><a href="post.html" class="">Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit.</a></h3>
-                    <p class="post__body">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi tempora sed
-                        sit est exercitationem iste adipisci, consequatur mollitia, nihil, dolores nobis neque sunt!</p>
-                        <div class="post__author">
-                            <div class="post__author-avatar">
-                                <img src="images/avatar12.jpg" alt="">
-                            </div>
-                            <div class="post__author-info">
-                                <h5>By : john</h5>
-                                <small>June 13 , 2022 - 10:34</small>
-                            </div>
-                        </div>
-                </div>
-            </article>
+
+
 
         </div>
     </section>
