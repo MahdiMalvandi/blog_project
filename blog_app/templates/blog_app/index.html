@@ -75,7 +75,39 @@ Blog Site
            </section>
             <!-- end post card -->
 
+        <section class="popular_posts r">
+                <h2>Latest posts</h2>
+               <div class="posts__container">
+                    {% for latest_post in latest_posts %}
+                        <article class="post">
+                <div class="post__thumbnail">
+                    <img src="{{ latest_post.thumbnail.url }}" alt="{{ latest_post.title }}">
+                </div>
+                <div class="post__info">
+                   <a href="{% url 'blog_app:category posts'   latest_post.category.text %}" class="category__button">{{ latest_post.category.text }}</a>
 
+                    <h3 class="post__title"><a href="{% url 'blog_app:blog page' latest_post.slug %}">{{ latest_post.title }}</a></h3>
+                    <p class="post__body">{{ latest_post.body }}</p>
+                        <div class="post__author">
+                            <div class="post__author-avatar">
+                            {% if latest_post.author.profile %}
+                            <img src="{{ latest_post.author.profile.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+
+                            {% endif %}
+                            </div>
+                            <div class="post__author-info">
+                                <h5>By : <a href="{% url 'blog_app:user info'  latest_post.author.username %}">{{ latest_post.author.get_full_name }}</a></h5>
+                                <small>{{ latest_post.created }}</small>
+                            </div>
+                        </div>
+                </div>
+            </article>
+                    {% endfor %}
+
+               </div>
+           </section>
 
 
 

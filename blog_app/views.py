@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg, Max
 
 
+
 # Create your views here.
 def get_all_category():
     return Category.objects.all()
@@ -15,10 +16,19 @@ def home(request):
     if request.GET.get('q'):
         post = get_object_or_404(Post, id=request.GET.get('q'))
         return redirect('blog_app:blog page', post.slug)
-    most_popular_posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).order_by('avg_points')
+
+    most_popular_posts = Post.objects.select_related('author', 'category').annotate(
+        avg_points=Avg('post_comments__point'), comments_count=Count('post_comments')).order_by('avg_points', 'comments_count')
+
+    for i in most_popular_posts.all():
+        print(i, i.avg_points, i.comments_count)
+
+
+    latest_posts = Post.objects.select_related('author', 'category').all().order_by('-created')
     context = {
         'most_popular_post': most_popular_posts[:1].first(),
         'popular_posts': most_popular_posts[1:5],
+        'latest_posts': latest_posts[:4],
         'categories': get_all_category(),
     }
     return render(request, 'blog_app/index.html', context)
@@ -126,3 +136,5 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('blog_app:home')
+
+
