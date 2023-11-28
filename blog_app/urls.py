@@ -19,4 +19,9 @@ urlpatterns = [
     path('signup/', views.signup, name='sign up'),
     path('logout/', views.logout_view, name='log out'),
 
+    path('manage-posts/', views.manage_posts, name='manage posts'),
+
+    path('blogs/<str:slug>/delete/', views.post_delete, name='delete post'),
+    path('blogs/<str:slug>/edit/', views.post_edit, name='edit post'),
+
 ]

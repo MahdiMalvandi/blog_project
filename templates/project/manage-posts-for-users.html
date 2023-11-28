@@ -1,0 +1,76 @@
+{% extends 'parent/base.html' %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="dashboard">
+        <div class="container dashboard__container">
+            <button class="sidebar__toggle" id="show__sidebar-btn"><i class="uil uil-angle-right-b"></i></button>
+            <button class="sidebar__toggle" id="hide__sidebar-btn"><i class="uil uil-angle-left-b"></i></button>
+            <aside>
+                <ul>
+                    <li>
+                        <a href="../../blog_app/templates/blog_app/dashboard.html" class="active">
+                            <i class="uil uil-user"></i>
+                            <h5>Profile</h5>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="add-post.html">
+                            <i class="uil uil-pen"></i>
+                            <h5>Add Post</h5>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="manage-posts-for-users.html">
+                            <i class="uil uil-postcard"></i>
+                            <h5>Manage Posts</h5>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="../../blog_app/templates/blog_app/change-profile.html" >
+                            <i class="uil uil-users-alt"></i>
+                            <h5>Change Profile</h5>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <main>
+                <h2>Manage Posts</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- start a user -->
+                        {% if posts %}
+                            {% for post in posts %}
+                        <tr>
+                            <td><a href="{% url 'blog_app:blog page' post.slug %}">{{ post.title }}</a></td>
+                            <td><a href="{% url 'blog_app:category posts' post.category.text %}">{{ post.category }}</a></td>
+                            <td><a href="{% url 'blog_app:edit post' post.slug %}" class="btn sm">Edit</a></td>
+                            <td><a href="{% url 'blog_app:delete post' post.slug %}" class="btn sm danger">Delete</a></td>
+                        </tr>
+                            {% endfor %}
+
+                        {% endif %}
+
+                        <!-- end user -->
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </section>
+
+</main>
+{% endblock %}
+
+

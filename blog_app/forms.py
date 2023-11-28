@@ -6,7 +6,6 @@ from .models import *
 
 class SignUpForm(forms.ModelForm):
     password = forms.CharField(max_length=20, label=False)
-
     password_repeat = forms.CharField(max_length=200)
 
     class Meta:
@@ -33,3 +32,8 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=63)
     password = forms.CharField(max_length=63)
 
+
+class AddPostForm(forms.ModelForm):
+    class Meta:
+        fields = ['title', 'body', 'thumbnail', 'category']
+        model = Post

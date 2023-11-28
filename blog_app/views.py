@@ -8,6 +8,7 @@ from django.db.models import Count, Avg, Max
 
 
 # Create your views here.
+
 def get_all_category():
     return Category.objects.all()
 
@@ -20,8 +21,7 @@ def home(request):
     most_popular_posts = Post.objects.select_related('author', 'category').annotate(
         avg_points=Avg('post_comments__point'), comments_count=Count('post_comments')).order_by('avg_points', 'comments_count')
 
-    for i in most_popular_posts.all():
-        print(i, i.avg_points, i.comments_count)
+
 
 
     latest_posts = Post.objects.select_related('author', 'category').all().order_by('-created')
@@ -98,8 +98,9 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            login(request)
+            user = form.save(commit=False)
+            user.save()
+            login(request, user)
             return redirect('blog_app:home')
     else:
         form = SignUpForm()
@@ -138,3 +139,32 @@ def logout_view(request):
     return redirect('blog_app:home')
 
 
+def manage_posts(request):
+    user_posts = Post.objects.select_related('author', 'category').filter(author=request.user)
+    context = {
+        'posts': user_posts,
+    }
+    return render(request, '../templates/project/manage-posts-for-users.html', context=context)
+
+
+def post_delete(request, slug):
+    return redirect('blog_app:manage posts')
+
+
+def post_edit(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if request.method == 'POST':
+
+        form = AddPostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.author = post.author
+            form.save()
+            return redirect('blog_app:manage posts')
+    form = AddPostForm(instance=post)
+    context = {
+        'edit': True,
+        'form': form,
+        'categories': get_all_category(),
+    }
+    return render(request, '../templates/project/add-post.html', context=context)

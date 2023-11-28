@@ -17,7 +17,7 @@ class Admin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "author"]
-    fields = ["title", "body", "thumbnail", "author", "slug"]
+    fields = ["title", "body", "thumbnail", "author", "slug", "category"]
     inlines = [
         CommentTabularInline
     ]

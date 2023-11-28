@@ -1,0 +1,67 @@
+{% extends 'parent/base.html' %}
+{% block title %}
+{% if edit %}
+    Edit
+    {% else %}
+    Add
+{% endif %}
+    post
+{% endblock %}
+
+{% block content %}
+<main>
+
+    <section class="form__section">
+        <div class="container form__section-container">
+            <h2>{% if edit %}
+    Edit
+    {% else %}
+    Add
+{% endif %} Post</h2>
+            <div class="alert__message success">
+                <p>This is an error message</p>
+            </div>
+
+            <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+                <input type="text" placeholder="Title" name="title" {% if form.title.value %}
+                value="{{ form.title.value }}"
+                {% endif %} >
+
+                <select name="category">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" name="{{ category }}">{{ category.text }}</option>
+                    {% endfor %}
+
+                </select>
+                <div class="form__control">
+                    <label for="thumbnail">{% if edit %}
+                    Edit Thumbnail if you want
+                        {% else %}
+                        Add Thumbnail
+                    {% endif %}  </label>
+                    <input type="file" name="thumbnail" id="thumbnail" {% if form.thumbnail.value %}
+                    value="{{ form.thumbnail.value }}"
+                    {% endif %} >
+                </div>
+            {% if edit %}
+                <p>The thumbnail is <a href="/images/{{ form.thumbnail.value }}" style="color: blue">image</a></p>
+            {% endif %}
+                <textarea name="body" id=""  rows="10" placeholder="Body">{% if form.body.value %}
+                {{ form.body.value }}
+                {% endif %} </textarea>
+
+                <button type="submit" class="btn">
+                    {% if edit %}
+                        Edit
+                        {% else %}
+                        Add
+                    {% endif %} Post</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+
+
