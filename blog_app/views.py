@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Avg, Max
 
 
-
 # Create your views here.
 
 def get_all_category():
@@ -19,10 +18,8 @@ def home(request):
         return redirect('blog_app:blog page', post.slug)
 
     most_popular_posts = Post.objects.select_related('author', 'category').annotate(
-        avg_points=Avg('post_comments__point'), comments_count=Count('post_comments')).order_by('avg_points', 'comments_count')
-
-
-
+        avg_points=Avg('post_comments__point'), comments_count=Count('post_comments')).order_by('avg_points',
+                                                                                                'comments_count')
 
     latest_posts = Post.objects.select_related('author', 'category').all().order_by('-created')
     context = {
@@ -35,8 +32,8 @@ def home(request):
 
 
 def blogs(request):
-
-    posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).select_related('author', 'category').order_by('avg_points').all()
+    posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).select_related('author', 'category').order_by(
+        'avg_points').all()
     context = {
         'posts': posts,
         'categories': get_all_category(),
@@ -89,7 +86,7 @@ def get_user_info(request, username):
     return render(request, 'blog_app/user-profile.html', context=context)
 
 
-@login_required( redirect_field_name='next_page')
+@login_required(redirect_field_name='next_page')
 def profile(request):
     return render(request, 'blog_app/dashboard.html')
 
@@ -111,7 +108,6 @@ def signup(request):
 
 
 def login_view(request):
-
     if request.method == 'POST':
 
         form = LoginForm(request.POST)
@@ -148,13 +144,14 @@ def manage_posts(request):
 
 
 def post_delete(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    post.delete()
     return redirect('blog_app:manage posts')
 
 
 def post_edit(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
-
         form = AddPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form = form.save(commit=False)
@@ -164,6 +161,22 @@ def post_edit(request, slug):
     form = AddPostForm(instance=post)
     context = {
         'edit': True,
+        'form': form,
+        'categories': get_all_category(),
+    }
+    return render(request, '../templates/project/add-post.html', context=context)
+
+
+def add_post(request):
+    if request.method == 'POST':
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('blog_app:manage posts')
+    form = AddPostForm()
+    context = {
         'form': form,
         'categories': get_all_category(),
     }

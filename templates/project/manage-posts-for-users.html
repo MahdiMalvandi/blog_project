@@ -5,6 +5,13 @@
 
 {% block content %}
 <main>
+<div class="box">
+    <h3>Do you want to delete post?</h3>
+    <div>
+        <button type="button" class="no-btn btn">No</button>
+        <button type="button" class="btn yes-btn"><a href="">Yes</a></button>
+    </div>
+</div>
     <section class="dashboard">
         <div class="container dashboard__container">
             <button class="sidebar__toggle" id="show__sidebar-btn"><i class="uil uil-angle-right-b"></i></button>
@@ -57,7 +64,7 @@
                             <td><a href="{% url 'blog_app:blog page' post.slug %}">{{ post.title }}</a></td>
                             <td><a href="{% url 'blog_app:category posts' post.category.text %}">{{ post.category }}</a></td>
                             <td><a href="{% url 'blog_app:edit post' post.slug %}" class="btn sm">Edit</a></td>
-                            <td><a href="{% url 'blog_app:delete post' post.slug %}" class="btn sm danger">Delete</a></td>
+                            <td><p data-link="{% url 'blog_app:delete post' post.slug %}" class="btn sm danger">Delete</p></td>
                         </tr>
                             {% endfor %}
 
@@ -71,6 +78,29 @@
     </section>
 
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+let $ = document
+let box = $.querySelector('.box')
+const showDeleteBox = (e) => {
+    let url = e.target.dataset.link
+    box.classList.add('active')
+    let yesBtn = $.querySelector('.btn.yes-btn')
+    let noBtn = $.querySelector('.btn.no-btn')
+    yesBtn.firstElementChild.href = url
+    noBtn.addEventListener('click', () => {
+        box.classList.remove('active')
+    })
+
+}
+let deleteBtns = $.querySelectorAll('.btn.sm.danger')
+deleteBtns.forEach(btn =>{
+    btn.addEventListener('click', showDeleteBox)
+})
+
+</script>
 {% endblock %}
 
 

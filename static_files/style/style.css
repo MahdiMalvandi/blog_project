@@ -800,6 +800,23 @@ font-size: .9rem;
   transition: var(--transition);
   color: var(--color-white);
 }
+.box {
+  background: var(--color-gray-900);
+  padding: 0.8rem;
+  border-radius: var(--card-border-radius-2);
+  border:1px solid white;
+  width: 18rem;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  position: fixed;
+  top: -28rem;
+  z-index: 2;
+}
+.box.active {
+  top: 8rem;
+}
+
 .sidebar__toggle {
   display: none;
 }
