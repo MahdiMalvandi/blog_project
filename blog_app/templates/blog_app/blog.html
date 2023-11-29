@@ -10,10 +10,10 @@ Blogs
 <main>
     <!-- start search form -->
     <section class="search__bar">
-        <form action="" class="container search__bar-container">
+        <form action="{% url 'blog_app:blogs' %}" class="container search__bar-container">
             <div class="">
                 <i class="uil uil-search"></i>
-                <input type="search" name="query" placeholder="Search..." autocomplete="off">
+                <input type="search" name="q" placeholder="Search..." autocomplete="off">
             </div>
             <button type="submit" class="btn">Go</button>
         </form>

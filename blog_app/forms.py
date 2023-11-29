@@ -37,3 +37,14 @@ class AddPostForm(forms.ModelForm):
     class Meta:
         fields = ['title', 'body', 'thumbnail', 'category']
         model = Post
+
+
+class SearchPostForm(forms.Form):
+    q = forms.CharField(max_length=1000)
+
+
+class AddCommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ['user', 'post', 'body', 'reply', 'point']

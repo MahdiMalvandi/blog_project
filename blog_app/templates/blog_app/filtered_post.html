@@ -10,6 +10,9 @@
     <section class="title-section">
             {% if category %}
                 <h1 class="title">{{ category }}'s Blog</h1>
+            {% elif query %}
+                <h1 class="title">{{ query }}'s Blog</h1>
+
             {% endif %}
 
     </section>
@@ -47,7 +50,8 @@
             </article>
                 {% endfor %}
                 {% else %}
-                <h2 style="text-align: center; background:white;">There is no article</h2>
+                <h2 style="text-align: center; color
+                :white;">There is no article</h2>
             {% endif %}
 
             <!-- end post card -->

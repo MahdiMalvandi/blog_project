@@ -46,19 +46,20 @@
                             {% endif %}
                             <div class="user-info__data">
                                 <h4 class="user-info__username">
-                                    <a href="">{{ request.user.get_full_name }}</a>
+                                    <a href="{% url 'blog_app:profile' %}">{{ request.user.get_full_name }}</a>
                                 </h4>
                                 <p class="user-info__new-comment">
                                     New Comment
                                 </p>
                             </div>
                         </div>
-                        <form action="" class="comment-form">
+                        <form action="{% url 'blog_app:add comment' post.slug %}" class="comment-form" method="post">
+                            {% csrf_token %}
                             <textarea name="body" id="" rows="10" placeholder="Enter Your Comment"></textarea>
                             <div class="form-bottom">
                                 <div class="select-box">
                                     <label for="point">Point</label>
-                                    <select name="star" id="">
+                                    <select name="point" id="">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -66,7 +67,13 @@
                                         <option value="5" selected>5</option>
                                     </select>
                                 </div>
+
+                                {% if request.user.is_authenticated  %}
+
                                 <button type="submit" class="submit-btn">Submit</button>
+                                    {% else %}
+                                    <a href="{% url 'blog_app:login' %}">Please Login</a>
+                                {% endif %} 
                             </div>
                         </form>
                     </div>

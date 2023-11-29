@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import TrigramSimilarity
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from django.contrib.auth import login, authenticate, logout
@@ -32,6 +33,21 @@ def home(request):
 
 
 def blogs(request):
+    results = []
+    query = ''
+    if 'q' in request.GET:
+        query = request.GET.get('q')
+        form = SearchPostForm(data=request.GET)
+        if form.is_valid():
+            results_by_title = Post.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0.1)
+            results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(similarity__gt=0.1)
+            results = (results_by_title | results_by_body).order_by("-similarity")
+            print(results)
+            context = {
+                "posts": results,
+                "query": query
+            }
+            return render(request, 'blog_app/filtered_post.html', context=context)
     posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).select_related('author', 'category').order_by(
         'avg_points').all()
     context = {
@@ -39,6 +55,8 @@ def blogs(request):
         'categories': get_all_category(),
     }
     return render(request, 'blog_app/blog.html', context)
+
+
 
 
 def get_blog_detail(request, slug):
@@ -181,3 +199,24 @@ def add_post(request):
         'categories': get_all_category(),
     }
     return render(request, '../templates/project/add-post.html', context=context)
+
+
+def add_comment(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if request.method == 'POST':
+
+        form = AddCommentForm(data=request.POST)
+        # print(f'post: {post}\n\n '
+        #       f'request.post : {request.POST}\n\n'
+        #       f'form: {form}\n\n'
+        #       f'form.is_valid:{form.is_valid()}')
+        if form.is_valid():
+
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
+    else:
+        form = AddCommentForm()
+
+    return redirect('blog_app:blog page', slug)
