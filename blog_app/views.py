@@ -33,6 +33,7 @@ def home(request):
 
 
 def blogs(request):
+    print(request.user)
     results = []
     query = ''
     if 'q' in request.GET:
@@ -134,6 +135,7 @@ def login_view(request):
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'])
+
             if user is not None:
                 login(request, user)
                 if request.GET.get('next_page'):
@@ -220,3 +222,17 @@ def add_comment(request, slug):
         form = AddCommentForm()
 
     return redirect('blog_app:blog page', slug)
+
+
+def change_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ChangeProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_app:profile')
+    form = ChangeProfileForm(instance=user)
+    context = {
+        'form': form
+    }
+    return render(request, '../templates/project/change-profile.html', context=context)

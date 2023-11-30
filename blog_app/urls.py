@@ -13,7 +13,7 @@ urlpatterns = [
 
 
     path('users/<str:username>/', views.get_user_info, name='user info'),
-    path('profile/', views.profile, name='profile'),
+
 
     path('services/', views.services, name='services'),
     path('about_us/', views.about_us, name='about'),
@@ -24,8 +24,9 @@ urlpatterns = [
     path('logout/', views.logout_view, name='log out'),
 
     path('manage-posts/', views.manage_posts, name='manage posts'),
-
+    path('profile/', views.profile, name='profile'),
     path('add-post/', views.add_post, name='add post'),
+    path('change-profile/', views.change_profile, name='change profile'),
 
     path('blogs/<str:slug>/comments/add/', views.add_comment, name='add comment'),
 

@@ -1,16 +1,16 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import *
 
 
-class SignUpForm(forms.ModelForm):
-    password = forms.CharField(max_length=20, label=False)
-    password_repeat = forms.CharField(max_length=200)
+class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'username', 'last_name', 'email', 'password', 'password_repeat']
+        fields = ['first_name', 'username', 'last_name', 'email', 'password1', 'password2']
+
+
 
     def clean_password_repeat(self):
         password = self.cleaned_data['password']
@@ -44,7 +44,12 @@ class SearchPostForm(forms.Form):
 
 
 class AddCommentForm(forms.ModelForm):
-
     class Meta:
         model = Comment
         fields = ['user', 'post', 'body', 'reply', 'point']
+
+
+class ChangeProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'job', 'bio', 'profile', 'email']

@@ -23,7 +23,7 @@
  <div class="alert__message error">
     {% for field, errors in form.errors.items %}
     {% for error in errors %}
-                {{ error }}
+                {{ field }}:{{ error }}
                 {% endfor %}
                 {% endfor %}
     </div>
@@ -63,16 +63,16 @@
                 </div>
                 <div>
 
-                    <input type="password" placeholder="Create Password" name="password" {% if form.password.value %}
-                    value="{{ form.password.value }}"
+                    <input type="password" placeholder="Create Password" name="password1" {% if form.password1.value %}
+                    value="{{ form.password1.value }}"
                     {% endif %} >
-                    {{ form.password.errors }}
+                    {{ form.password1.errors }}
                 </div>
                 <div>
-                        <input type="password" placeholder="Confirm Password" name="password_repeat" {% if form.password_repeat.value %}
-                        value="{{ form.password_repeat.value }}"
+                        <input type="password" placeholder="Confirm Password" name="password2" {% if form.password2.value %}
+                        value="{{ form.password2.value }}"
                         {% endif %} >
-                    {{ form.password_repeat.errors }}
+                    {{ form.password2.errors }}
                 </div>
                 <button type="submit" class="btn">Sign Up</button>
                 <small>Already have an account? 

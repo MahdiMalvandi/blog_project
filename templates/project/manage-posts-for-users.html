@@ -19,26 +19,26 @@
             <aside>
                 <ul>
                     <li>
-                        <a href="../../blog_app/templates/blog_app/dashboard.html" class="active">
+                        <a href="{% url 'blog_app:profile' %}" >
                             <i class="uil uil-user"></i>
                             <h5>Profile</h5>
                         </a>
                     </li>
                     <li>
-                        <a href="add-post.html">
+                        <a href="{% url 'blog_app:add post' %}">
                             <i class="uil uil-pen"></i>
                             <h5>Add Post</h5>
                         </a>
                     </li>
                     <li>
-                        <a href="manage-posts-for-users.html">
+                        <a href="{% url 'blog_app:manage posts' %}" class="active">
                             <i class="uil uil-postcard"></i>
                             <h5>Manage Posts</h5>
                         </a>
                     </li>
 
                     <li>
-                        <a href="../../blog_app/templates/blog_app/change-profile.html" >
+                        <a href="{% url 'blog_app:change profile' %}" >
                             <i class="uil uil-users-alt"></i>
                             <h5>Change Profile</h5>
                         </a>

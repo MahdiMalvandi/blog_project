@@ -7,6 +7,7 @@ Blog Site
 {% block content %}
 <main>
     <!-- feature post -->
+    {% if most_popular_post %}
     <section class="featured">
         <div class="container  featured__container">
             <div class="post__thumbnail most_popular_thumbnail">
@@ -34,6 +35,9 @@ Blog Site
             </div>
         </div>
     </section>
+        {% else %}
+                        <h2 style=" color:white;">There is no most popular article</h2>
+    {% endif %}
     <!-- end feature post -->
 
     <section class="posts">
@@ -42,8 +46,10 @@ Blog Site
             <!-- start post card -->
            <section class="popular_posts r">
                 <h2>Popular posts</h2>
-               <div class="posts__container">
-                    {% for popular_post in popular_posts %}
+
+                    {% if popular_posts %}
+{% for popular_post in popular_posts %}
+    <div class="posts__container">
                         <article class="post">
                 <div class="post__thumbnail">
                     <img src="{{ popular_post.thumbnail.url }}" alt="{{ popular_post.title }}">
@@ -69,15 +75,20 @@ Blog Site
                         </div>
                 </div>
             </article>
+       </div>
                     {% endfor %}
+                        {% else %}
+                                        <h2 style=" color:white;">There is no popular article</h2>
+                    {% endif %}
 
-               </div>
+
            </section>
             <!-- end post card -->
 
         <section class="popular_posts r">
                 <h2>Latest posts</h2>
-               <div class="posts__container">
+               {% if latest_posts %}
+<div class="posts__container">
                     {% for latest_post in latest_posts %}
                         <article class="post">
                 <div class="post__thumbnail">
@@ -107,6 +118,9 @@ Blog Site
                     {% endfor %}
 
                </div>
+                   {% else %}
+                                   <h2 style=" color:white;">There is no latest article</h2>
+               {% endif %}
            </section>
 
 

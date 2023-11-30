@@ -21,9 +21,7 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.username}'
 
-    def save(self, *args, **kwargs):
-        self.set_password(self.password)
-        super().save(*args, **kwargs)
+
 
 # endregion
 

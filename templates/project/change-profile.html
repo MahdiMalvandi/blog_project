@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog website</title>
+
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+<section class="form__section">
+    <div class="container form__section-container">
+
+        <h2>Change Profile</h2>
+        <div class="alert__message success">
+            <p>This is an error message</p>
+        </div>
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <input type="text" name="first_name" id="" class="text" placeholder="Enter Your First Name" {% if form.first_name.value %}
+            value="{{ form.first_name.value }}"
+            {% endif %} >
+            <input type="text" name="last_name" id="" class="text" placeholder="Enter Your Last Name" {% if form.last_name.value %}
+            value="{{ form.last_name.value }}"
+            {% endif %} >
+            <input type="text" name="username" id="" class="text" placeholder="Enter Your User Name" {% if form.username.value %}
+            value="{{ form.username.value }}"
+            {% endif %} >
+            <input type="email" name="email" id="" class="text" placeholder="Enter Your Email" {% if form.email.value %}
+            value="{{ form.email.value }}"
+            {% endif %} >
+            <input type="text" name="job" id="" class="text" placeholder="Enter Your Job" {% if form.job.value %}
+            value="{{ form.job.value }}"
+            {% endif %} >
+            <textarea type="text" name="bio" id="" class="text" placeholder="Enter Your Bio">{% if form.bio.value %}{{ form.bio.value }}{% endif %} </textarea>
+
+            <p>Your Profile is <a href="/images/{{ form.profile.value }}" style="color: blue">image</a></p>
+            <div class="form__control">
+                <label for="avatar">Change Profile if you want</label>
+                <input type="file" id="avatar" name="profile">
+            </div>
+            <button type="submit" class="btn">Submit</button>
+
+        </form>
+    </div>
+</section>
+
+
+
+</body>
+
+</html>
