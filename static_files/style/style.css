@@ -228,7 +228,6 @@ nav button {
   margin-top: 8rem;
 }
 .most_popular_thumbnail img{
-  object-fit: cover;
   height: 100%;
 ;
 }
@@ -1069,5 +1068,11 @@ font-size: .9rem;
 }
 .stars-container{
   float: right;
+}
+.most_popular_thumbnail{
+  height: 16rem;
+}
+.post__thumbnail{
+  height: 14rem;
 }
 }

@@ -1,0 +1,7 @@
+    <section class="category__buttons">
+        <div class="container category__buttons-container">
+            {% for category in categories %}
+            <a href="{% url 'blog_app:category posts' category.text %}" class="category__button">{{ category.text }}</a>
+            {% endfor %}
+        </div>
+    </section>

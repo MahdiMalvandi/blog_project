@@ -55,6 +55,7 @@
                         </div>
                         <form action="{% url 'blog_app:add comment' post.slug %}" class="comment-form" method="post">
                             {% csrf_token %}
+                        <input type="hidden" name="reply" value="" class="reply-id-input">
                             <textarea name="body" id="" rows="10" placeholder="Enter Your Comment"></textarea>
                             <div class="form-bottom">
                                 <div class="select-box">
@@ -239,5 +240,26 @@
 
 {% block scripts %}
 <script src="{% static 'assets/post.js' %}"></script>
+    <script>
+    let $ = document
+    let commentsReply = $.querySelectorAll('.reply-svg')
+    let commentForm = $.querySelector('.comment-form')
+    let commentText = $.querySelector('.user-info__new-comment')
+    let replyIdComment = $.querySelector('.reply-id-input')
+    commentsReply.forEach(item => {
+        item.addEventListener('click', () => {
+            let commentId = item.parentElement.parentElement.dataset.id
+            commentText.innerHTML = `comment ${commentId}`
+            replyIdComment.value = commentId
+        })
+    })
+    {#commentForm.addEventListener('submit', (event) => {#}
+    {#    event.preventDefault()#}
+    {#    fetch('{% url 'blog_app:add comment' post.id  %}', {#}
+    {#        method: "POST",#}
+    {#        body:{'csrfmiddlewaretoken': '{{ csrf_token }}'}#}
+    {#    })#}
+    {#})#}
+    </script>
 {% endblock %}
 

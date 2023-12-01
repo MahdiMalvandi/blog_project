@@ -27,7 +27,6 @@ def home(request):
         'most_popular_post': most_popular_posts[:1].first(),
         'popular_posts': most_popular_posts[1:5],
         'latest_posts': latest_posts[:4],
-        'categories': get_all_category(),
     }
     return render(request, 'blog_app/index.html', context)
 
@@ -40,8 +39,10 @@ def blogs(request):
         query = request.GET.get('q')
         form = SearchPostForm(data=request.GET)
         if form.is_valid():
-            results_by_title = Post.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(similarity__gt=0.1)
-            results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(similarity__gt=0.1)
+            results_by_title = Post.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(
+                similarity__gt=0.1)
+            results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(
+                similarity__gt=0.1)
             results = (results_by_title | results_by_body).order_by("-similarity")
             print(results)
             context = {
@@ -53,11 +54,9 @@ def blogs(request):
         'avg_points').all()
     context = {
         'posts': posts,
-        'categories': get_all_category(),
+
     }
     return render(request, 'blog_app/blog.html', context)
-
-
 
 
 def get_blog_detail(request, slug):
@@ -160,7 +159,7 @@ def manage_posts(request):
     context = {
         'posts': user_posts,
     }
-    return render(request, '../templates/project/manage-posts-for-users.html', context=context)
+    return render(request, 'blog_app/manage-posts-for-users.html', context=context)
 
 
 def post_delete(request, slug):
@@ -208,12 +207,8 @@ def add_comment(request, slug):
     if request.method == 'POST':
 
         form = AddCommentForm(data=request.POST)
-        # print(f'post: {post}\n\n '
-        #       f'request.post : {request.POST}\n\n'
-        #       f'form: {form}\n\n'
-        #       f'form.is_valid:{form.is_valid()}')
-        if form.is_valid():
 
+        if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
             comment.post = post

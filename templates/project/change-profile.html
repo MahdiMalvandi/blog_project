@@ -40,7 +40,9 @@
             {% endif %} >
             <textarea type="text" name="bio" id="" class="text" placeholder="Enter Your Bio">{% if form.bio.value %}{{ form.bio.value }}{% endif %} </textarea>
 
+            {% if request.user.profile %}
             <p>Your Profile is <a href="/images/{{ form.profile.value }}" style="color: blue">image</a></p>
+            {% endif %}
             <div class="form__control">
                 <label for="avatar">Change Profile if you want</label>
                 <input type="file" id="avatar" name="profile">

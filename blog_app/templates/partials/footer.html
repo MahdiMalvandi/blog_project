@@ -10,12 +10,12 @@
             <article>
                 <h4>Categories</h4>
                 <ul>
-                    <li><a href="">Art</a></li>
-                    <li><a href="">wild life</a></li>
-                    <li><a href="">travel</a></li>
-                    <li><a href="">music</a></li>
-                    <li><a href="">scinse and technology</a></li>
-                    <li><a href="">food</a></li>
+                    {% for category in categories %}
+                    <li><a href="{% url 'blog_app:category posts' category %}">{{ category }}</a></li>
+
+                    {% endfor %}
+
+
                 </ul>
             </article>
             <article>
