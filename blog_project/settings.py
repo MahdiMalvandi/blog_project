@@ -138,3 +138,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mahdimalvandi6@gmail.com.com'
+EMAIL_HOST_PASSWORD = 'ixgiscqdxobyqahj'

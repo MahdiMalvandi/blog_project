@@ -1,10 +1,12 @@
-from django.contrib.postgres.search import TrigramSimilarity
-from django.shortcuts import render, get_object_or_404, redirect
-from .forms import *
 from django.contrib.auth import login, authenticate, logout
-from .models import *
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Avg, Max
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models import Count, Avg
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.mail import send_mail
+
+from .forms import *
+from .models import *
 
 
 # Create your views here.
