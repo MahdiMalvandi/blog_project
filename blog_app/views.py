@@ -54,7 +54,6 @@ def blogs(request):
         'avg_points').all()
     context = {
         'posts': posts,
-
     }
     return render(request, 'blog_app/blog.html', context)
 
@@ -139,8 +138,7 @@ def login_view(request):
                 login(request, user)
                 if request.GET.get('next_page'):
                     return redirect(request.GET.get('next_page'))
-
-            return redirect('blog_app:home')
+                return redirect('blog_app:home')
     else:
         form = LoginForm()
     context = {

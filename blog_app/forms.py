@@ -5,12 +5,9 @@ from .models import *
 
 
 class SignUpForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = ['first_name', 'username', 'last_name', 'email', 'password1', 'password2']
-
-
 
     def clean_password_repeat(self):
         password = self.cleaned_data['password']
@@ -31,6 +28,24 @@ class SignUpForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=63)
     password = forms.CharField(max_length=63)
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        username = cleaned_data['username']
+        password = cleaned_data['password']
+
+        # username clean
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise forms.ValidationError("Username does not exist")
+
+        # password clean
+        if user.check_password(password):
+            return cleaned_data
+        else:
+            raise forms.ValidationError("Password does not match")
 
 
 class AddPostForm(forms.ModelForm):

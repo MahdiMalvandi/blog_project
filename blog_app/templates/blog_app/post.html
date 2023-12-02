@@ -253,13 +253,7 @@
             replyIdComment.value = commentId
         })
     })
-    {#commentForm.addEventListener('submit', (event) => {#}
-    {#    event.preventDefault()#}
-    {#    fetch('{% url 'blog_app:add comment' post.id  %}', {#}
-    {#        method: "POST",#}
-    {#        body:{'csrfmiddlewaretoken': '{{ csrf_token }}'}#}
-    {#    })#}
-    {#})#}
+
     </script>
 {% endblock %}
 
