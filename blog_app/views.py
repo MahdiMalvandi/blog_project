@@ -1,10 +1,12 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Count, Avg
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.mail import send_mail
-
+from django.urls import reverse_lazy
+from django.contrib.auth import update_session_auth_hash
 from .forms import *
 from .models import *
 
@@ -231,3 +233,39 @@ def change_profile(request):
         'form': form
     }
     return render(request, '../templates/project/change-profile.html', context=context)
+
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'users/password_reset.html'
+    email_template_name = 'users/email_template.html'
+    subject_template_name = 'users/password_reset_subject.txt'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('blog_app:home')
+
+
+
+
+
+def account_change_password(request):
+    if request.method == 'POST':
+        form = AccountChangePasswordForm(request.POST)
+        if form.is_valid():
+            user_id = form.cleaned_data['user']
+            new_password = form.cleaned_data['new_password']
+            user = User.objects.get(id=user_id)
+            user.set_password(new_password)
+            user.save()
+
+            # Update the user's session to prevent them from being logged out
+            update_session_auth_hash(request, user)
+
+            return redirect('blog_app:profile')
+    else:
+        form = AccountChangePasswordForm()
+
+    context = {'form': form}
+    return render(request, 'blog_app/account_change_password.html', context)
+

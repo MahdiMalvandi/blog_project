@@ -68,3 +68,21 @@ class ChangeProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'job', 'bio', 'profile', 'email']
+
+
+class AccountChangePasswordForm(forms.Form):
+    old_password = forms.CharField(max_length=100)
+    new_password = forms.CharField(max_length=100)
+    user = forms.IntegerField()
+
+    def clean(self):
+
+        user_id = self.cleaned_data['user']
+        old_password = self.cleaned_data['old_password']
+        new_password = self.cleaned_data['new_password']
+        user = User.objects.get(id=user_id)
+
+        if user.check_password(old_password):
+            return self.cleaned_data
+        else:
+            raise forms.ValidationError('Your Password in wrong')

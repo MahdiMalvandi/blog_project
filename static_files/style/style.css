@@ -822,6 +822,9 @@ font-size: .9rem;
 .sign-up-form div input{
   width: 100%;
 }
+.reset_password_form{
+  width: 50%;
+}
 @media screen and (max-width: 1700px) {
   .posts__container{
     grid-template-columns: repeat(3, 1fr);
@@ -1032,6 +1035,7 @@ font-size: .9rem;
     height: 100vh;
     transition: var(--transition);
     background: var(--color-primary);
+    z-index: 2;
   }
   .dashboard .sidebar__toggle {
     display: inline-block;
@@ -1074,5 +1078,8 @@ font-size: .9rem;
 }
 .post__thumbnail{
   height: 14rem;
+}
+.reset_password_form{
+  width: 100%;
 }
 }

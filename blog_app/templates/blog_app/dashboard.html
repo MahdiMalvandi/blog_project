@@ -1,6 +1,7 @@
 {% extends 'parent/base.html' %}
+{% load static %}
 {% block title %}
-
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -17,6 +18,12 @@
                         <a href="{% url 'blog_app:profile' %}" class="active">
                             <i class="uil uil-user"></i>
                             <h5>Profile</h5>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'blog_app:account_change_password' %}" >
+                            <i class="uil uil-user"></i>
+                            <h5>Change Password</h5>
                         </a>
                     </li>
                     <li>
@@ -46,6 +53,9 @@
                     <div class="profile-img">
                         {% if user.profile %}
                         <img src="{{ user.profile.url }}" alt="{{ user.get_full_name }}'s profile" class="profile__img">
+                            {% else %}
+                        <img src="{% static 'images/user-avatar.jpg' %}"  alt="{{ user.get_full_name }}'s profile" class="profile__img">
+
                         {% endif %}
                         <h5 class="user-full-name">{{ user.get_full_name }}</h5>
                         {% if user.job %}
@@ -65,4 +75,9 @@
     </section>
 {% endwith %}
 </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'assets/dashboard.js' %}"></script>
+
 {% endblock %}

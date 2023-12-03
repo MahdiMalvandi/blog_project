@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
 from . import views
 from django.contrib.auth import views as auth_views
 
@@ -13,9 +13,7 @@ urlpatterns = [
     path('blogs/<str:slug>/delete/', views.post_delete, name='delete post'),
     path('blogs/<str:slug>/edit/', views.post_edit, name='edit post'),
 
-
     path('users/<str:username>/', views.get_user_info, name='user info'),
-
 
     path('services/', views.services, name='services'),
     path('about_us/', views.about_us, name='about'),
@@ -25,16 +23,12 @@ urlpatterns = [
     path('signup/', views.signup, name='sign up'),
     path('logout/', views.logout_view, name='log out'),
 
-    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="users/password_reset.html"),
-         name='reset_password'),
-    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="users/password_reset_done.html"),
-         name='password_reset_done'),
-    path('reset/<uidb64>/<token>',
-         auth_views.PasswordResetConfirmView.as_view(template_name="users/password_reset_confirm.html"),
+
+    path('password-reset/', views.ResetPasswordView.as_view(), name='reset_password'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html',success_url=reverse_lazy("blog_app:home")),
          name='password_reset_confirm'),
-    path('reset_password_complete/',
-         auth_views.PasswordResetCompleteView.as_view(template_name="users/password_reset_complete.html"),
-         name='password_reset_complete'),
+    path('account/password_change/', views.account_change_password, name='account_change_password'),
 
     path('manage-posts/', views.manage_posts, name='manage posts'),
     path('profile/', views.profile, name='profile'),

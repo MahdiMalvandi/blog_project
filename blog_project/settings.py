@@ -56,7 +56,7 @@ AUTH_USER_MODEL = "blog_app.User"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,7 +123,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_URL = '/static/'
+STATIC_URL = '/static_files/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
 
 # Default primary key field type
@@ -140,9 +140,11 @@ LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mahdimalvandi6@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mahdimalvandi6@gmail.com.com'
-EMAIL_HOST_PASSWORD = 'ixgiscqdxobyqahj'
+EMAIL_HOST_PASSWORD = 'mvzxrlzspgquwuht'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
