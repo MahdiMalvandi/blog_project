@@ -1,4 +1,5 @@
 {% extends 'parent/base.html' %}
+
 {% block title %}
 {% if edit %}
     Edit
@@ -9,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-<main>
+<main style="margin-bottom: 10rem;">
 
     <section class="form__section">
         <div class="container form__section-container">
@@ -45,10 +46,11 @@
             {% if edit %}
                 <p>The thumbnail is <a href="/images/{{ form.thumbnail.value }}" style="color: blue">image</a></p>
             {% endif %}
-                <textarea name="body" id=""  rows="10" placeholder="Body">{% if form.body.value %}
-                {{ form.body.value }}
+                <textarea name="description" id=""  rows="10" placeholder="Description">{% if form.description.value %}
+                {{ form.description.value }}
                 {% endif %} </textarea>
-
+            {{ form.media }}
+            {{ form.body }}
                 <button type="submit" class="btn">
                     {% if edit %}
                         Edit

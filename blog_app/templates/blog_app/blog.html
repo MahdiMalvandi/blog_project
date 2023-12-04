@@ -34,7 +34,7 @@ Blogs
                    <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
 
                     <h3 class="post__title"><a href="{% url 'blog_app:blog page' post.slug %}">{{ post.title }}</a></h3>
-                    <p class="post__body">{{ post.body }}</p>
+                    <p class="post__body">{{ post.description }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">
                             {% if post.author.profile %}

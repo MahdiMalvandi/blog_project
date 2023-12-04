@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'ckeditor',
+    'ckeditor_uploader',
+    'mathfilters'
 ]
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -124,8 +128,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static_files/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
 
+
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_files')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

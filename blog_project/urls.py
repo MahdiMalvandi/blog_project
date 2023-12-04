@@ -21,6 +21,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog_app.urls'), name='blog_app app')
-]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', include('blog_app.urls'), name='blog_app app'),
+    path('ckeditor', include("ckeditor_uploader.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

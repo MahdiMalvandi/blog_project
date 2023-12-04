@@ -1,3 +1,4 @@
+import ckeditor_uploader
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -50,7 +51,7 @@ class LoginForm(forms.Form):
 
 class AddPostForm(forms.ModelForm):
     class Meta:
-        fields = ['title', 'body', 'thumbnail', 'category']
+        fields = ['title', 'body', 'thumbnail', 'category', 'description']
         model = Post
 
 

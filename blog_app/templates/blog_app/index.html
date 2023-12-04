@@ -16,7 +16,7 @@ Blog Site
             <div class="post__info">
                 <a href="{% url 'blog_app:category posts' most_popular_post.category %}" class="category__button">{{ most_popular_post.category }}</a>
                 <h2 class="post__title"><a href="{% url 'blog_app:blog page' most_popular_post.slug %}">{{ most_popular_post.title }}</a></h2>
-                <p class="post__body">{{ most_popular_post.body }}</p>
+                <p class="post__body">{{ most_popular_post.description }}</p>
                 <div class="post__author">
                       <div class="post__author-avatar">
                             {% if most_popular_post.author.profile %}
@@ -48,8 +48,9 @@ Blog Site
                 <h2>Popular posts</h2>
 
                     {% if popular_posts %}
+                           <div class="posts__container">
 {% for popular_post in popular_posts %}
-    <div class="posts__container">
+
                         <article class="post">
                 <div class="post__thumbnail">
                     <img src="{{ popular_post.thumbnail.url }}" alt="{{ popular_post.title }}">
@@ -58,7 +59,7 @@ Blog Site
                    <a href="{% url 'blog_app:category posts'   popular_post.category.text %}" class="category__button">{{ popular_post.category.text }}</a>
 
                     <h3 class="post__title"><a href="{% url 'blog_app:blog page' popular_post.slug %}">{{ popular_post.title }}</a></h3>
-                    <p class="post__body">{{ popular_post.body }}</p>
+                    <p class="post__body">{{ popular_post.description }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">
                             {% if popular_post.author.profile %}
@@ -75,8 +76,9 @@ Blog Site
                         </div>
                 </div>
             </article>
-       </div>
+
                     {% endfor %}
+                          </div>
                         {% else %}
                                         <h2 style=" color:white;">There is no popular article</h2>
                     {% endif %}
@@ -85,7 +87,7 @@ Blog Site
            </section>
             <!-- end post card -->
 
-        <section class="popular_posts r">
+        <section class="popular_posts ">
                 <h2>Latest posts</h2>
                {% if latest_posts %}
 <div class="posts__container">
@@ -98,7 +100,7 @@ Blog Site
                    <a href="{% url 'blog_app:category posts'   latest_post.category.text %}" class="category__button">{{ latest_post.category.text }}</a>
 
                     <h3 class="post__title"><a href="{% url 'blog_app:blog page' latest_post.slug %}">{{ latest_post.title }}</a></h3>
-                    <p class="post__body">{{ latest_post.body }}</p>
+                    <p class="post__body">{{ latest_post.description }}</p>
                         <div class="post__author">
                             <div class="post__author-avatar">
                             {% if latest_post.author.profile %}
@@ -116,8 +118,7 @@ Blog Site
                 </div>
             </article>
                     {% endfor %}
-
-               </div>
+</div>
                    {% else %}
                                    <h2 style=" color:white;">There is no latest article</h2>
                {% endif %}

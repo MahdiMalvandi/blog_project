@@ -36,7 +36,6 @@ def home(request):
 
 
 def blogs(request):
-    print(request.user)
     results = []
     query = ''
     if 'q' in request.GET:
@@ -48,7 +47,6 @@ def blogs(request):
             results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(
                 similarity__gt=0.1)
             results = (results_by_title | results_by_body).order_by("-similarity")
-            print(results)
             context = {
                 "posts": results,
                 "query": query
@@ -246,9 +244,6 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     success_url = reverse_lazy('blog_app:home')
 
 
-
-
-
 def account_change_password(request):
     if request.method == 'POST':
         form = AccountChangePasswordForm(request.POST)
@@ -268,4 +263,3 @@ def account_change_password(request):
 
     context = {'form': form}
     return render(request, 'blog_app/account_change_password.html', context)
-
