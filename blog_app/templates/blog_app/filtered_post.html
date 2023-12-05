@@ -18,7 +18,8 @@
     </section>
 
     <section class="posts">
-        <div class="container posts__container">
+    <div class="container">
+        <div class=" posts__container">
 
             <!-- start post card -->
             {% if posts %}
@@ -60,6 +61,10 @@
 
 
         </div>
+        {% include 'partials/pagination.html' with page=posts %}
+
+    </div>
+
     </section>
 
     <!-- end section -->

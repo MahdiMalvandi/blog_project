@@ -249,6 +249,17 @@ nav button {
 .post img{
   height: 100%;
 }
+.pagination_box{
+  padding: .9rem;
+  border-radius: var(--card-border-radius-2);
+  background-color: var(--color-gray-700);
+}
+.pagination{
+  display: flex;
+  gap: 2rem;
+  width: fit-content;
+  margin: 3rem auto;
+}
 /* categories  button */
 .category__buttons {
   padding: 4rem 0;
@@ -1089,5 +1100,11 @@ font-size: .9rem;
 }
 .reset_password_form{
   width: 100%;
+}
+.pagination_box{
+  padding: .6rem;
+}
+.pagination{
+  gap: 1rem;
 }
 }

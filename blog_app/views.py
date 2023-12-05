@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import TrigramSimilarity
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count, Avg
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -12,6 +13,17 @@ from .models import *
 
 
 # Create your views here.
+def make_paginator(request, posts):
+    paginator = Paginator(posts, 12)
+    page = request.GET.get("page") if request.GET.get('page') else 1
+    try:
+        posts = paginator.page(page)
+    except EmptyPage:
+        posts = []
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    return posts
+
 
 def get_all_category():
     return Category.objects.all()
@@ -47,15 +59,17 @@ def blogs(request):
             results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(
                 similarity__gt=0.1)
             results = (results_by_title | results_by_body).order_by("-similarity")
+
             context = {
-                "posts": results,
+                "posts": make_paginator(request, results),
                 "query": query
             }
             return render(request, 'blog_app/filtered_post.html', context=context)
     posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).select_related('author', 'category').order_by(
         'avg_points').all()
+
     context = {
-        'posts': posts,
+        'posts': make_paginator(request, posts),
     }
     return render(request, 'blog_app/blog.html', context)
 
@@ -80,7 +94,7 @@ def get_category_posts(request, category_name):
     posts = Post.objects.select_related('author', 'category').filter(category__text=category_name)
     context = {
         'category': category_name,
-        'posts': posts
+        'posts': make_paginator(request, posts)
     }
     return render(request, 'blog_app/filtered_post.html', context)
 
@@ -149,11 +163,13 @@ def login_view(request):
     return render(request, 'forms/signin.html', context=context)
 
 
+@login_required(redirect_field_name='next_page')
 def logout_view(request):
     logout(request)
     return redirect('blog_app:home')
 
 
+@login_required(redirect_field_name='next_page')
 def manage_posts(request):
     user_posts = Post.objects.select_related('author', 'category').filter(author=request.user)
     context = {
@@ -162,12 +178,14 @@ def manage_posts(request):
     return render(request, 'blog_app/manage-posts-for-users.html', context=context)
 
 
+@login_required(redirect_field_name='next_page')
 def post_delete(request, slug):
     post = get_object_or_404(Post, slug=slug)
     post.delete()
     return redirect('blog_app:manage posts')
 
 
+@login_required(redirect_field_name='next_page')
 def post_edit(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
@@ -186,6 +204,7 @@ def post_edit(request, slug):
     return render(request, '../templates/project/add-post.html', context=context)
 
 
+@login_required(redirect_field_name='next_page')
 def add_post(request):
     if request.method == 'POST':
         form = AddPostForm(request.POST, request.FILES)
@@ -202,6 +221,7 @@ def add_post(request):
     return render(request, '../templates/project/add-post.html', context=context)
 
 
+@login_required(redirect_field_name='next_page')
 def add_comment(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
@@ -219,6 +239,7 @@ def add_comment(request, slug):
     return redirect('blog_app:blog page', slug)
 
 
+@login_required(redirect_field_name='next_page')
 def change_profile(request):
     user = request.user
     if request.method == 'POST':
@@ -244,6 +265,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     success_url = reverse_lazy('blog_app:home')
 
 
+@login_required(redirect_field_name='next_page')
 def account_change_password(request):
     if request.method == 'POST':
         form = AccountChangePasswordForm(request.POST)
