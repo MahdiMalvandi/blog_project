@@ -120,6 +120,19 @@ nav button {
   align-items: center;
   justify-content: space-between;
 }
+.content {
+  width:fit-content;
+  margin: 0 auto;
+  background: var(--color-gray-700);
+  border-radius: var(--card-border-radius-5);
+  border: 1px solid var(--color-white);
+  padding: .5rem 1rem;
+  display: flex;
+  gap: 2rem;
+}
+.sort_by {
+  font-weight: bold;
+}
 .avatar {
   width: 2.5rem;
   height: 2.5rem;

@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count, Avg
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
@@ -67,6 +68,15 @@ def blogs(request):
             return render(request, 'blog_app/filtered_post.html', context=context)
     posts = Post.objects.annotate(avg_points=Avg('post_comments__point')).select_related('author', 'category').order_by(
         'avg_points').all()
+
+    if 'time' in request.GET:
+        time = request.GET['time']
+        if time == 'newest':
+            posts = Post.objects.select_related('author', 'category').all().order_by('-created')
+        elif time == 'oldest':
+            posts = Post.objects.select_related('author', 'category').all().order_by('created')
+        else:
+            posts = []
 
     context = {
         'posts': make_paginator(request, posts),
