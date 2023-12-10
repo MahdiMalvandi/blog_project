@@ -168,9 +168,9 @@
 						>
 							<span class="user-icon">
 								 {% if user.profile %}
-                         <img src="{{ user.profile.url }}" style="height: 100%;" alt="">
+                         <img src="{{ user.profile.url }}" class="h-100" alt="">
                         {% else %}
-                            <img src="{% static 'images/user-avatar.jpg' %}" style="height: 100%;" alt="">
+                            <img src="../../../images/users_avatar/user-avatar.jpg" class="h-100" alt="">
                         {% endif %}
 							</span>
 							<span class="user-name">{{ user.get_full_name }}</span>

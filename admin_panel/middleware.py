@@ -7,6 +7,6 @@ class AdminCheckMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/admin/') and not request.user.is_superuser:
-            return render(request, 'admin_panel/401.html')
+        if request.path.startswith('/admin/') and not request.user.is_staff:
+            return render(request, 'errors/401.html')
         return self.get_response(request)

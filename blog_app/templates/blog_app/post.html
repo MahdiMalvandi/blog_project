@@ -100,7 +100,9 @@
                             {% endif %}
 
                                     <p class="user-position">{% if comment.user.is_superuser %}
-                                    Admin
+                                    Manager
+                                        {% elif comment.user.is_staff %}
+                                        Admin
                                         {% else %}
                                         User
                                     {% endif %} </p>
@@ -158,7 +160,9 @@
                                                         <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
                                                     {% endif %}
                                                 <p class="user-position">{% if reply.user.is_superuser %}
-                                    Admin
+                                    Manager
+                                                    {% elif reply.user.is_staff %}
+                                                    Admin
                                         {% else %}
                                         User
                                     {% endif %}</p>
