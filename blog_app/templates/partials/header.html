@@ -23,7 +23,12 @@
                         {% endif %}
                     </div>
                     <ul>
+                        {% if user.is_superuser %}
+                        <li><a href="{% url 'admin_panel:home page'%}">Dashboard</a></li>
+                            {% else %}
+
                         <li><a href="{% url 'blog_app:profile'%}">Dashboard</a></li>
+                        {% endif %}
                         <li><a href="{% url 'blog_app:log out' %}">Log Out</a></li>
                     </ul>
                 </li>

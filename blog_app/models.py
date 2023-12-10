@@ -18,7 +18,7 @@ class User(AbstractUser):
     profile = models.ImageField(upload_to='users_profile/', blank=True)
     bio = models.TextField(blank=True, null=True, max_length=1000)
     job = models.CharField(max_length=30, blank=True, null=True)
-    position = models.CharField(choices=positions, default='user', max_length=10)
+
 
     def __str__(self):
         return f'{self.username}'

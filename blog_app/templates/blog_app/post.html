@@ -99,7 +99,11 @@
 
                             {% endif %}
 
-                                    <p class="user-position">{{ comment.user.position }}</p>
+                                    <p class="user-position">{% if comment.user.is_superuser %}
+                                    Admin
+                                        {% else %}
+                                        User
+                                    {% endif %} </p>
                         </div>
                                         <div class="comment__body">
                                     <div class="comment__info">
@@ -153,7 +157,11 @@
                                                     {% else %}
                                                         <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
                                                     {% endif %}
-                                                <p class="user-position">{{ reply.user.position }}</p>
+                                                <p class="user-position">{% if reply.user.is_superuser %}
+                                    Admin
+                                        {% else %}
+                                        User
+                                    {% endif %}</p>
                                             </div>
                                             <div class="comment__body">
                                                 <div class="comment__info">

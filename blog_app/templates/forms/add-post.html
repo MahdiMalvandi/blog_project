@@ -46,9 +46,7 @@
             {% if edit %}
                 <p>The thumbnail is <a href="/images/{{ form.thumbnail.value }}" style="color: blue">image</a></p>
             {% endif %}
-                <textarea name="description" id=""  rows="10" placeholder="Description">{% if form.description.value %}
-                {{ form.description.value }}
-                {% endif %} </textarea>
+                <textarea name="description" id=""  rows="10" placeholder="Description">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
             {{ form.media }}
             {{ form.body }}
                 <button type="submit" class="btn">

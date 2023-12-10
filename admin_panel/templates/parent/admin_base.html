@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% include 'partials/preloader.html' %}
+    {% include 'partials/admin_header.html' %}
+    {% include 'partials/right-sidebar.html' %}
+    {% include 'partials/left-sidebar.html' %}
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+    <script type="text/javascript">
+        if (!{{ request.user.is_superuser }}){
+
+        }
+    </script>
+</body>
+</html>

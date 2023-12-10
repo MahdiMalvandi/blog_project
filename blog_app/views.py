@@ -164,6 +164,8 @@ def login_view(request):
                 login(request, user)
                 if request.GET.get('next_page'):
                     return redirect(request.GET.get('next_page'))
+                if user.is_superuser:
+                    return redirect('admin_panel:home page')
                 return redirect('blog_app:home')
     else:
         form = LoginForm()
@@ -211,7 +213,7 @@ def post_edit(request, slug):
         'form': form,
         'categories': get_all_category(),
     }
-    return render(request, '../templates/project/add-post.html', context=context)
+    return render(request, 'forms/add-post.html', context=context)
 
 
 @login_required(redirect_field_name='next_page')
@@ -228,7 +230,7 @@ def add_post(request):
         'form': form,
         'categories': get_all_category(),
     }
-    return render(request, '../templates/project/add-post.html', context=context)
+    return render(request, 'forms/add-post.html', context=context)
 
 
 @login_required(redirect_field_name='next_page')
@@ -261,7 +263,7 @@ def change_profile(request):
     context = {
         'form': form
     }
-    return render(request, '../templates/project/change-profile.html', context=context)
+    return render(request, 'forms/change-profile.html', context=context)
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
