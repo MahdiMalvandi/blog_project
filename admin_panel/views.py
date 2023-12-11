@@ -1,5 +1,6 @@
 from django.db.models import Count
-from django.shortcuts import render, HttpResponse
+from django.http import Http404
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
 
 
@@ -22,3 +23,56 @@ def home(request):
 
     }
     return render(request, 'admin_panel/index.html', context)
+
+
+# region users views
+def users_page(request):
+    users = User.objects.all()
+    context = {
+        'users': users,
+    }
+    return render(request, 'admin_panel/users.html', context)
+
+
+def user_profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+        if user == request.user:
+            return redirect('admin_panel:profile')
+    except User.DoesNotExist:
+        user = None
+    context = {
+        'user': user,
+    }
+    return render(request, 'admin_panel/user-profile.html', context)
+
+
+def edit_user(request, username):
+    return
+
+
+def delete_user(request, username):
+    return
+
+
+# endregion
+
+
+# region blogs views
+def blogs_page(request):
+    return
+
+
+def blog_detail(request, slug):
+    ...
+
+# endregion
+
+
+def profile(request):
+    return render(request, 'admin_panel/profile.html')
+
+
+
+def test(request):
+    return get_object_or_404(User, id=123)
