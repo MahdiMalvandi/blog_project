@@ -24,7 +24,7 @@ Admin Dashboard
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											Blog Detail
@@ -38,112 +38,23 @@ Admin Dashboard
 						<div class=" pd-0">
 							<div class="row">
 								<div class="col-md-8 col-sm-12">
+
 									<div class="blog-detail card-box overflow-hidden mb-30">
+
 										<div class="blog-img">
-											<img src="vendors/images/img2.jpg" alt="" />
+											<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" />
 										</div>
 										<div class="blog-caption">
-											<h4 class="mb-10">
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                                            <a href="{% url 'admin_panel:edit post' post.slug %}" class="btn btn-sm btn-info">Edit</a>
+
+                                            <a href="{% url 'admin_panel:delete post' post.slug %}" class="btn btn-sm btn-danger">Remove</a>
+											<h4 class="mb-10 mt-4">
+                                                {{ post.title}}
 											</h4>
 											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed do eiusmod tempor incididunt ut labore et
-												dolore magna aliqua. Ut enim ad minim veniam, quis
-												nostrud exercitation ullamco laboris nisi ut aliquip ex
-												ea commodo
+                                                {{ post.description }}
 											</p>
-											<h5 class="mb-10">
-												Lorem ipsum dolor sit amet, consectetur.
-											</h5>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed do eiusmod tempor incididunt ut labore et
-												dolore magna aliqua. Ut enim ad minim veniam, quis
-												nostrud exercitation ullamco laboris nisi ut aliquip ex
-												ea commodo consequat. Duis aute irure dolor in
-												reprehenderit in voluptate velit esse cillum dolore eu
-												fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-												non proident, sunt in culpa qui officia deserunt mollit
-												anim id est laborum.
-											</p>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed do eiusmod tempor incididunt ut labore et
-												dolore magna aliqua. Ut enim ad minim veniam, quis
-												nostrud exercitation ullamco laboris nisi ut aliquip ex
-												ea commodo consequat. Duis aute irure dolor in
-												reprehenderit in voluptate velit esse cillum dolore eu
-												fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-												non proident, sunt in culpa qui officia deserunt mollit
-												anim id est laborum.
-											</p>
-											<h5 class="mb-10">Unordered List</h5>
-											<ul>
-												<li>
-													Duis aute irure dolor in reprehenderit in voluptate.
-												</li>
-												<li>
-													Sunt in culpa qui officia deserunt mollit anim id est
-													laborum.
-												</li>
-												<li>
-													Ut enim ad minim veniam, quis nostrud exercitation
-													ullamco laboris.
-												</li>
-												<li>
-													Lorem ipsum dolor sit amet, consectetur adipisicing
-													elit.
-												</li>
-												<li>
-													Duis aute irure dolor in reprehenderit in voluptate.
-												</li>
-												<li>
-													Sunt in culpa qui officia deserunt mollit anim id est
-													laborum.
-												</li>
-												<li>
-													Ut enim ad minim veniam, quis nostrud exercitation
-													ullamco laboris.
-												</li>
-												<li>
-													Lorem ipsum dolor sit amet, consectetur adipisicing
-													elit.
-												</li>
-											</ul>
-											<h5 class="mb-10">Ordered List</h5>
-											<ol>
-												<li>
-													Duis aute irure dolor in reprehenderit in voluptate.
-												</li>
-												<li>
-													Sunt in culpa qui officia deserunt mollit anim id est
-													laborum.
-												</li>
-												<li>
-													Ut enim ad minim veniam, quis nostrud exercitation
-													ullamco laboris.
-												</li>
-												<li>
-													Lorem ipsum dolor sit amet, consectetur adipisicing
-													elit.
-												</li>
-												<li>
-													Duis aute irure dolor in reprehenderit in voluptate.
-												</li>
-												<li>
-													Sunt in culpa qui officia deserunt mollit anim id est
-													laborum.
-												</li>
-												<li>
-													Ut enim ad minim veniam, quis nostrud exercitation
-													ullamco laboris.
-												</li>
-												<li>
-													Lorem ipsum dolor sit amet, consectetur adipisicing
-													elit.
-												</li>
-											</ol>
+                                            {{post.body|safe}}
 										</div>
 									</div>
 									<div class="blog-comments card-box p-4 mb-4">
@@ -167,50 +78,54 @@ Admin Dashboard
 									</div>
 									<div class="comments card-box p-4 ">
 										<h4 class="title mb-4">Comments</h4>
+										{% if comments %}
+										{% for comment in comments %}
 										<div class="comment card card-body mb-4 card-box">
 											<div class="comment-user-info">
-												<a href="profile.html">Mahdiml6</a>
-												<p>star : 4</p>
+												<a href="{% url 'admin_panel:user_page' comment.user.username %}">{{ comment.user.get_full_name }}</a>
+												<p>star : {{ comment.point }}</p>
 												<div class="flex mb-1">
 													<btn class="btn btn-sm btn-primary">Reply</btn>
-													<btn class="btn btn-sm btn-danger">Remove</btn>
+													<a href="{% url 'admin_panel:edit comment' comment.pk %}" class="btn btn-sm btn-info">Edit</a>
+													<a href="{% url 'admin_panel:delete comment' comment.pk %}" class="btn btn-sm btn-danger">Remove</a>
 												</div>
 											</div>
 											<p class="comment-body">
-												Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam culpa nisi dolores deleniti, voluptatibus natus a, in provident expedita voluptas quam incidunt amet velit eum. Atque similique itaque quasi voluptates!
+                                                {{ comment.body }}
 											</p>
-											<div class="comment-reply-container">
-												<div class="comment-reply card text-white bg-secondary card-box p-4 mb-4">
+											{% if comment.replies %}
+                                                <div class="comment-reply-container">
+
+{% for reply in comment.replies.all %}
+											<div class="comment-reply card text-white bg-secondary card-box p-4 mb-4">
 													<div class="comment-user-info mb-2">
-														<a href="profile.html" class="text-white">Mahdiml6</a>
+														<a href="{% url 'admin_panel:user_page' reply.user.username %}" class="text-white">{{ reply.user.get_full_name }}</a>
 
 													</div>
 
 															<div class=" mb-2">
-																<btn class="btn btn-sm btn-danger">Remove</btn>
+													    <a href="{% url 'admin_panel:edit comment' reply.pk %}" class="btn btn-sm btn-info">Edit</a>
+
+														<a href="{% url 'admin_panel:delete comment' reply.pk %}" class="btn btn-sm btn-danger">Remove</a>
+
 															</div>
 
 													<p class="comment-body">
-														Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam culpa nisi dolores deleniti, voluptatibus natus a, in provident expedita voluptas quam incidunt amet velit eum. Atque similique itaque quasi voluptates!
+														{{ reply.body }}
 													</p>
 												</div>
+											{% endfor %}
 
-												<div class="comment-reply card text-white bg-secondary card-box p-4 mb-4">
-													<div class="comment-user-info mb-2">
-														<a href="profile.html" class="text-white">Mahdiml6</a>
-
-													</div>
-
-															<div class=" mb-2">
-																<btn class="btn btn-sm btn-danger">Remove</btn>
-															</div>
-
-													<p class="comment-body">
-														Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam culpa nisi dolores deleniti, voluptatibus natus a, in provident expedita voluptas quam incidunt amet velit eum. Atque similique itaque quasi voluptates!
-													</p>
-												</div>
 											</div>
+
+
+											{% endif %}
 										</div>
+										{% endfor %}
+                                            {% else %}
+                                            <p class="text-lg-center">There is no Comment</p>
+										{% endif %}
+
 
 
 									</div>
@@ -219,135 +134,43 @@ Admin Dashboard
 									<div class="card-box mb-30">
 										<h5 class="pd-20 h5 mb-0">Categories</h5>
 										<div class="list-group">
-											<a
-												href="#"
+
+{% for category in categories %}
+<a
+												href="{% url 'admin_panel:post category' category %}"
 												class="list-group-item d-flex align-items-center justify-content-between"
-												>HTML
-												<span class="badge badge-primary badge-pill">7</span></a
+												>{{ category }}
+												<span class="badge badge-primary badge-pill">{{ category.posts.count }}</span></a
 											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>Css
-												<span class="badge badge-primary badge-pill"
-													>10</span
-												></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between active"
-												>Bootstrap
-												<span class="badge badge-primary badge-pill">8</span></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>jQuery
-												<span class="badge badge-primary badge-pill"
-													>15</span
-												></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>Design
-												<span class="badge badge-primary badge-pill">5</span></a
-											>
+{% endfor %}
+
 										</div>
 									</div>
 									<div class="card-box mb-30">
-										<h5 class="pd-20 h5 mb-0">Latest Post</h5>
+										<h5 class="pd-20 h5 mb-0">Similar Posts</h5>
 										<div class="latest-post">
 											<ul>
-												<li>
+                                                {% for post in similar_posts %}
+                                                <li>
 													<h4>
-														<a href="#"
-															>Ut enim ad minim veniam, quis nostrud
-															exercitation ullamco</a
+														<a href="{% url 'admin_panel:blog detail' post.slug %}"
+															>{{ post.title }}</a
 														>
 													</h4>
-													<span>HTML</span>
+													<span>{{ post.author.get_full_name }}</span>
 												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Css</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Ut enim ad minim veniam, quis nostrud
-															exercitation ullamco</a
-														>
-													</h4>
-													<span>jQuery</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Bootstrap</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Design</span>
-												</li>
+                                                {% endfor %}
+
 											</ul>
 										</div>
 									</div>
-									<div class="card-box overflow-hidden">
-										<h5 class="pd-20 h5 mb-0">Archives</h5>
-										<div class="list-group">
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>January 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>February 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>March 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>April 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>May 2020</a
-											>
-										</div>
-									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By
-					<a href="https://github.com/dropways" target="_blank"
-						>Ankit Hingarajiya</a
-					>
-				</div>
+
 			</div>
 		</div>
 {% endblock %}

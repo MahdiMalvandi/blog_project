@@ -26,8 +26,20 @@ def make_paginator(request, posts):
     return posts
 
 
-def get_all_category():
-    return Category.objects.all()
+def show_post(request, slug, template_name):
+    post = get_object_or_404(Post, slug=slug)
+    similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(
+        id=post.id)
+    short_link = request.build_absolute_uri('/')[:-1] + f'?q={post.id}'
+    comments = Comment.objects.select_related('user', 'post').filter(post=post, reply__post=None)
+    context = {
+        'post': post,
+
+        'similar_posts': similar_posts,
+        'short_link': short_link,
+        'comments': comments
+    }
+    return render(request, template_name, context)
 
 
 def home(request):
@@ -85,19 +97,7 @@ def blogs(request):
 
 
 def get_blog_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug)
-    similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(id=post.id)
-    short_link = request.build_absolute_uri('/')[:-1] + f'?q={post.id}'
-    comments = Comment.objects.select_related('user', 'post').filter(post=post, reply__post=None)
-
-    context = {
-        'post': post,
-        'categories': get_all_category(),
-        'similar_posts': similar_posts,
-        'short_link': short_link,
-        'comments': comments
-    }
-    return render(request, 'blog_app/post.html', context)
+    return show_post(request, slug, 'blog_app/post.html')
 
 
 def get_category_posts(request, category_name):
@@ -211,7 +211,6 @@ def post_edit(request, slug):
     context = {
         'edit': True,
         'form': form,
-        'categories': get_all_category(),
     }
     return render(request, 'forms/add-post.html', context=context)
 
@@ -228,7 +227,6 @@ def add_post(request):
     form = AddPostForm()
     context = {
         'form': form,
-        'categories': get_all_category(),
     }
     return render(request, 'forms/add-post.html', context=context)
 

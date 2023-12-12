@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 
+
 app_name = 'admin_panel'
 
 urlpatterns = [
@@ -11,12 +12,24 @@ urlpatterns = [
     path('users/<str:username>/', user_profile, name='user_page'),
     path('users/<str:username>/edit/', edit_user, name='edit user page'),
     path('users/<str:username>/delete/', delete_user, name='delete user'),
+    path('add-user/', add_user, name='add user'),
 
     # blogs url
-    path('blogs/', blogs_page, name='blogs'),
-    path('blogs/<str:slug>/', blog_detail, name='blog detail'),
+    path('blogs/', posts_page, name='blogs'),
+    path('add-post/', add_post, name='add post'),
+    path('blogs/<str:slug>/', post_detail, name='blog detail'),
+    path('blogs/<str:slug>/edit/', edit_post, name='edit post'),
+    path('blogs/<str:slug>/delete/', delete_post, name='delete post'),
+
+    path('blogs/category/<str:category>/', posts_category, name='post category'),
+    path('categories/', category, name='category'),
+
+    path('comments/<pk>/edit/', edit_comment, name='edit comment'),
+    path('comments/<pk>/delete/', delete_comment, name='delete comment'),
 
     path('profile/', profile, name='profile'),
+    path('ticket/', ticket, name='ticket'),
+
     path('test/', test)
 ]
 

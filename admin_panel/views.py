@@ -2,6 +2,7 @@ from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
+from blog_app.views import show_post
 
 
 # Create your views here.
@@ -55,24 +56,88 @@ def delete_user(request, username):
     return
 
 
+def add_user(request):
+    context = {}
+    return render(request, 'admin_panel/add-user.html', context)
+
 # endregion
 
 
 # region blogs views
-def blogs_page(request):
-    return
+def posts_page(request):
+    blogs = Post.objects.select_related('author', 'category').all()
+    context = {
+        'blogs': blogs,
+    }
+    return render(request, 'admin_panel/blog.html', context)
 
 
-def blog_detail(request, slug):
+def post_detail(request, slug):
+    return show_post(request, slug, 'admin_panel/blog-detail.html')
+
+
+def edit_post(request, slug):
+    # post = get_object_or_404(Post, slug=slug)
+    # if request.method == 'POST':
+    #     form = AddPostFormAdmin(request.POST, request.FILES, instance=post)
+    #     if form.is_valid():
+    #         form = form.save(commit=False)
+    #         form.author = post.author
+    #         form.save()
+    #         return redirect('blog_app:manage posts')
+    # form = AddPostFormAdmin(instance=post)
+    # context = {
+    #     'edit': True,
+    #     'form': form,
+    # }
+    # return render(request, 'forms/add-post.html', context=context)
     ...
 
+
+def delete_post(request, slug):
+    ...
+
+
+def add_post(request):
+    context = {}
+    return render(request, 'admin_panel/add-blog.html', context)
+
 # endregion
+
+
+def add_comment(request, slug):
+    ...
+
+
+def edit_comment(request, pk):
+    ...
+
+
+def delete_comment(request, pk):
+    ...
 
 
 def profile(request):
     return render(request, 'admin_panel/profile.html')
 
 
+def category(request):
+    context = {}
+    return render(request, 'admin_panel/category.html', context)
+
+
+def posts_category(request, category):
+    blogs = Post.objects.select_related('category', 'author').filter(category=category)
+    context = {
+        'blogs': blogs,
+        'category': category,
+    }
+    return render(request, 'admin_panel/blog.html', context)
+
+
+def ticket(request):
+    context = {}
+    return render(request, 'admin_panel/tickets.html', context)
 
 def test(request):
     return get_object_or_404(User, id=123)

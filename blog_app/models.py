@@ -50,7 +50,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, related_name='user_like', blank=True)
     slug = models.SlugField(max_length=1000, blank=True, null=True)
     thumbnail = models.ImageField(upload_to='article-thumbnail/')
-    category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE, default=1)
+    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title
@@ -59,7 +59,11 @@ class Post(models.Model):
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):
-        self.slug = self.title.replace(' ', '-')
+        super(Post, self).save(*args, **kwargs)
+        if Post.objects.filter(slug=self.slug).exists():
+            self.slug = self.title.replace(' ', '-') + str(self.pk)
+        else:
+            self.slug = self.title.replace(' ', '-')
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

@@ -1,12 +1,9 @@
+{% load static %}
 <div class="left-side-bar">
 			<div class="brand-logo">
-				<a href="index.html">
-					<img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
-					<img
-						src="vendors/images/deskapp-logo-white.svg"
-						alt=""
-						class="light-logo"
-					/>
+				<a href="{% url 'admin_panel:home page' %}">
+					<img src="{% static 'vendors/images/apple-touch-icon.png' %}" alt="" class="" style="height: 3rem;" />
+                    <h1 style="" class="text-white ml-1">Blog</h1>
 				</a>
 				<div class="close-sidebar" data-toggle="left-sidebar-close">
 					<i class="ion-close-round"></i>
@@ -30,7 +27,7 @@
 							</a>
 							<ul class="submenu">
 								<li><a href="{% url 'admin_panel:users' %}">Show users</a></li>
-								<li><a href="add-user.html">Add users</a></li>
+								<li><a href="{% url 'admin_panel:add user' %}">Add users</a></li>
 							</ul>
 						</li>
 
@@ -40,14 +37,14 @@
 								><span class="mtext">Blogs</span>
 							</a>
 							<ul class="submenu">
-								<li><a href="add-blog.html">Add Blog</a></li>
-								<li><a href="blog.html">Blogs</a></li>
+								<li><a href="{% url 'admin_panel:add post' %}">Add Blog</a></li>
+								<li><a href="{% url 'admin_panel:blogs' %}">Blogs</a></li>
 
 							</ul>
 						</li>
 
 						<li>
-							<a href="category.html" class="dropdown-toggle no-arrow">
+							<a href="{% url 'admin_panel:category' %}" class="dropdown-toggle no-arrow">
 								<span class="micon bi bi-table"></span
 								><span class="mtext">Category</span>
 							</a>
@@ -62,7 +59,7 @@
 
 
 						<li>
-							<a href="tickets.html" class="dropdown-toggle no-arrow">
+							<a href="{% url 'admin_panel:ticket' %}" class="dropdown-toggle no-arrow">
 								<span class="micon bi bi-chat-right-dots"></span
 								><span class="mtext">Tickets
 									<img src="vendors/images/coming-soon.png" alt="" width="25">
