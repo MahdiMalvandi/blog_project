@@ -3,6 +3,7 @@ from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
 from blog_app.views import show_post, make_paginator
+from .forms import *
 
 
 # Create your views here.
@@ -53,11 +54,21 @@ def edit_user(request, username):
 
 
 def delete_user(request, username):
-    return
+    user = get_object_or_404(User, username=username)
+    user.delete()
+    return redirect('admin_panel:users')
 
 
 def add_user(request):
-    context = {}
+    if request.method == 'POST':
+        form = AddUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:users')
+    form = AddUserForm()
+    context = {
+        'form': form,
+    }
     return render(request, 'admin_panel/add-user.html', context)
 
 
@@ -100,7 +111,18 @@ def delete_post(request, slug):
 
 
 def add_post(request):
-    context = {}
+    if request.method == 'POST':
+        form = AddBlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            print('is valid')
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('admin_panel:blogs')
+    form = AddBlogForm()
+    context = {
+        'form': form,
+    }
     return render(request, 'admin_panel/add-blog.html', context)
 
 
@@ -124,7 +146,9 @@ def profile(request):
 
 
 def category(request):
-    context = {}
+    context = {
+        'user': request.user,
+    }
     return render(request, 'admin_panel/category.html', context)
 
 

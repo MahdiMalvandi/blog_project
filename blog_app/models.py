@@ -19,10 +19,8 @@ class User(AbstractUser):
     bio = models.TextField(blank=True, null=True, max_length=1000)
     job = models.CharField(max_length=30, blank=True, null=True)
 
-
     def __str__(self):
         return f'{self.username}'
-
 
 
 # endregion
@@ -60,10 +58,8 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         super(Post, self).save(*args, **kwargs)
-        if Post.objects.filter(slug=self.slug).exists():
-            self.slug = self.title.replace(' ', '-') + str(self.pk)
-        else:
-            self.slug = self.title.replace(' ', '-')
+        self.slug = self.title.replace(' ', '-') + '-'+ str(self.pk)
+
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -88,7 +84,6 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     reply = models.ForeignKey('self', related_name='replies', on_delete=models.CASCADE, null=True, blank=True)
     point = models.PositiveIntegerField(choices=point_choices, default=5)
-
 
     def __str__(self):
         return f'a comment for {self.post} by {self.user}'

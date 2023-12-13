@@ -15,7 +15,7 @@
                     {% if user.profile %}
                     <img src="{{ user.profile.url }}" alt="{{ user.get_full_name }}'s profile" class="user-img">
                         {% else %}
-                        <img src="{% static 'images/user-avatar.jpg' %}" alt="" class="user-img">
+                        <img src="../../../images/users_avatar/user-avatar.jpg" alt="" class="user-img">
                     {% endif %}
                 </div>
                 <h4 class="user-fullname">{{ user.get_full_name }}</h4>

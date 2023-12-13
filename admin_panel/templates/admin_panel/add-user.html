@@ -26,7 +26,7 @@ Admin Dashboard
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											Add User
@@ -43,14 +43,16 @@ Admin Dashboard
 								<h4 class="text-blue h4">Add User</h4>
 							</div>
 						</div>
-						<form class="row">
+						<form class="row" method="post">
+                            {% csrf_token %}
 							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12  col-form-label">First Name</label>
 								<div class="col-sm-12">
 									<input
 										class="form-control"
 										type="text"
-										placeholder="Johnny Brown"
+                                        name="first_name"
+										placeholder="Enter The First Name"
 									/>
 								</div>
 							</div>
@@ -60,7 +62,8 @@ Admin Dashboard
 									<input
 										class="form-control"
 										type="text"
-										placeholder="Johnny Brown"
+                                        name="last_name"
+										placeholder="Enter The Last Name"
 									/>
 								</div>
 							</div>
@@ -71,19 +74,24 @@ Admin Dashboard
 									<input
 										class="form-control"
 										type="text"
-										placeholder="Johnny Brown"
+                                        name="username"
+										placeholder="Enter The Username"
 									/>
+                                    {{ form.username.errors }}
 								</div>
 							</div>
 
-							<div class="form-group col-md-6 col-lg-4"">
+							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12 col-form-label">Email</label>
 								<div class="col-sm-12">
 									<input
 										class="form-control"
 
 										type="email"
+                                        name="email"
+                                        placeholder="Enter The Email"
 									/>
+                                    {{ form.email.errors }}
 								</div>
 							</div>
 
@@ -94,7 +102,8 @@ Admin Dashboard
 								<div class="col-sm-12 ">
 									<input
 										class="form-control"
-
+                                        placeholder="Enter The Password"
+                                        name="password"
 										type="password"
 									/>
 								</div>
@@ -107,8 +116,9 @@ Admin Dashboard
 								<div class="col-sm-12 ">
 									<input
 										class="form-control"
-
+                                        placeholder="Enter The Repeat Password"
 										type="password"
+                                        name="password2"
 									/>
 								</div>
 							</div>
@@ -116,9 +126,10 @@ Admin Dashboard
 							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12 col-form-label">Position</label>
 								<div class="col-sm-12 ">
-									<select class="custom-select col-12">
-										<option selected="">user</option>
-										<option value="1">admin</option>
+									<select class="custom-select col-12" name="position">
+										<option selected value="3">User</option>
+										<option value="2">Admin</option>
+										<option value="1">Manager</option>
 									</select>
 								</div>
 							</div>

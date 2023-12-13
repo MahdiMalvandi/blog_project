@@ -40,19 +40,20 @@ Admin Dashboard
                     <div class="add-blog card-box p-4 bg-white border-radius-4 box-shadow mb-30">
                         <div class="">
                             <h4 class="title">Add Blog</h4>
-                            <form action="">
+                            <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
                                 <div class="row">
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Title</label>
                                         <div class="col-sm-12 ">
-                                            <input class="form-control" type="text" placeholder="title">
+                                            <input class="form-control" type="text" name="title" placeholder="title">
                                         </div>
                                     </div>
 
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Description</label>
                                         <div class="col-sm-12">
-                                            <input class="form-control" type="text" placeholder="Description">
+                                            <input class="form-control" type="text" name="description" placeholder="Description">
                                         </div>
                                     </div>
 
@@ -60,6 +61,7 @@ Admin Dashboard
                                         <label>Thumbnail</label>
                                         <input
                                             type="file"
+                                            name="thumbnail"
                                             class="form-control-file form-control"
                                         />
                                     </div>
@@ -67,19 +69,23 @@ Admin Dashboard
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Category</label>
                                         <div class="col-sm-12 ">
-                                            <select class="custom-select col-12">
+                                            <select class="custom-select col-12" name="category">
 
-                                                <option value="art">art</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                {% for category in categories %}
+                                                <option value="{{ category.id }}" name="{{ category }}">{{ category.text }}</option>
+                                                {% endfor %}
+
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-md-6 col-lg-4">
+                                    <div class="form-group col-sm-12 ">
                                         <label class="col-sm-12 col-md-2 col-form-label">Body</label>
                                         <div class="col-sm-12 ">
-                                            <!-- ck editor form -->
+
+
+                                    {{ form.body }}
+                                            {{ form.media }}
                                         </div>
                                     </div>
                                 </div>
@@ -90,12 +96,7 @@ Admin Dashboard
                     </div>
 
 				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By
-					<a href="https://github.com/dropways" target="_blank"
-						>Ankit Hingarajiya</a
-					>
-				</div>
+
 			</div>
 		</div>
 {% endblock %}

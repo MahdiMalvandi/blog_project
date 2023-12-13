@@ -23,7 +23,7 @@
                         {% endif %}
                     </div>
                     <ul>
-                        {% if user.is_superuser %}
+                        {% if user.is_staff %}
                         <li><a href="{% url 'admin_panel:home page'%}">Dashboard</a></li>
                             {% else %}
 
