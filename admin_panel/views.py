@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
-from blog_app.views import show_post
+from blog_app.views import show_post, make_paginator
 
 
 # Create your views here.
@@ -60,6 +60,7 @@ def add_user(request):
     context = {}
     return render(request, 'admin_panel/add-user.html', context)
 
+
 # endregion
 
 
@@ -67,7 +68,7 @@ def add_user(request):
 def posts_page(request):
     blogs = Post.objects.select_related('author', 'category').all()
     context = {
-        'blogs': blogs,
+        'blogs': make_paginator(request, blogs, 6),
     }
     return render(request, 'admin_panel/blog.html', context)
 
@@ -102,6 +103,7 @@ def add_post(request):
     context = {}
     return render(request, 'admin_panel/add-blog.html', context)
 
+
 # endregion
 
 
@@ -126,11 +128,11 @@ def category(request):
     return render(request, 'admin_panel/category.html', context)
 
 
-def posts_category(request, category):
-    blogs = Post.objects.select_related('category', 'author').filter(category=category)
+def posts_category(request, category_text):
+    blogs = Post.objects.select_related('category', 'author').filter(category__text=category_text)
     context = {
-        'blogs': blogs,
-        'category': category,
+        'blogs': make_paginator(request, blogs, 6),
+        'category': category_text,
     }
     return render(request, 'admin_panel/blog.html', context)
 
@@ -138,6 +140,7 @@ def posts_category(request, category):
 def ticket(request):
     context = {}
     return render(request, 'admin_panel/tickets.html', context)
+
 
 def test(request):
     return get_object_or_404(User, id=123)

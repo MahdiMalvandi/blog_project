@@ -1,0 +1,42 @@
+<div class="blog-pagination">
+										<div class="btn-toolbar justify-content-center mb-15">
+											<div class="btn-group">
+                                                    {% if page.paginator.num_pages > 1 %}
+    {% if page.has_previous %}
+												<a href="?page={{ page.previous_page_number }}" class="btn btn-outline-primary prev h-3rem"
+													><i class="fa fa-angle-double-left"></i></a>
+
+                                                {% if page.number > 3 %}
+												<a href="?page=1" class="btn btn-outline-primary h-3rem">1</a>
+                                                        {% if page.number > 3 %}
+												<p class="btn btn-outline-primary h-3rem">...</p>
+                                                        {% endif %}
+    {% endif %}
+    {% endif %}
+                                                {% for num in page.paginator.page_range %}
+    {% if page.number == num %}
+
+												<a href="?page={{ num }}" class="btn btn-outline-primary h-3rem">{{ num }}</a>
+                                                {% elif num > page.number|add:'-2' and num < page.number|add:'2' %}
+												<a href="?page={{ num }}" class="btn btn-outline-primary h-3rem">{{ num }}</a>
+                                                {% endif %}
+    {% endfor %}
+
+    {% if page.has_next %}
+    {% if page.number < page.paginator.num_pages|add:'-2' %}
+												<p class="btn btn-outline-primary h-3rem">...</p>
+												<a href="?page={{ page.paginator.num_pages }}" class="btn btn-outline-primary h-3rem">{{ page.paginator.num_pages }}</a>
+
+                                                   {% elif page.number < page.paginator.num_pages|add:'-2' %}
+												<a href="?page={{ page.paginator.num_pages }}" class="btn btn-outline-primary h-3rem">{{ page.paginator.num_pages }}</a>
+                                                {% endif %}
+
+
+												<a href="?page={{ page.next_page_number }}" class="btn btn-outline-primary next h-3rem"
+													><i class="fa fa-angle-double-right"></i
+												></a>
+                                                {% endif %}
+    {% endif %}
+											</div>
+										</div>
+									</div>

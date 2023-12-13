@@ -21,7 +21,7 @@ urlpatterns = [
     path('blogs/<str:slug>/edit/', edit_post, name='edit post'),
     path('blogs/<str:slug>/delete/', delete_post, name='delete post'),
 
-    path('blogs/category/<str:category>/', posts_category, name='post category'),
+    path('blogs/category/<str:category_text>/', posts_category, name='post category'),
     path('categories/', category, name='category'),
 
     path('comments/<pk>/edit/', edit_comment, name='edit comment'),

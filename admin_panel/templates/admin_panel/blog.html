@@ -22,16 +22,28 @@ Admin Dashboard
 						<div class="row">
 							<div class="col-md-12 col-sm-12">
 								<div class="title">
-									<h4>Blog</h4>
+
+									{% if category %}
+
+                                        <h4>{{ category }}'s Blogs</h4>
+{% else %}
+                                        <h4>Blog</h4>
+									{% endif %}
 								</div>
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
-										<li class="breadcrumb-item active" aria-current="page">
+										{% if category %}
+<li class="breadcrumb-item active" aria-current="page">
+											{{ category }}'s Blog
+										</li>
+                                            {% else %}
+                                            <li class="breadcrumb-item active" aria-current="page">
 											Blog
 										</li>
+										{% endif %}
 									</ol>
 								</nav>
 							</div>
@@ -43,13 +55,15 @@ Admin Dashboard
 								<div class="col-md-8 col-sm-12">
 									<div class="blog-list">
 										<ul>
-											<li>
+											{% if blogs %}
+                                                {% for blog in blogs %}
+                                                <li>
 												<div class="row no-gutters">
 													<div class="col-lg-4 col-md-12 col-sm-12">
 														<div class="blog-img">
 															<img
-																src="vendors/images/img2.jpg"
-																alt=""
+																src="{{ blog.thumbnail.url }}"
+																alt="{{ blog.title }}"
 																class="bg_img"
 															/>
 														</div>
@@ -57,22 +71,16 @@ Admin Dashboard
 													<div class="col-lg-8 col-md-12 col-sm-12">
 														<div class="blog-caption">
 															<h4>
-																<a href="#"
-																	>Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit</a
+																<a href="{% url 'admin_panel:blog detail' blog.slug %}"
+																	>{{ blog.title }}</a
 																>
 															</h4>
 															<div class="blog-by">
 																<p>
-																	Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit, sed do eiusmod tempor
-																	incididunt ut labore et dolore magna aliqua.
-																	Ut enim ad minim veniam, quis nostrud
-																	exercitation ullamco laboris nisi ut aliquip
-																	ex ea commodo
+																	{{ blog.description }}
 																</p>
 																<div class="pt-10">
-																	<a href="#" class="btn btn-outline-primary"
+																	<a href="{% url 'admin_panel:blog detail' blog.slug %}" class="btn btn-outline-primary"
 																		>Read More</a
 																	>
 																</div>
@@ -81,273 +89,38 @@ Admin Dashboard
 													</div>
 												</div>
 											</li>
-											<li>
-												<div class="row no-gutters">
-													<div class="col-lg-4 col-md-12 col-sm-12">
-														<div class="blog-img">
-															<img
-																src="vendors/images/img3.jpg"
-																alt=""
-																class="bg_img"
-															/>
-														</div>
-													</div>
-													<div class="col-lg-8 col-md-12 col-sm-12">
-														<div class="blog-caption">
-															<h4>
-																<a href="#"
-																	>Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit</a
-																>
-															</h4>
-															<div class="blog-by">
-																<p>
-																	Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit, sed do eiusmod tempor
-																	incididunt ut labore et dolore magna aliqua.
-																	Ut enim ad minim veniam, quis nostrud
-																	exercitation ullamco laboris nisi ut aliquip
-																	ex ea commodo
-																</p>
-																<div class="pt-10">
-																	<a href="#" class="btn btn-outline-primary"
-																		>Read More</a
-																	>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="row no-gutters">
-													<div class="col-lg-4 col-md-12 col-sm-12">
-														<div class="blog-img">
-															<img
-																src="vendors/images/img4.jpg"
-																alt=""
-																class="bg_img"
-															/>
-														</div>
-													</div>
-													<div class="col-lg-8 col-md-12 col-sm-12">
-														<div class="blog-caption">
-															<h4>
-																<a href="#"
-																	>Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit</a
-																>
-															</h4>
-															<div class="blog-by">
-																<p>
-																	Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit, sed do eiusmod tempor
-																	incididunt ut labore et dolore magna aliqua.
-																	Ut enim ad minim veniam, quis nostrud
-																	exercitation ullamco laboris nisi ut aliquip
-																	ex ea commodo
-																</p>
-																<div class="pt-10">
-																	<a href="#" class="btn btn-outline-primary"
-																		>Read More</a
-																	>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="row no-gutters">
-													<div class="col-lg-4 col-md-12 col-sm-12">
-														<div class="blog-img">
-															<img
-																src="vendors/images/img5.jpg"
-																alt=""
-																class="bg_img"
-															/>
-														</div>
-													</div>
-													<div class="col-lg-8 col-md-12 col-sm-12">
-														<div class="blog-caption">
-															<h4>
-																<a href="#"
-																	>Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit</a
-																>
-															</h4>
-															<div class="blog-by">
-																<p>
-																	Lorem ipsum dolor sit amet, consectetur
-																	adipisicing elit, sed do eiusmod tempor
-																	incididunt ut labore et dolore magna aliqua.
-																	Ut enim ad minim veniam, quis nostrud
-																	exercitation ullamco laboris nisi ut aliquip
-																	ex ea commodo
-																</p>
-																<div class="pt-10">
-																	<a href="#" class="btn btn-outline-primary"
-																		>Read More</a
-																	>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
+                                                {% endfor %}
+
+                                                {% else %}
+                                                <p>There is no post</p>
+											{% endif %}
+
 										</ul>
 									</div>
-									<div class="blog-pagination">
-										<div class="btn-toolbar justify-content-center mb-15">
-											<div class="btn-group">
-												<a href="#" class="btn btn-outline-primary prev"
-													><i class="fa fa-angle-double-left"></i
-												></a>
-												<a href="#" class="btn btn-outline-primary">1</a>
-												<a href="#" class="btn btn-outline-primary">2</a>
-												<span class="btn btn-primary current">3</span>
-												<a href="#" class="btn btn-outline-primary">4</a>
-												<a href="#" class="btn btn-outline-primary">5</a>
-												<a href="#" class="btn btn-outline-primary next"
-													><i class="fa fa-angle-double-right"></i
-												></a>
-											</div>
-										</div>
-									</div>
+									{% include 'partials/pagination_admin.html' with page=blogs %}
 								</div>
 								<div class="col-md-4 col-sm-12">
 									<div class="card-box mb-30">
 										<h5 class="pd-20 h5 mb-0">Categories</h5>
 										<div class="list-group">
-											<a
-												href="#"
+                                    {% for category in categories %}
+                                    <a
+												href="{% url 'admin_panel:post category' category %}"
 												class="list-group-item d-flex align-items-center justify-content-between"
-												>HTML
-												<span class="badge badge-primary badge-pill">7</span></a
+												>{{ category }}
+												<span class="badge badge-primary badge-pill">{{ category.posts.count }}</span></a
 											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>Css
-												<span class="badge badge-primary badge-pill"
-													>10</span
-												></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between active"
-												>Bootstrap
-												<span class="badge badge-primary badge-pill">8</span></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>jQuery
-												<span class="badge badge-primary badge-pill"
-													>15</span
-												></a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>Design
-												<span class="badge badge-primary badge-pill">5</span></a
-											>
+                                    {% endfor %}
+
 										</div>
 									</div>
-									<div class="card-box mb-30">
-										<h5 class="pd-20 h5 mb-0">Latest Post</h5>
-										<div class="latest-post">
-											<ul>
-												<li>
-													<h4>
-														<a href="#"
-															>Ut enim ad minim veniam, quis nostrud
-															exercitation ullamco</a
-														>
-													</h4>
-													<span>HTML</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Css</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Ut enim ad minim veniam, quis nostrud
-															exercitation ullamco</a
-														>
-													</h4>
-													<span>jQuery</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Bootstrap</span>
-												</li>
-												<li>
-													<h4>
-														<a href="#"
-															>Lorem ipsum dolor sit amet, consectetur
-															adipisicing elit</a
-														>
-													</h4>
-													<span>Design</span>
-												</li>
-											</ul>
-										</div>
-									</div>
-									<div class="card-box overflow-hidden">
-										<h5 class="pd-20 h5 mb-0">Archives</h5>
-										<div class="list-group">
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>January 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>February 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>March 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>April 2020</a
-											>
-											<a
-												href="#"
-												class="list-group-item d-flex align-items-center justify-content-between"
-												>May 2020</a
-											>
-										</div>
-									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By
-					<a href="https://github.com/dropways" target="_blank"
-						>Ankit Hingarajiya</a
-					>
-				</div>
+
 			</div>
 		</div>
 

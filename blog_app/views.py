@@ -14,8 +14,8 @@ from .models import *
 
 
 # Create your views here.
-def make_paginator(request, posts):
-    paginator = Paginator(posts, 12)
+def make_paginator(request, posts, count=12):
+    paginator = Paginator(posts, count)
     page = request.GET.get("page") if request.GET.get('page') else 1
     try:
         posts = paginator.page(page)
