@@ -11,7 +11,7 @@ class CommentTabularInline(admin.TabularInline):
 
 @admin.register(User)
 class Admin(admin.ModelAdmin):
-    list_display = ["username", "first_name", "last_name", ]
+    list_display = ["username", "first_name", "last_name",'pk' ]
 
 
 @admin.register(Post)

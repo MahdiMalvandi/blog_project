@@ -4,9 +4,51 @@ from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
 from blog_app.views import show_post, make_paginator
 from .forms import *
+from django.contrib.postgres.search import TrigramSimilarity
 
 
 # Create your views here.
+def search(request):
+    if 'query' in request.GET:
+
+        query = request.GET.get('query')
+        context = {
+            'query': query,
+        }
+        form = SearchForm(data=request.GET)
+        if form.is_valid():
+
+            if request.GET.get('type') == 'user':
+                results_by_username = User.objects.annotate(similarity=TrigramSimilarity('username', query)).filter(
+                    similarity__gt=0.1)
+                results_by_first_name = User.objects.annotate(similarity=TrigramSimilarity('first_name', query)).filter(
+                    similarity__gt=0.1)
+                results_by_last_name = User.objects.annotate(similarity=TrigramSimilarity('last_name', query)).filter(
+                    similarity__gt=0.1)
+                results_by_job = User.objects.annotate(similarity=TrigramSimilarity('job', query)).filter(
+                    similarity__gt=0.1)
+                results_by_email = User.objects.annotate(similarity=TrigramSimilarity('email', query)).filter(
+                    similarity__gt=0.1)
+
+                results = (
+                        results_by_username | results_by_first_name | results_by_last_name | results_by_job | results_by_email).order_by(
+                    "-similarity")
+                context['users'] = results
+                return render(request, 'admin_panel/users.html', context)
+            elif request.GET.get('type') == 'blog':
+                results_by_title = Post.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(
+                    similarity__gt=0.2)
+                results_by_description = Post.objects.annotate(
+                    similarity=TrigramSimilarity('description', query)).filter(
+                    similarity__gt=0.1)
+                results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(
+                    similarity__gt=0.1)
+                print(results_by_title,
+                      results_by_body,
+                      results_by_description)
+                results = (results_by_title | results_by_body | results_by_description).order_by("-similarity")
+                context['blogs'] = results
+                return render(request, 'admin_panel/blog.html', context)
 
 
 def home(request):
@@ -114,7 +156,6 @@ def add_post(request):
     if request.method == 'POST':
         form = AddBlogForm(request.POST, request.FILES)
         if form.is_valid():
-            print('is valid')
             post = form.save(commit=False)
             post.author = request.user
             post.save()
@@ -146,10 +187,26 @@ def profile(request):
 
 
 def category(request):
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST)
+        if form.is_valid():
+            category_form = form.save(commit=False)
+            category_form.author = request.user
+            category_form.save()
+            return redirect('admin_panel:category')
+    form = AddCategoryForm()
     context = {
-        'user': request.user,
+        'form': form,
     }
     return render(request, 'admin_panel/category.html', context)
+
+
+def edit_category(request, text):
+    category_selected = Category.objects.get(text=text)
+
+
+def delete_category(request, text):
+    category_selected = Category.objects.get(text=text)
 
 
 def posts_category(request, category_text):

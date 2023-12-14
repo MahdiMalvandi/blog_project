@@ -41,33 +41,54 @@ Admin Dashboard
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
+
                                 <th scope="col">title</th>
                                 <th scope="col">description</th>
-                                <th scope="col">user</th>
+                                <th scope="col">author</th>
+                                <th scope="col">actions</th>
+
                             </tr>
                             </thead>
                             <tbody>
+                            {% if categories %}
+                            {% for category in categories %}
                             <tr>
-                                <th scope="row">1</th>
-                                <th scope="row">art</th>
-                                <th scope="row">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste, sapiente!</th>
-                                <th scope="row">mahdi</th>
+                                <td>{{ category.text }}</td>
+                                {% if category.description %}
+                                <td >{{ category.description }}</td>
+                                    {% else %}
+                                    <td >The Description isn't set</td>
+                                {% endif %}
+                                <td ><a href="{% url 'admin_panel:user_page' category.author.username %}">{{ category.author.get_full_name }}</a></td>
+                                <td>
+											<div class="dropdown">
+												<a
+													class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
+													href="#"
+													role="button"
+													data-toggle="dropdown"
+												>
+													<i class="dw dw-more"></i>
+												</a>
+												<div
+													class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
+												>
+													<a class="dropdown-item" href="{% url 'admin_panel:edit category' category.text%}"
+														><i class="dw dw-edit2"></i> Edit</a
+													>
+													<a class="dropdown-item" href="{% url 'admin_panel:delete category' category.text %}"
+														><i class="dw dw-delete-3"></i> Delete</a
+													>
+												</div>
+											</div>
+										</td>
                             </tr>
+                            {% endfor %}
 
-                            <tr>
-                                <th scope="row">1</th>
-                                <th scope="row">art</th>
-                                <th scope="row">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste, sapiente!</th>
-                                <th scope="row">mahdi</th>
-                            </tr>
+                            {% endif %}
 
-                            <tr>
-                                <th scope="row">1</th>
-                                <th scope="row">art</th>
-                                <th scope="row">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste, sapiente!</th>
-                                <th scope="row">mahdi</th>
-                            </tr>
+
+
                             </tbody>
                         </table>
 
@@ -76,31 +97,29 @@ Admin Dashboard
                         <div class="title">
                             <h4>Add Category</h4>
                         </div>
-                        <form class="row">
+                        <form class="row" method="post">
+                            {% csrf_token %}
                             <div class="form-group col-md-6 ">
 								<label class="col-sm-12  col-form-label">Title</label>
 								<div>
 									<input
 										class="form-control"
 										type="text"
-										placeholder="Johnny Brown"
+                                        name="text"
+										placeholder="title"
+                                        required
 									/>
 								</div>
 							</div>
                             <div class="form-group  col-md-6">
                                 <label class="col-sm-12  col-form-label">Description</label>
-                                <textarea class="form-control"></textarea>
+                                <textarea class="form-control" name="description"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary ml-3">Submit</button>
                         </form>
                     </div>
 				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By
-					<a href="https://github.com/dropways" target="_blank"
-						>Ankit Hingarajiya</a
-					>
-				</div>
+
 			</div>
 		</div>
 

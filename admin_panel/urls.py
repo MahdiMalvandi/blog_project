@@ -14,6 +14,7 @@ urlpatterns = [
     path('users/<str:username>/delete/', delete_user, name='delete user'),
     path('add-user/', add_user, name='add user'),
 
+    path('search/', search, name='search'),
     # blogs url
     path('blogs/', posts_page, name='blogs'),
     path('add-post/', add_post, name='add post'),
@@ -23,9 +24,12 @@ urlpatterns = [
 
     path('blogs/category/<str:category_text>/', posts_category, name='post category'),
     path('categories/', category, name='category'),
+    path('categories/<str:text>/edit/', edit_category, name='edit category'),
+    path('categories/<str:text>/delete/', delete_category, name='delete category'),
 
     path('comments/<pk>/edit/', edit_comment, name='edit comment'),
     path('comments/<pk>/delete/', delete_comment, name='delete comment'),
+
 
     path('profile/', profile, name='profile'),
     path('ticket/', ticket, name='ticket'),

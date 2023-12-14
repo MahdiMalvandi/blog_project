@@ -48,3 +48,13 @@ class AddBlogForm(forms.ModelForm):
 
     def clean(self):
         return self.cleaned_data
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=10000)
+
+
+class AddCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['text', 'description']
