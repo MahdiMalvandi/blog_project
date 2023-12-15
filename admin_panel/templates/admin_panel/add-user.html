@@ -21,16 +21,28 @@ Admin Dashboard
 						<div class="row">
 							<div class="col-md-6 col-sm-12">
 								<div class="title">
-									<h4>Add User</h4>
+									{% if edit %}
+									<h4>Edit User</h4>
+                                     {% else %}
+                                        <h4>Add User</h4>
+									{% endif %}
 								</div>
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
 											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
-										<li class="breadcrumb-item active" aria-current="page">
+
+                                       {% if edit %}
+                                        <li class="breadcrumb-item active" aria-current="page">
+											Edit User
+										</li>
+
+                                     {% else %}
+                                        	<li class="breadcrumb-item active" aria-current="page">
 											Add User
 										</li>
+									{% endif %}
 									</ol>
 								</nav>
 							</div>
@@ -40,10 +52,14 @@ Admin Dashboard
 					<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
 						<div class="clearfix">
 							<div class="pull-left">
-								<h4 class="text-blue h4">Add User</h4>
+								{% if edit %}
+                                    <h4 class="text-blue h4">Edit User</h4>
+                                    {% else %}
+                                    <h4 class="text-blue h4">Add User</h4>
+								{% endif %}
 							</div>
 						</div>
-						<form class="row" method="post">
+						<form class="row" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12  col-form-label">First Name</label>
@@ -52,6 +68,9 @@ Admin Dashboard
 										class="form-control"
 										type="text"
                                         name="first_name"
+                                        {% if form.first_name.value %}
+                                        value="{{ form.first_name.value }}"
+                                        {% endif %}
 										placeholder="Enter The First Name"
 									/>
 								</div>
@@ -63,6 +82,9 @@ Admin Dashboard
 										class="form-control"
 										type="text"
                                         name="last_name"
+                                        {% if form.last_name.value %}
+                                        value="{{ form.last_name.value }}"
+                                        {% endif %}
 										placeholder="Enter The Last Name"
 									/>
 								</div>
@@ -75,7 +97,11 @@ Admin Dashboard
 										class="form-control"
 										type="text"
                                         name="username"
-										placeholder="Enter The Username"
+                                        {% if form.username.value %}
+                                        value="{{ form.username.value }}"
+                                        {% endif %}
+										placeholder="En
+										ter The Username"
 									/>
                                     {{ form.username.errors }}
 								</div>
@@ -86,14 +112,33 @@ Admin Dashboard
 								<div class="col-sm-12">
 									<input
 										class="form-control"
-
 										type="email"
                                         name="email"
+                                        {% if form.email.value %}
+                                        value="{{ form.email.value }}"
+                                        {% endif %}
                                         placeholder="Enter The Email"
 									/>
                                     {{ form.email.errors }}
 								</div>
 							</div>
+
+                        							<div class="form-group col-md-6 col-lg-4">
+								<label class="col-sm-12 col-form-label">Job</label>
+								<div class="col-sm-12">
+									<input
+										class="form-control"
+										type="text"
+                                        name="job"
+                                        {% if form.job.value %}
+                                        value="{{ form.job.value }}"
+                                        {% endif %}
+                                        placeholder="Enter The job"
+									/>
+                                    {{ form.job.errors }}
+								</div>
+							</div>
+
 
 							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12 col-form-label"
@@ -105,31 +150,24 @@ Admin Dashboard
                                         placeholder="Enter The Password"
                                         name="password"
 										type="password"
+
 									/>
 								</div>
 							</div>
 
-							<div class="form-group col-md-6 col-lg-4">
-								<label class="col-sm-12 col-form-label"
-									>Password Repeat</label
-								>
-								<div class="col-sm-12 ">
-									<input
-										class="form-control"
-                                        placeholder="Enter The Repeat Password"
-										type="password"
-                                        name="password2"
-									/>
-								</div>
-							</div>
+
 
 							<div class="form-group col-md-6 col-lg-4">
 								<label class="col-sm-12 col-form-label">Position</label>
 								<div class="col-sm-12 ">
+
 									<select class="custom-select col-12" name="position">
-										<option selected value="3">User</option>
-										<option value="2">Admin</option>
-										<option value="1">Manager</option>
+                                    <option value="1">Manager</option>
+
+										<option value="3">User</option>
+
+										<option value="2" >Admin</option>
+
 									</select>
 								</div>
 							</div>
@@ -140,7 +178,17 @@ Admin Dashboard
 								<input
 									type="file"
 									class="form-control-file form-control "
+                                    name="profile"
 								/>
+							</div>
+						</div>
+                        							<div class="form-group col-md-6 col-lg-4">
+								<label class="col-sm-12 col-form-label">Bio</label>
+								<div class="col-sm-12 ">
+								<textarea name="bio"
+
+
+								 class="form-control">{% if form.bio.value %}{{ form.bio.value }}{% endif %}</textarea>
 							</div>
 						</div>
 						<button type="submit" class="btn btn-primary align-self-center" style="height: 3rem;">Submit</button>

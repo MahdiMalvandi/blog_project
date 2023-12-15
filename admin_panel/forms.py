@@ -3,25 +3,43 @@ from blog_app.models import *
 
 
 class AddUserForm(forms.ModelForm):
-    password2 = forms.CharField(max_length=100)
     position = forms.ChoiceField(choices=((1, 1), (2, 2), (3, 3)))
+    password = forms.CharField(max_length=100,required=False)
 
     class Meta:
         model = User
         fields = [
             'username', 'first_name', 'last_name',
             'is_staff', 'is_superuser', 'password',
-            'profile', 'email'
+            'profile', 'email', 'job'
         ]
 
-    def clean(self):
-        position = self.cleaned_data['position']
+    exclude = ('password',)
+
+    def clean_username(self):
         username = self.cleaned_data['username']
+        users = User.objects.exclude(pk=self.instance.pk).filter(
+            username__iexact=username
+        ).exists()
+
+        if users:
+            raise forms.ValidationError("Username has already taken by someone else")
+        return username
+
+    def clean_email(self):
         email = self.cleaned_data['email']
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Username already exists')
-        elif User.objects.filter(email=email).exists():
-            raise forms.ValidationError('Email already exists')
+        users = User.objects.exclude(pk=self.instance.pk).filter(
+            email__iexact=email
+        ).exists()
+
+        if users:
+            raise forms.ValidationError("Email has already taken by someone else")
+
+        return email
+
+    def clean(self):
+
+        position = self.cleaned_data['position']
 
         if int(position) == 1:
             # Manager
@@ -31,14 +49,24 @@ class AddUserForm(forms.ModelForm):
             self.cleaned_data['is_superuser'], self.cleaned_data['is_staff'] = False, True
         elif int(position) == 3:
             self.cleaned_data['is_superuser'], self.cleaned_data['is_staff'] = False, False
+
         return self.cleaned_data
 
     def save(self, commit=True):
+        password = self.cleaned_data['password']
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])
-        if commit:
-            user.save()
-        return user
+        if not password and self.instance.pk:
+            # If password is not provided and user exists, keep the previous password
+            if commit:
+                user.save()
+            return user
+        else:
+            # If password provided or it's a new user, return the entered password
+            user.set_password(self.cleaned_data['password'])
+            if commit:
+                user.save()
+            return user
+
 
 
 class AddBlogForm(forms.ModelForm):

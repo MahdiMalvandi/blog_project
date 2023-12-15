@@ -7,13 +7,14 @@ Admin Dashboard
 {% endblock %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'style/izitoast.css' %}">
 {% endblock %}
 
 
 {% block content %}
 
 		<div class="main-container">
+
 			<div class="pd-ltr-20 xs-pd-20-10">
 				<div class="min-height-200px">
 					<div class="page-header">
@@ -22,6 +23,10 @@ Admin Dashboard
 								<div class="title">
 									<h4>Users</h4>
 								</div>
+                                {% for message in messages %}
+                                {{ message }}
+                                {% endfor %}
+
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
@@ -94,9 +99,11 @@ Admin Dashboard
 													<a class="dropdown-item" href="{% url 'admin_panel:edit user page' user.username %}"
 														><i class="dw dw-edit2"></i> Edit</a
 													>
+													{% if user != request.user %}
 													<a class="dropdown-item" href="{% url 'admin_panel:delete user' user.username %}"
 														><i class="dw dw-delete-3"></i> Delete</a
 													>
+													{% endif %}
 												</div>
 											</div>
 										</td>
@@ -136,8 +143,28 @@ Admin Dashboard
 		<script src="{% static 'src/plugins/datatables/js/buttons.flash.min.js' %}"></script>
 		<script src="{% static 'src/plugins/datatables/js/pdfmake.min.js' %}"></script>
 		<script src="{% static 'src/plugins/datatables/js/vfs_fonts.js' %}"></script>
-
+		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
+    <script type="text/javascript">
+         window.addEventListener('load', e=>console.log('load'))
+         </script>
+		{% if messages %}
 		<script src="{% static 'vendors/scripts/datatable-setting.js' %}"></script>
+    <script type="text/javascript">
+         window.addEventListener('load', () => {
+             {% for message in messages %}
+        iziToast.{{ message.tags }}({
+                theme: 'dark',
+messageColor: '#1a1a1a',
+            color: '#0eb020',
+    message: '{{message}}'
+});
+        {% endfor %}
+         })
+
+
+
+</script>
+		{% endif %}
 		<!-- Google Tag Manager (noscript) -->
 		<noscript
 			><iframe

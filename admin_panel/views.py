@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
@@ -43,9 +44,6 @@ def search(request):
                     similarity__gt=0.1)
                 results_by_body = Post.objects.annotate(similarity=TrigramSimilarity('body', query)).filter(
                     similarity__gt=0.1)
-                print(results_by_title,
-                      results_by_body,
-                      results_by_description)
                 results = (results_by_title | results_by_body | results_by_description).order_by("-similarity")
                 context['blogs'] = results
                 return render(request, 'admin_panel/blog.html', context)
@@ -72,6 +70,7 @@ def home(request):
 # region users views
 def users_page(request):
     users = User.objects.all()
+
     context = {
         'users': users,
     }
@@ -79,12 +78,9 @@ def users_page(request):
 
 
 def user_profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-        if user == request.user:
-            return redirect('admin_panel:profile')
-    except User.DoesNotExist:
-        user = None
+    user = get_object_or_404(User, username=username)
+    if user == request.user:
+        return redirect('admin_panel:profile')
     context = {
         'user': user,
     }
@@ -92,12 +88,26 @@ def user_profile(request, username):
 
 
 def edit_user(request, username):
-    return
+    user = get_object_or_404(User, username=username)
+    if user == request.user:
+        return redirect('admin_panel:profile')
+    if request.method == 'POST':
+        form = AddUserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:users')
+    form = AddUserForm(instance=user)
+    context = {
+        'form': form,
+        'edit': True,
+    }
+    return render(request, 'admin_panel/add-user.html', context)
 
 
 def delete_user(request, username):
     user = get_object_or_404(User, username=username)
     user.delete()
+    messages.success(request, 'User deleted successfully')
     return redirect('admin_panel:users')
 
 

@@ -15,7 +15,7 @@ class User(AbstractUser):
     )
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_groups')
     user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_permissions')
-    profile = models.ImageField(upload_to='users_profile/', blank=True)
+    profile = models.ImageField(upload_to='users_profile/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True, max_length=1000)
     job = models.CharField(max_length=30, blank=True, null=True)
 
