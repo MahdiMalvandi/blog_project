@@ -231,11 +231,9 @@ def add_post(request):
     return render(request, 'forms/add-post.html', context=context)
 
 
-@login_required(redirect_field_name='next_page')
-def add_comment(request, slug):
+def add_comment_base_view(request, slug, redirect_reverse):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
-
         form = AddCommentForm(data=request.POST)
 
         if form.is_valid():
@@ -243,10 +241,17 @@ def add_comment(request, slug):
             comment.user = request.user
             comment.post = post
             comment.save()
+            if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+                return JsonResponse({'message'})
     else:
         form = AddCommentForm()
 
-    return redirect('blog_app:blog page', slug)
+    return redirect(redirect_reverse, slug)
+
+
+@login_required(redirect_field_name='next_page')
+def add_comment(request, slug):
+    return add_comment_base_view(request, slug, 'blog_app:blog page')
 
 
 @login_required(redirect_field_name='next_page')

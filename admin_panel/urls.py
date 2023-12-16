@@ -21,11 +21,14 @@ urlpatterns = [
     path('blogs/<str:slug>/', post_detail, name='blog detail'),
     path('blogs/<str:slug>/edit/', edit_post, name='edit post'),
     path('blogs/<str:slug>/delete/', delete_post, name='delete post'),
+    path('blogs/<str:slug>/delete/thumbnail/', delete_thumbnail_post, name='delete thumbnail post'),
 
     path('blogs/category/<str:category_text>/', posts_category, name='post category'),
     path('categories/', category, name='category'),
     path('categories/<str:text>/edit/', edit_category, name='edit category'),
     path('categories/<str:text>/delete/', delete_category, name='delete category'),
+
+    path('blogs/<str:slug>/add-comment/', add_comment, name='add comment'),
 
     path('comments/<pk>/edit/', edit_comment, name='edit comment'),
     path('comments/<pk>/delete/', delete_comment, name='delete comment'),

@@ -48,7 +48,7 @@ class Post(models.Model):
     short_link = models.CharField(max_length=100)
     likes = models.ManyToManyField(User, related_name='user_like', blank=True)
     slug = models.SlugField(max_length=1000, blank=True, null=True)
-    thumbnail = models.ImageField(upload_to='article-thumbnail/')
+    thumbnail = models.ImageField(upload_to='article-thumbnail/', blank=True, null=True)
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, default=1)
 
     def __str__(self):

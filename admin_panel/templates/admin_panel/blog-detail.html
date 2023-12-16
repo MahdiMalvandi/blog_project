@@ -13,6 +13,12 @@ Admin Dashboard
 
 {% block content %}
 <div class="main-container">
+<div class="remove-container bg-white border-radius-4 position-absolute p-3 border hid" style="    z-index: 2;
+    border-color:black !important;">
+    <h4 class="font-20">Are You Sure To Delete This Post?</h4>
+    <button type="button" class="btn btn-primary no-btn">No</button>
+    <a href="{% url 'admin_panel:delete post' post.slug %}" class="btn btn-danger">Yes</a>
+</div>
 			<div class="pd-ltr-20 xs-pd-20-10">
 				<div class="min-height-200px">
 					<div class="page-header">
@@ -41,13 +47,15 @@ Admin Dashboard
 
 									<div class="blog-detail card-box overflow-hidden mb-30">
 
+										{% if post.thumbnail %}
 										<div class="blog-img">
 											<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" />
 										</div>
+										{% endif %}
 										<div class="blog-caption">
                                             <a href="{% url 'admin_panel:edit post' post.slug %}" class="btn btn-sm btn-info">Edit</a>
 
-                                            <a href="{% url 'admin_panel:delete post' post.slug %}" class="btn btn-sm btn-danger">Remove</a>
+                                            <button class="btn btn-sm btn-danger rm-post">Remove</button>
 											<h4 class="mb-10 mt-4">
                                                 {{ post.title}}
 											</h4>
@@ -57,78 +65,7 @@ Admin Dashboard
                                             {{post.body|safe}}
 										</div>
 									</div>
-									<div class="blog-comments card-box p-4 mb-4">
-										<h4 class="title">Add Comment</h4>
-										<p class=" my-4">New comments</p>
-										<form action="" class="">
-											<textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
-											<div class="form-group">
-												<label class="col-sm-12  col-form-label">Star</label>
-												<div class="col-sm-12 col-md-10">
-													<select class="custom-select col-12">
-														<option value="1">1</option>
-														<option value="2">2</option>
-														<option value="3">3</option>
-														<option value="4">4</option>
-														<option value="5" selected>5</option>
-													</select>
-												</div>
-											</div>
-										</form>
-									</div>
-									<div class="comments card-box p-4 ">
-										<h4 class="title mb-4">Comments</h4>
-										{% if comments %}
-										{% for comment in comments %}
-										<div class="comment card card-body mb-4 card-box">
-											<div class="comment-user-info">
-												<a href="{% url 'admin_panel:user_page' comment.user.username %}">{{ comment.user.get_full_name }}</a>
-												<p>star : {{ comment.point }}</p>
-												<div class="flex mb-1">
-													<btn class="btn btn-sm btn-primary">Reply</btn>
-													<a href="{% url 'admin_panel:edit comment' comment.pk %}" class="btn btn-sm btn-info">Edit</a>
-													<a href="{% url 'admin_panel:delete comment' comment.pk %}" class="btn btn-sm btn-danger">Remove</a>
-												</div>
-											</div>
-											<p class="comment-body">
-                                                {{ comment.body }}
-											</p>
-											{% if comment.replies %}
-                                                <div class="comment-reply-container">
-
-{% for reply in comment.replies.all %}
-											<div class="comment-reply card text-white bg-secondary card-box p-4 mb-4">
-													<div class="comment-user-info mb-2">
-														<a href="{% url 'admin_panel:user_page' reply.user.username %}" class="text-white">{{ reply.user.get_full_name }}</a>
-
-													</div>
-
-															<div class=" mb-2">
-													    <a href="{% url 'admin_panel:edit comment' reply.pk %}" class="btn btn-sm btn-info">Edit</a>
-
-														<a href="{% url 'admin_panel:delete comment' reply.pk %}" class="btn btn-sm btn-danger">Remove</a>
-
-															</div>
-
-													<p class="comment-body">
-														{{ reply.body }}
-													</p>
-												</div>
-											{% endfor %}
-
-											</div>
-
-
-											{% endif %}
-										</div>
-										{% endfor %}
-                                            {% else %}
-                                            <p class="text-lg-center">There is no Comment</p>
-										{% endif %}
-
-
-
-									</div>
+{% include 'partials/comments.html' %}
 								</div>
 								<div class="col-md-4 col-sm-12">
 									<div class="card-box mb-30">
@@ -183,6 +120,7 @@ Admin Dashboard
 		<script src="{% static 'vendors/scripts/script.min.js' %}"></script>
 		<script src="{% static 'vendors/scripts/process.js' %}"></script>
 		<script src="{% static 'vendors/scripts/layout-settings.js' %}"></script>
+		<script src="{% static 'vendors/scripts/post-detail.js' %}"></script>
 		<!-- Google Tag Manager (noscript) -->
 		<noscript
 			><iframe

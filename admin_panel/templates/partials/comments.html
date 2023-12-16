@@ -1,0 +1,94 @@
+									<div class="blog-comments card-box p-4 mb-4">
+										<h4 class="title">Add Comment</h4>
+										<p class="text-comment my-4">New comments</p>
+										<form action="{% url 'admin_panel:add comment' post.slug %}" method="post">
+                                            {% csrf_token %}
+                                        {{ form.point }}
+											<textarea name="body" class="form-control" id="" cols="30" rows="10">{% if form.body.value %}
+											{{ form.body.value }}
+											{% endif %} </textarea>
+                                        <input type="hidden" name="reply" value="" class="hidden-input">
+											<div class="form-group">
+												<label class="col-sm-12  col-form-label">Star</label>
+												<div class="col-sm-12 col-md-10">
+													<select class="custom-select col-12" name="point">
+														<option value="1" {% if form.point.value == 1 %}
+														selected
+														{% endif %} >1</option>
+														<option value="2" {% if form.point.value == 2 %}
+														selected
+														{% endif %} >2</option>
+														<option value="3" {% if form.point.value == 3 %}
+														selected
+														{% endif %} >3</option>
+														<option value="4" {% if form.point.value == 4 %}
+														selected
+														{% endif %} >4</option>
+														<option value="5" {% if edit %}
+                                                                {% if form.point.value == 5 %}
+
+                                                                {% endif %}
+														{% else %}
+														selected
+														{% endif %} >5</option>
+													</select>
+												</div>
+											</div>
+                                            <button class="btn btn-primary" type="submit">Submit</button>
+                                            <button class="btn btn-info add-comment-btn hid" type="reset" >Cancel Reply</button>
+
+										</form>
+									</div>
+									<div class="comments card-box p-4 ">
+										<h4 class="title mb-4">Comments</h4>
+										{% if comments %}
+										{% for comment in comments %}
+										<div class="comment card card-body mb-4 card-box" data-id="{{ comment.id }}">
+											<div class="comment-user-info">
+												<a href="{% url 'admin_panel:user_page' comment.user.username %}">{{ comment.user.get_full_name }}</a>
+												<p>star : {{ comment.point }}</p>
+												<div class="flex mb-1">
+													<btn class="btn btn-sm btn-primary edit-btn">Reply</btn>
+													<a href="{% url 'admin_panel:edit comment' comment.pk %}" class="btn btn-sm btn-info">Edit</a>
+													<a href="{% url 'admin_panel:delete comment' comment.pk %}" class="btn btn-sm btn-danger">Remove</a>
+												</div>
+											</div>
+											<p class="comment-body">
+                                                {{ comment.body }}
+											</p>
+											{% if comment.replies %}
+                                                <div class="comment-reply-container">
+
+{% for reply in comment.replies.all %}
+											<div class="comment-reply card text-white bg-secondary card-box p-4 mb-4" data-id="{{ reply.id }}">
+													<div class="comment-user-info mb-2">
+														<a href="{% url 'admin_panel:user_page' reply.user.username %}" class="text-white">{{ reply.user.get_full_name }}</a>
+
+													</div>
+
+															<div class=" mb-2">
+													    <a href="{% url 'admin_panel:edit comment' reply.pk %}" class="btn btn-sm btn-info">Edit</a>
+
+														<a href="{% url 'admin_panel:delete comment' reply.pk %}" class="btn btn-sm btn-danger">Remove</a>
+
+															</div>
+
+													<p class="comment-body">
+														{{ reply.body }}
+													</p>
+												</div>
+											{% endfor %}
+
+											</div>
+
+
+											{% endif %}
+										</div>
+										{% endfor %}
+                                            {% else %}
+                                            <p class="text-lg-center">There is no Comment</p>
+										{% endif %}
+
+
+
+									</div>

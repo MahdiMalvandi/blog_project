@@ -26,7 +26,7 @@ Admin Dashboard
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											Add Blog
@@ -39,40 +39,61 @@ Admin Dashboard
 					</div>
                     <div class="add-blog card-box p-4 bg-white border-radius-4 box-shadow mb-30">
                         <div class="">
-                            <h4 class="title">Add Blog</h4>
+                        <h4 class="title">{% if edit %}
+                            Edit
+                            {% else %}
+                            Add
+                            {% endif %}  Blog</h4>
+
                             <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                                 <div class="row">
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Title</label>
                                         <div class="col-sm-12 ">
-                                            <input class="form-control" type="text" name="title" placeholder="title">
+                                            <input class="form-control" type="text" name="title" placeholder="title" {% if form.title.value %}
+                                            value="{{ form.title.value }}"
+                                            {% endif %} >
                                         </div>
                                     </div>
 
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Description</label>
                                         <div class="col-sm-12">
-                                            <input class="form-control" type="text" name="description" placeholder="Description">
+                                            <input class="form-control" type="text" name="description" placeholder="Description" {% if form.description.value %}
+                                            value="{{ form.description.value }}"
+                                            {% endif %} >
                                         </div>
                                     </div>
 
                                     <div class="form-group col-md-6 col-lg-4">
+                                        {% if edit and form.thumbnail.value %}
+                                        <p>Thumbnail is : <a href="{{ form.thumbnail.value.url }}" class="text-blue">Thumbnail</a></p>
+                                        {% endif %}
                                         <label>Thumbnail</label>
+
                                         <input
                                             type="file"
                                             name="thumbnail"
                                             class="form-control-file form-control"
+
                                         />
+                                        {% if edit and form.thumbnail.value %}
+
+                                        <a class="btn btn-danger p-1 mt-15" href="{% url 'admin_panel:delete thumbnail post' form.instance.slug %}">Remove Thumbnail</a>
+                                        {% endif %}
                                     </div>
 
                                     <div class="form-group col-md-6 col-lg-4">
                                         <label class="col-sm-12 col-md-2 col-form-label">Category</label>
                                         <div class="col-sm-12 ">
+
+
                                             <select class="custom-select col-12" name="category">
 
                                                 {% for category in categories %}
-                                                <option value="{{ category.id }}" name="{{ category }}">{{ category.text }}</option>
+                                             <option value="{{ category.id }}" name="{{ category }}" {% if form.category.value == category.id %}selected
+                                                {% endif %} >{{ category.text }}</option>
                                                 {% endfor %}
 
                                             </select>

@@ -4,7 +4,7 @@ from blog_app.models import *
 
 class AddUserForm(forms.ModelForm):
     position = forms.ChoiceField(choices=((1, 1), (2, 2), (3, 3)))
-    password = forms.CharField(max_length=100,required=False)
+    password = forms.CharField(max_length=100, required=False)
 
     class Meta:
         model = User

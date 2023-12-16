@@ -23,9 +23,7 @@ Admin Dashboard
 								<div class="title">
 									<h4>Users</h4>
 								</div>
-                                {% for message in messages %}
-                                {{ message }}
-                                {% endfor %}
+
 
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
@@ -143,12 +141,10 @@ Admin Dashboard
 		<script src="{% static 'src/plugins/datatables/js/buttons.flash.min.js' %}"></script>
 		<script src="{% static 'src/plugins/datatables/js/pdfmake.min.js' %}"></script>
 		<script src="{% static 'src/plugins/datatables/js/vfs_fonts.js' %}"></script>
-		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
-    <script type="text/javascript">
-         window.addEventListener('load', e=>console.log('load'))
-         </script>
-		{% if messages %}
 		<script src="{% static 'vendors/scripts/datatable-setting.js' %}"></script>
+
+		{% if messages %}
+		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
     <script type="text/javascript">
          window.addEventListener('load', () => {
              {% for message in messages %}

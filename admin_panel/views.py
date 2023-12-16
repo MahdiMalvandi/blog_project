@@ -3,9 +3,10 @@ from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from blog_app.models import *
-from blog_app.views import show_post, make_paginator
+from blog_app.views import show_post, make_paginator, add_comment_base_view
 from .forms import *
 from django.contrib.postgres.search import TrigramSimilarity
+from blog_app.forms import AddCommentForm
 
 
 # Create your views here.
@@ -141,25 +142,24 @@ def post_detail(request, slug):
 
 
 def edit_post(request, slug):
-    # post = get_object_or_404(Post, slug=slug)
-    # if request.method == 'POST':
-    #     form = AddPostFormAdmin(request.POST, request.FILES, instance=post)
-    #     if form.is_valid():
-    #         form = form.save(commit=False)
-    #         form.author = post.author
-    #         form.save()
-    #         return redirect('blog_app:manage posts')
-    # form = AddPostFormAdmin(instance=post)
-    # context = {
-    #     'edit': True,
-    #     'form': form,
-    # }
-    # return render(request, 'forms/add-post.html', context=context)
-    ...
+    post = get_object_or_404(Post, slug=slug)
+    if request.method == 'POST':
+        form = AddBlogForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:blog detail', slug)
+    form = AddBlogForm(instance=post)
+    context = {
+        'edit': True,
+        'form': form,
+    }
+    return render(request, 'admin_panel/add-blog.html', context=context)
 
 
 def delete_post(request, slug):
-    ...
+    get_object_or_404(Post, slug=slug).delete()
+    messages.success(request, 'Blog deleted successfully')
+    return redirect('admin_panel:blogs')
 
 
 def add_post(request):
@@ -177,19 +177,39 @@ def add_post(request):
     return render(request, 'admin_panel/add-blog.html', context)
 
 
+def delete_thumbnail_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    post.thumbnail.delete()
+    return redirect('admin_panel:edit post', slug)
+
 # endregion
 
 
 def add_comment(request, slug):
-    ...
+
+    return add_comment_base_view(request, slug, 'admin_panel:blog detail')
 
 
 def edit_comment(request, pk):
-    ...
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:blog detail', comment.post.slug)
+    form = AddCommentForm(instance=comment)
+    context = {
+            'edit': True,
+            'form': form,
+    }
+    return redirect('admin_panel:blog detail', comment.post.slug)
 
 
 def delete_comment(request, pk):
-    ...
+    comment = get_object_or_404(Comment, pk=pk)
+    slug = comment.post.slug
+    comment.delete()
+    return redirect('admin_panel:blog detail', slug)
 
 
 def profile(request):

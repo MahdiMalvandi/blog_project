@@ -59,6 +59,7 @@ Admin Dashboard
                                                 {% for blog in blogs %}
                                                 <li>
 												<div class="row no-gutters">
+													{% if blog.thumbnail %}
 													<div class="col-lg-4 col-md-12 col-sm-12">
 														<div class="blog-img">
 															<img
@@ -68,6 +69,7 @@ Admin Dashboard
 															/>
 														</div>
 													</div>
+													{% endif %}
 													<div class="col-lg-8 col-md-12 col-sm-12">
 														<div class="blog-caption">
 															<h4>
@@ -77,7 +79,7 @@ Admin Dashboard
 															</h4>
 															<div class="blog-by">
 																<p>
-																	{{ blog.description }}
+																	{{ blog.description|truncatewords:30 }}
 																</p>
 																<div class="pt-10">
 																	<a href="{% url 'admin_panel:blog detail' blog.slug %}" class="btn btn-outline-primary"
@@ -141,6 +143,24 @@ Admin Dashboard
 				style="display: none; visibility: hidden"
 			></iframe
 		></noscript>
+		{% if messages %}
+		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
+    <script type="text/javascript">
+         window.addEventListener('load', () => {
+             {% for message in messages %}
+        iziToast.{{ message.tags }}({
+                theme: 'dark',
+messageColor: '#1a1a1a',
+            color: '#0eb020',
+    message: '{{message}}'
+});
+        {% endfor %}
+         })
+
+
+
+</script>
+		{% endif %}
 {% endblock %}
 
 
