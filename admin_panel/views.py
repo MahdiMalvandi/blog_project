@@ -96,6 +96,8 @@ def edit_user(request, username):
         form = AddUserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Edit User was successful')
+
             return redirect('admin_panel:users')
     form = AddUserForm(instance=user)
     context = {
@@ -108,7 +110,7 @@ def edit_user(request, username):
 def delete_user(request, username):
     user = get_object_or_404(User, username=username)
     user.delete()
-    messages.success(request, 'User deleted successfully')
+    messages.success(request, 'The User was deleted successfully')
     return redirect('admin_panel:users')
 
 
@@ -117,6 +119,8 @@ def add_user(request):
         form = AddUserForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'The User was added successfully')
+
             return redirect('admin_panel:users')
     form = AddUserForm()
     context = {
@@ -126,7 +130,6 @@ def add_user(request):
 
 
 # endregion
-
 
 # region blogs views
 def posts_page(request):
@@ -147,6 +150,8 @@ def edit_post(request, slug):
         form = AddBlogForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Edit Post was successful')
+
             return redirect('admin_panel:blog detail', slug)
     form = AddBlogForm(instance=post)
     context = {
@@ -158,7 +163,8 @@ def edit_post(request, slug):
 
 def delete_post(request, slug):
     get_object_or_404(Post, slug=slug).delete()
-    messages.success(request, 'Blog deleted successfully')
+    messages.success(request, 'The Post was deleted successfully')
+
     return redirect('admin_panel:blogs')
 
 
@@ -169,6 +175,8 @@ def add_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            messages.success(request, 'The Post was added successfully')
+
             return redirect('admin_panel:blogs')
     form = AddBlogForm()
     context = {
@@ -180,13 +188,26 @@ def add_post(request):
 def delete_thumbnail_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
     post.thumbnail.delete()
+    messages.success(request, 'The Thumbnail of the post was deleted successfully')
+
     return redirect('admin_panel:edit post', slug)
+
+
+def posts_category(request, category_text):
+    blogs = Post.objects.select_related('category', 'author').filter(category__text=category_text)
+    context = {
+        'blogs': make_paginator(request, blogs, 6),
+        'category': category_text,
+    }
+    return render(request, 'admin_panel/blog.html', context)
 
 
 # endregion
 
+# region comments views
 
 def add_comment(request, slug):
+    messages.success(request, 'The Comment was added successfully')
     return add_comment_base_view(request, slug, 'admin_panel:blog detail')
 
 
@@ -196,7 +217,7 @@ def edit_comment(request, pk):
         form = AddCommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Edit Comment Successfully')
+            messages.success(request, 'Edit Comment was successful')
             return redirect('admin_panel:blog detail', comment.post.slug)
     form = AddCommentForm(instance=comment)
     context = {
@@ -209,14 +230,15 @@ def edit_comment(request, pk):
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     slug = comment.post.slug
-    messages.success(request, 'Comment deleted successfully')
+    messages.success(request, 'The Comment was deleted successfully')
+
     comment.delete()
     return redirect('admin_panel:blog detail', slug)
 
 
-def profile(request):
-    return render(request, 'admin_panel/profile.html')
+# endregion
 
+# region category views
 
 def category(request):
     if request.method == 'POST':
@@ -225,6 +247,8 @@ def category(request):
             category_form = form.save(commit=False)
             category_form.author = request.user
             category_form.save()
+            messages.success(request, 'The Category was added successfully')
+
             return redirect('admin_panel:category')
     form = AddCategoryForm()
     context = {
@@ -239,6 +263,8 @@ def edit_category(request, text):
         form = AddCategoryForm(request.POST, instance=category_selected)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Edit Category was successful')
+
             return redirect('admin_panel:category')
     form = AddCategoryForm(instance=category_selected)
     context = {
@@ -250,23 +276,18 @@ def edit_category(request, text):
 def delete_category(request, text):
     category_selected = Category.objects.get(text=text)
     category_selected.delete()
-    messages.success(request, 'Category deleted successfully')
+    messages.success(request, 'The Category deleted successfully')
+
     return redirect('admin_panel:category')
 
 
-def posts_category(request, category_text):
-    blogs = Post.objects.select_related('category', 'author').filter(category__text=category_text)
-    context = {
-        'blogs': make_paginator(request, blogs, 6),
-        'category': category_text,
-    }
-    return render(request, 'admin_panel/blog.html', context)
+# endregion
+
+
+def profile(request):
+    return render(request, 'admin_panel/profile.html')
 
 
 def ticket(request):
     context = {}
     return render(request, 'admin_panel/tickets.html', context)
-
-
-def test(request):
-    return get_object_or_404(User, id=123)
