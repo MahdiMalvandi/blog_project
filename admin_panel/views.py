@@ -182,11 +182,11 @@ def delete_thumbnail_post(request, slug):
     post.thumbnail.delete()
     return redirect('admin_panel:edit post', slug)
 
+
 # endregion
 
 
 def add_comment(request, slug):
-
     return add_comment_base_view(request, slug, 'admin_panel:blog detail')
 
 
@@ -196,11 +196,12 @@ def edit_comment(request, pk):
         form = AddCommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Edit Comment Successfully')
             return redirect('admin_panel:blog detail', comment.post.slug)
     form = AddCommentForm(instance=comment)
     context = {
-            'edit': True,
-            'form': form,
+        'edit': True,
+        'form': form,
     }
     return render(request, 'admin_panel/edit-comments.html', context)
 
@@ -208,6 +209,7 @@ def edit_comment(request, pk):
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     slug = comment.post.slug
+    messages.success(request, 'Comment deleted successfully')
     comment.delete()
     return redirect('admin_panel:blog detail', slug)
 
@@ -233,10 +235,23 @@ def category(request):
 
 def edit_category(request, text):
     category_selected = Category.objects.get(text=text)
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST, instance=category_selected)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:category')
+    form = AddCategoryForm(instance=category_selected)
+    context = {
+        'form': form
+    }
+    return render(request, 'admin_panel/edit-category.html', context)
 
 
 def delete_category(request, text):
     category_selected = Category.objects.get(text=text)
+    category_selected.delete()
+    messages.success(request, 'Category deleted successfully')
+    return redirect('admin_panel:category')
 
 
 def posts_category(request, category_text):

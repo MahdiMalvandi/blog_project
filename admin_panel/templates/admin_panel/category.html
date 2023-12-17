@@ -141,6 +141,24 @@ Admin Dashboard
 				style="display: none; visibility: hidden"
 			></iframe
 		></noscript>
+    		{% if messages %}
+		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
+    <script type="text/javascript">
+         window.addEventListener('load', () => {
+             {% for message in messages %}
+        iziToast.{{ message.tags }}({
+                theme: 'dark',
+messageColor: '#1a1a1a',
+            color: '#0eb020',
+    message: '{{message}}'
+});
+        {% endfor %}
+         })
+
+
+
+</script>
+		{% endif %}
 {% endblock %}
 
 

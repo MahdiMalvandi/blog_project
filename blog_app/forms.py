@@ -68,6 +68,7 @@ class AddCommentForm(forms.ModelForm):
         (5, 5),
     )
     point = forms.ChoiceField(choices=point_choices, required=False)
+
     class Meta:
         model = Comment
         fields = ['body', 'reply', 'point']

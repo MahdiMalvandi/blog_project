@@ -122,6 +122,24 @@ Admin Dashboard
 		<script src="{% static 'vendors/scripts/layout-settings.js' %}"></script>
 		<script src="{% static 'vendors/scripts/post-detail.js' %}"></script>
 		<!-- Google Tag Manager (noscript) -->
+    		{% if messages %}
+		<script src="{% static 'vendors/scripts/izitoast.js' %}"></script>
+    <script type="text/javascript">
+         window.addEventListener('load', () => {
+             {% for message in messages %}
+        iziToast.{{ message.tags }}({
+                theme: 'dark',
+messageColor: '#1a1a1a',
+            color: '#0eb020',
+    message: '{{message}}'
+});
+        {% endfor %}
+         })
+
+
+
+</script>
+		{% endif %}
 		<noscript
 			><iframe
 				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"

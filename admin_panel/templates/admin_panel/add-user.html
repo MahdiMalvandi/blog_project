@@ -162,11 +162,12 @@ Admin Dashboard
 								<div class="col-sm-12 ">
 
 									<select class="custom-select col-12" name="position">
+                                        <option value="3">User</option>
+                                    {% if request.user.is_superuser %}
                                     <option value="1">Manager</option>
 
-										<option value="3">User</option>
-
 										<option value="2" >Admin</option>
+                                    {% endif %}
 
 									</select>
 								</div>

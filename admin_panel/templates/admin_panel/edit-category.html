@@ -1,0 +1,94 @@
+{% extends 'parent/admin_base.html' %}
+
+{% load static %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+		<div class="main-container">
+			<div class="pd-ltr-20 xs-pd-20-10">
+				<div class="min-height-200px">
+					<div class="page-header">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="title">
+									<h4>Edit Comment</h4>
+								</div>
+								<nav aria-label="breadcrumb" role="navigation">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
+										</li>
+										<li class="breadcrumb-item active" aria-current="page">
+											Edit Comment
+										</li>
+									</ol>
+								</nav>
+							</div>
+
+						</div>
+					</div>
+                    <div class="add-blog card-box p-4 bg-white border-radius-4 box-shadow mb-30">
+                        <div class="">
+                        <h4 class="title">Edit Comment</h4>
+<p>Edit {{ form.instance.text }} Category</p>
+                            <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                <div class="row">
+                                <div class="form-group col-md-6 col-lg-4">
+                                        <label class="col-sm-12 col-md-2 col-form-label">Title</label>
+                                        <div class="col-sm-12 ">
+                                            <input class="form-control" type="text" name="text" placeholder="Title" {% if form.text.value %}value="{{ form.text.value }}" {% endif %}>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-lg-4">
+                                        <label class="col-sm-12 col-md-2 col-form-label">Description</label>
+                                        <div class="col-sm-12 ">
+                                            <textarea class="form-control" type="text" name="description" placeholder="description" >{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <button class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+				</div>
+
+			</div>
+		</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+		<script src="{% static 'vendors/scripts/core.js' %}"></script>
+		<script src="{% static 'vendors/scripts/script.min.js' %}"></script>
+		<script src="{% static 'vendors/scripts/process.js' %}"></script>
+		<script src="{% static 'vendors/scripts/layout-settings.js' %}"></script>
+		<noscript
+			><iframe
+				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
+				height="0"
+				width="0"
+				style="display: none; visibility: hidden"
+			></iframe
+		></noscript>
+{% endblock %}
+
+
+

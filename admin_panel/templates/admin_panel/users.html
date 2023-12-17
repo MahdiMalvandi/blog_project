@@ -94,6 +94,7 @@ Admin Dashboard
 													<a class="dropdown-item" href="{% url 'admin_panel:user_page' user.username %}"
 														><i class="dw dw-eye"></i> View</a
 													>
+													{% if request.user.is_superuser or not user.is_staff %}
 													<a class="dropdown-item" href="{% url 'admin_panel:edit user page' user.username %}"
 														><i class="dw dw-edit2"></i> Edit</a
 													>
@@ -101,6 +102,8 @@ Admin Dashboard
 													<a class="dropdown-item" href="{% url 'admin_panel:delete user' user.username %}"
 														><i class="dw dw-delete-3"></i> Delete</a
 													>
+
+													{% endif %}
 													{% endif %}
 												</div>
 											</div>

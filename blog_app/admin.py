@@ -2,16 +2,16 @@ from django.contrib import admin
 from .models import *
 
 
-
 # Register your models here.
 
 class CommentTabularInline(admin.TabularInline):
     model = Comment
     extra = 0
 
+
 @admin.register(User)
 class Admin(admin.ModelAdmin):
-    list_display = ["username", "first_name", "last_name",'pk' ]
+    list_display = ["username", "first_name", "last_name", 'pk']
 
 
 @admin.register(Post)
