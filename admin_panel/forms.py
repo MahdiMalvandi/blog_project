@@ -68,7 +68,6 @@ class AddUserForm(forms.ModelForm):
             return user
 
 
-
 class AddBlogForm(forms.ModelForm):
     class Meta:
         model = Post

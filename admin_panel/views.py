@@ -202,7 +202,7 @@ def edit_comment(request, pk):
             'edit': True,
             'form': form,
     }
-    return redirect('admin_panel:blog detail', comment.post.slug)
+    return render(request, 'admin_panel/edit-comments.html', context)
 
 
 def delete_comment(request, pk):

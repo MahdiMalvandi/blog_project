@@ -241,8 +241,6 @@ def add_comment_base_view(request, slug, redirect_reverse):
             comment.user = request.user
             comment.post = post
             comment.save()
-            if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-                return JsonResponse({'message'})
     else:
         form = AddCommentForm()
 

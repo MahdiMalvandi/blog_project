@@ -60,9 +60,17 @@ class SearchPostForm(forms.Form):
 
 
 class AddCommentForm(forms.ModelForm):
+    point_choices = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    )
+    point = forms.ChoiceField(choices=point_choices, required=False)
     class Meta:
         model = Comment
-        fields = ['user', 'post', 'body', 'reply', 'point']
+        fields = ['body', 'reply', 'point']
 
 
 class ChangeProfileForm(forms.ModelForm):
