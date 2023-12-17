@@ -9,7 +9,7 @@
 				></div>
 				<div class="header-search">
 					<form action="{% url 'admin_panel:search' %}" method="get">
-                        {% csrf_token %}
+
 						<div class="form-group mb-0">
 							<i class="dw dw-search2 search-icon"></i>
 							<input
@@ -166,12 +166,6 @@
 						>
 							<a class="dropdown-item" href="{% url 'admin_panel:profile' %}"
 								><i class="dw dw-user1"></i> Profile</a
-							>
-							<a class="dropdown-item" href="profile.html"
-								><i class="dw dw-settings2"></i> Setting</a
-							>
-							<a class="dropdown-item" href="faq.html"
-								><i class="dw dw-help"></i> Help</a
 							>
 							<a class="dropdown-item" href="{% url 'blog_app:log out' %}"
 								><i class="dw dw-logout"></i> Log Out</a

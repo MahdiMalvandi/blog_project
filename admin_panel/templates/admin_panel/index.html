@@ -1,5 +1,4 @@
 {% extends 'parent/admin_base.html' %}
-
 {% load static %}
 
 {% block title %}
@@ -7,93 +6,7 @@ Admin Dashboard
 {% endblock %}
 
 {% block head %}
-	<head>
-		<!-- Basic Page Info -->
 
-
-		<!-- Site favicon -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="{% static 'vendors/images/apple-touch-icon.png' %}"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="{% static 'vendors/images/favicon-32x32.png' %}"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="{% static 'vendors/images/favicon-16x16.png' %}"
-		/>
-
-		<!-- Mobile Specific Metas -->
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1, maximum-scale=1"
-		/>
-
-		<!-- Google Font -->
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-			rel="stylesheet"
-		/>
-		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="{% static 'vendors/styles/core.css' %}" />
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="{% static 'vendors/styles/icon-font.min.css' %}"
-		/>
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="{% static 'src/plugins/datatables/css/dataTables.bootstrap4.min.css' %}"
-		/>
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="{% static 'src/plugins/datatables/css/responsive.bootstrap4.min.css' %}"
-		/>
-		<link rel="stylesheet" type="text/css" href="{% static 'vendors/styles/style.css' %}"/>
-
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"
-		></script>
-		<script
-			async
-			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2973766580778258"
-			crossorigin="anonymous"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-GBZ3SGGX85");
-		</script>
-		<!-- Google Tag Manager -->
-		<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-NXZMQSS");
-		</script>
-		<!-- End Google Tag Manager -->
-	</head>
 {% endblock %}
 
 {% block content %}
@@ -181,7 +94,7 @@ Admin Dashboard
 							<div
 								class="d-flex flex-wrap justify-content-between align-items-center pb-0 pb-md-3"
 							>
-								<div class="h5 mb-md-0">Hospital Activities</div>
+								<div class="h5 mb-md-0">Mock chart</div>
 								<div class="form-group mb-md-0">
 									<select class="form-control form-control-sm selectpicker">
 										<option value="">Last Week</option>
@@ -247,30 +160,7 @@ Admin Dashboard
 						<div class="card-box height-100-p pd-20 min-height-200px">
 							<div class="d-flex justify-content-between pb-10">
 								<div class="h5 mb-0">Most Active Users</div>
-								<div class="dropdown">
-									<a
-										class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
-										data-color="#1b3133"
-										href="#"
-										role="button"
-										data-toggle="dropdown"
-									>
-										<i class="dw dw-more"></i>
-									</a>
-									<div
-										class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
-									>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-eye"></i> View</a
-										>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-edit2"></i> Edit</a
-										>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-delete-3"></i> Delete</a
-										>
-									</div>
-								</div>
+
 							</div>
 							<div class="user-list">
 								<ul>
@@ -318,7 +208,7 @@ Admin Dashboard
 											</div>
 										</div>
 										<div class="cta flex-shrink-0">
-											<a href="user-profile.html" class="btn btn-sm btn-outline-primary"
+											<a href="{% url 'admin_panel:user_page' most_active_user.username %}" class="btn btn-sm btn-outline-primary"
 												>Profile</a
 											>
 										</div>
@@ -333,83 +223,51 @@ Admin Dashboard
 					</div>
 					<div class=" col-md-6 mb-20">
 						<div class="card-box height-100-p pd-20 min-height-200px">
-							<div class="d-flex justify-content-between">
-								<div class="h5 mb-0">Diseases Report</div>
-								<div class="dropdown">
-									<a
-										class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
-										data-color="#1b3133"
-										href="#"
-										role="button"
-										data-toggle="dropdown"
-									>
-										<i class="dw dw-more"></i>
-									</a>
-									<div
-										class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
-									>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-eye"></i> View</a
-										>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-edit2"></i> Edit</a
-										>
-										<a class="dropdown-item" href="#"
-											><i class="dw dw-delete-3"></i> Delete</a
-										>
-									</div>
-								</div>
-							</div>
+				<div class="h5 pd-20 mb-0">Recent Blogs</div>
 
-							<div id="diseases-chart"></div>
+                        <div class="user-list">
+								<ul>
+                                    {% for blog in blogs|slice:5 %}
+                                    <li class="d-flex align-items-center justify-content-between">
+										<div class="name-avatar d-flex align-items-center pr-2">
+											<div class="avatar mr-2 flex-shrink-0">
+												{% if blog.thumbnail %}
+												<img
+													src="{{blog.thumbnail.url}}"
+													class="border-radius-100 box-shadow"
+													width="50"
+													height="50"
+                                                    style="height:50px"
+													alt=""
+												/>
+												{% endif %}
+											</div>
+											<div class="txt">
+
+												<div class="font-14 weight-600">{{ blog.title }}</div>
+												<div class="font-12 weight-500" data-color="#b2b1b6">
+                                                    {{ blog.author.get_full_name }}
+												</div>
+											</div>
+										</div>
+										<div class="cta flex-shrink-0">
+											<a href="{% url 'admin_panel:blog detail' blog.slug %}" class="btn btn-sm btn-outline-primary"
+												>See</a
+											>
+										</div>
+									</li>
+                                    {% endfor %}
+
+
+
+								</ul>
+							</div>
 						</div>
 					</div>
 
 				</div>
 
-				<div class="card-box pb-10 mb-15">
-					<div class="h5 pd-20 mb-0">Recent Blogs</div>
-					<table class="data-table table nowrap">
-						<thead>
-							<tr>
-                                <th>Thumbnail</th>
-								<th>Title</th>
-								<th>Description</th>
-								<th>Author</th>
 
-							</tr>
-						</thead>
-						<tbody>
-							{% for blog in blogs %}
-							    <tr>
-								<td class="table-plus">
-									<div class="name-avatar d-flex align-items-center">
-										<div class="avatar mr-2 flex-shrink-0">
-											<img
-												src="{{ blog.thumbnail.url }}"
-												class="border-radius-100 shadow"
-                                                style="height: 40px;width: 40px;"
-												width="40"
-												height="40"
-												alt=""
-											/>
-										</div>
-
-									</div>
-								</td>
-                                    <td class="weight-600">{{ blog.title|truncatewords:4 }}</td>
-
-								<td>{{ blog.description|truncatewords:6 }}</td>
-								<td><a href="user-profile.html">{{ blog.author.get_full_name }}</a></td>
-								<td>{{ blog.point}}</td>
-
-							</tr>
-							{% endfor %}
-
-
-						</tbody>
-					</table>
-				</div>
 
 
 

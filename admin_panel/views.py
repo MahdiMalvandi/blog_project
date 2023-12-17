@@ -48,6 +48,7 @@ def search(request):
                 results = (results_by_title | results_by_body | results_by_description).order_by("-similarity")
                 context['blogs'] = results
                 return render(request, 'admin_panel/blog.html', context)
+    return redirect('admin_panel:home page')
 
 
 def home(request):
@@ -55,7 +56,7 @@ def home(request):
     blogs = Post.objects.all().order_by('-created')
     comments_count = Comment.objects.filter(reply=None).count()
     admins_count = User.objects.filter(is_superuser=True).count()
-    most_active_users = User.objects.annotate(num_posts=Count('user_posts')).order_by('-num_posts')
+    most_active_users = User.objects.annotate(num_posts=Count('user_posts')).order_by('-num_posts')[:5]
 
     context = {
         'users_count': users_count,
