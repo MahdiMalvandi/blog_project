@@ -1,21 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.models import Permission, Group
-from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
-from django.http import Http404
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from blog_app.models import *
-from blog_app.views import show_post, make_paginator, add_comment_base_view
-from .forms import *
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.postgres.search import TrigramSimilarity
-from blog_app.forms import AddCommentForm
+
+from .forms import *
 from .decorators import custom_permission_required
 
+from blog_app.forms import AddCommentForm
+from blog_app.views import show_post, make_paginator, add_comment_base_view
 
 
-
-# Create your views here.
 def search(request):
     if 'query' in request.GET:
 
@@ -104,12 +100,44 @@ def users_page(request):
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
+    form = UserPermissionsForm(user)
+
     if user == request.user:
         return redirect('admin_panel:profile')
-    context = {
-        'user': user,
-    }
-    return render(request, 'admin_panel/user-profile.html', context)
+
+    if not request.user.is_superuser:
+        for field_name, field in form.fields.items():
+            field.widget.attrs['disabled'] = True
+
+    if request.method == 'POST':
+        if request.user.is_staff or user == request.user:
+            form = UserPermissionsForm(user, request.POST)
+            if form.is_valid():
+                for key in form.cleaned_data:
+                    permission_id = key.split('_')[1]
+                    permission = Permission.objects.get(pk=permission_id)
+                    if form.cleaned_data[key]:
+                        user.user_permissions.add(permission)
+                    else:
+                        user.user_permissions.remove(permission)
+
+    return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form})
+
+
+# def user_profile(request, username):
+#     user = get_object_or_404(User, username=username)
+#     if user == request.user:
+#         return redirect('admin_panel:profile')
+#     if user.is_superuser:
+#         permissions = 'all'
+#     else:
+#         # Get the permissions
+#         ...
+#     context = {
+#         'user': user,
+#         'permissions':permissions
+#     }
+#     return render(request, 'admin_panel/user-profile.html', context)
 
 
 def edit_user(request, username):
@@ -166,6 +194,7 @@ def posts_page(request):
     return render(request, 'admin_panel/blog.html', context)
 
 
+@custom_permission_required('blog_app.view_post', message='You Can not see post detail')
 def post_detail(request, slug):
     return show_post(request, slug, 'admin_panel/blog-detail.html')
 

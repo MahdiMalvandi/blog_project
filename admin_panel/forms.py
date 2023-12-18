@@ -1,5 +1,6 @@
 from django import forms
 from blog_app.models import *
+from django.contrib.auth.models import Permission
 
 
 class AddUserForm(forms.ModelForm):
@@ -87,3 +88,19 @@ class AddCategoryForm(forms.ModelForm):
         fields = ['text', 'description']
 
 
+# forms.py
+
+
+class UserPermissionsForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super(UserPermissionsForm, self).__init__(*args, **kwargs)
+        user_permissions = user.user_permissions.all()
+        all_permissions = Permission.objects.all()
+
+        for permission in all_permissions:
+            checkbox_initial = permission in user_permissions
+            self.fields['permission_{}'.format(permission.id)] = forms.BooleanField(
+                label=permission.name,
+                initial=checkbox_initial,
+                required=False
+            )

@@ -1,6 +1,7 @@
 import ckeditor_uploader
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
 
 from .models import *
 
@@ -9,6 +10,14 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['first_name', 'username', 'last_name', 'email', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            common_user_group = Group.objects.get(name='Common User')  # یک گروه کاربری معمولی
+            user.groups.add(common_user_group)  # اضافه کردن کاربر به گروه کاربری معمولی
+        return user
 
     def clean_password_repeat(self):
         password = self.cleaned_data['password']
