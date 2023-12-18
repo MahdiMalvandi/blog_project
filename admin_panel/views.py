@@ -1,4 +1,7 @@
 from django.contrib import messages
+from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.decorators import permission_required
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
@@ -7,6 +10,9 @@ from blog_app.views import show_post, make_paginator, add_comment_base_view
 from .forms import *
 from django.contrib.postgres.search import TrigramSimilarity
 from blog_app.forms import AddCommentForm
+from .decorators import custom_permission_required
+
+
 
 
 # Create your views here.
@@ -57,7 +63,8 @@ def home(request):
     comments_count = Comment.objects.filter(reply=None).count()
     admins_count = User.objects.filter(is_superuser=True).count()
     most_active_users = User.objects.annotate(num_posts=Count('user_posts')).order_by('-num_posts')[:5]
-
+    permission = Permission.objects.get(codename='add_post')
+    print(request.user.user_permissions)
     context = {
         'users_count': users_count,
         'blogs': blogs,
@@ -70,8 +77,24 @@ def home(request):
 
 
 # region users views
+
+
 def users_page(request):
     users = User.objects.all()
+
+    user = User.objects.get(username='Mahdiml6')
+    # print('       ', user.user_permissions.all())
+
+    content_type = ContentType.objects.get_for_model(User)
+    permission_ = 'blog_app.add_post'
+    permission = Permission.objects.get(codename='add_post')
+
+    user.user_permissions.remove(permission)
+    print(user.user_permissions.all())
+    g = Group.objects.get(name='all access')
+    user.groups.remove(g)
+
+    print('       ', user.get_user_permissions())
 
     context = {
         'users': users,
@@ -133,8 +156,10 @@ def add_user(request):
 # endregion
 
 # region blogs views
+@custom_permission_required('blog_app.view_post', message='You Can not see this page')
 def posts_page(request):
     blogs = Post.objects.select_related('author', 'category').all()
+
     context = {
         'blogs': make_paginator(request, blogs, 6),
     }
