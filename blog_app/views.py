@@ -5,15 +5,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count, Avg
-from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from .forms import *
 from .models import *
+from .helpers import create_common_user_group
+from admin_panel.decorators import custom_permission_required
 
 
-# Create your views here.
 def make_paginator(request, posts, count=12):
     paginator = Paginator(posts, count)
     page = request.GET.get("page") if request.GET.get('page') else 1
@@ -96,6 +96,7 @@ def blogs(request):
     return render(request, 'blog_app/blog.html', context)
 
 
+@custom_permission_required('blog_app.view_post', message='You Can not See View')
 def get_blog_detail(request, slug):
     return show_post(request, slug, 'blog_app/post.html')
 
@@ -140,6 +141,10 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+
+            common_user_group = create_common_user_group()
+            user.groups.add(common_user_group)
+
             return redirect('blog_app:home')
     else:
         form = SignUpForm()

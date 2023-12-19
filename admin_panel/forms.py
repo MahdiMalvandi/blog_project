@@ -91,16 +91,23 @@ class AddCategoryForm(forms.ModelForm):
 # forms.py
 
 
-class UserPermissionsForm(forms.Form):
-    def __init__(self, user, *args, **kwargs):
-        super(UserPermissionsForm, self).__init__(*args, **kwargs)
-        user_permissions = user.user_permissions.all()
-        all_permissions = Permission.objects.all()
+class UserPermissionForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['permissions']  # Replace 'permissions' with the field name containing user permissions
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user_permissions = self.instance.permissions.all()  # Fetch user permissions
+        all_permissions = Permission.objects.all()  # Fetch all available permissions
+
+        choices = []  # Define choices for the permissions
         for permission in all_permissions:
-            checkbox_initial = permission in user_permissions
-            self.fields['permission_{}'.format(permission.id)] = forms.BooleanField(
-                label=permission.name,
-                initial=checkbox_initial,
-                required=False
-            )
+            choices.append((permission.id, permission.name))
+
+        # Add the permissions as a MultipleChoiceField to the form
+        self.fields['permissions'] = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple())
+
+        if user_permissions:
+            initial_permissions = [permission.id for permission in user_permissions]
+            self.initial['permissions'] = initial_permissions

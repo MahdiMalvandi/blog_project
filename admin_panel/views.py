@@ -100,7 +100,7 @@ def users_page(request):
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
-    form = UserPermissionsForm(user)
+    form = UserPermissionForm(instance=user)
 
     if user == request.user:
         return redirect('admin_panel:profile')
@@ -111,7 +111,7 @@ def user_profile(request, username):
 
     if request.method == 'POST':
         if request.user.is_staff or user == request.user:
-            form = UserPermissionsForm(user, request.POST)
+            form = UserPermissionForm(instance=user, data=request.POST)
             if form.is_valid():
                 for key in form.cleaned_data:
                     permission_id = key.split('_')[1]

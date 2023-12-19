@@ -1,7 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission
 from django.urls import reverse
 
 
@@ -21,6 +21,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username}'
+
 
 
 # endregion
