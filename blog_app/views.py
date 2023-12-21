@@ -248,6 +248,7 @@ def add_comment_base_view(request, slug, redirect_reverse):
     return redirect(redirect_reverse, slug)
 
 
+@custom_permission_required('blog_app.add_comment', message='You can not add comments')
 @login_required(redirect_field_name='next_page')
 def add_comment(request, slug):
     return add_comment_base_view(request, slug, 'blog_app:blog page')
