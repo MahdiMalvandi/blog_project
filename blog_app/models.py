@@ -1,11 +1,8 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-from ckeditor.fields import RichTextField
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Permission
 from django.urls import reverse
 
-
-# Create your models here.
 
 # region users model
 class User(AbstractUser):
@@ -21,7 +18,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username}'
-
 
 
 # endregion
@@ -60,7 +56,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         super(Post, self).save(*args, **kwargs)
-        self.slug = self.title.replace(' ', '-') + '-'+ str(self.pk)
+        self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
 
         super(Post, self).save(*args, **kwargs)
 

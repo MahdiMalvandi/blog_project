@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.models import Permission, Group
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.postgres.search import TrigramSimilarity
@@ -59,8 +57,6 @@ def home(request):
     comments_count = Comment.objects.filter(reply=None).count()
     admins_count = User.objects.filter(is_superuser=True).count()
     most_active_users = User.objects.annotate(num_posts=Count('user_posts')).order_by('-num_posts')[:5]
-    permission = Permission.objects.get(codename='add_post')
-    print(request.user.user_permissions)
     context = {
         'users_count': users_count,
         'blogs': blogs,
@@ -78,20 +74,6 @@ def home(request):
 def users_page(request):
     users = User.objects.all()
 
-    user = User.objects.get(username='Mahdiml6')
-    # print('       ', user.user_permissions.all())
-
-    content_type = ContentType.objects.get_for_model(User)
-    permission_ = 'blog_app.add_post'
-    permission = Permission.objects.get(codename='add_post')
-
-    user.user_permissions.remove(permission)
-    print(user.user_permissions.all())
-    g = Group.objects.get(name='all access')
-    user.groups.remove(g)
-
-    print('       ', user.get_user_permissions())
-
     context = {
         'users': users,
     }
@@ -100,7 +82,7 @@ def users_page(request):
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
-    form = UserPermissionForm(instance=user)
+    form = UserPermissionForm(user)
 
     if user == request.user:
         return redirect('admin_panel:profile')
@@ -111,7 +93,7 @@ def user_profile(request, username):
 
     if request.method == 'POST':
         if request.user.is_staff or user == request.user:
-            form = UserPermissionForm(instance=user, data=request.POST)
+            form = UserPermissionForm(user, data=request.POST)
             if form.is_valid():
                 for key in form.cleaned_data:
                     permission_id = key.split('_')[1]

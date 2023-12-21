@@ -1,5 +1,3 @@
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import Permission
 from django.shortcuts import render
 from functools import wraps
 
@@ -29,7 +27,7 @@ def custom_permission_required(required_permission, message):
             if request.user.is_anonymous:
                 return view_func(request, *args, **kwargs)
             else:
-                if request.user.has_perm(required_permission):
+                if required_permission in request.user.get_user_permissions():
                     return view_func(request, *args, **kwargs)
                 else:
                     if request.user.is_staff:
@@ -38,7 +36,7 @@ def custom_permission_required(required_permission, message):
                         user = 'normal'
                     context = {
                         'custom_message': message,
-                        'user_type':user
+                        'user_type': user
                     }
                     return render(request, 'errors/403.html', context=context, status=403)
 

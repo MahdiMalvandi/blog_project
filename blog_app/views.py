@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from .forms import *
 from .models import *
-from .helpers import create_common_user_group
+
 from admin_panel.decorators import custom_permission_required
 
 
@@ -141,9 +141,6 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-
-            common_user_group = create_common_user_group()
-            user.groups.add(common_user_group)
 
             return redirect('blog_app:home')
     else:
