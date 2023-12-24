@@ -326,5 +326,12 @@ def profile(request):
 
 
 def ticket(request):
-    context = {}
+    tickets = Ticket.objects.select_related('user').all()
+    context = {
+        'tickets': tickets
+    }
     return render(request, 'admin_panel/tickets.html', context)
+
+
+def ticket_answer(request, username):
+    return ...

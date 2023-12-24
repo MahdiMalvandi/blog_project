@@ -16,7 +16,6 @@ class User(AbstractUser):
     bio = models.TextField(blank=True, null=True, max_length=1000)
     job = models.CharField(max_length=30, blank=True, null=True)
 
-
     def __str__(self):
         return f'{self.username}'
 
@@ -85,10 +84,27 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'a comment for {self.post} by {self.user}'
+
+
 # endregion
 
 
-# region room and chat
+# region ticket
 
+class Ticket(models.Model):
+    type_of_tickets = (
+        ('Bug', 'Bug'),
+        ('Proposal', 'Proposal'),
+        ('Support', 'Support'),
+        ('Criticism', 'Criticism'),
+    )
+    type = models.CharField(choices=type_of_tickets, max_length=25, default='Support')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
+    answer = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='ticket')
+    created = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(max_length=1000)
 
+    class Meta:
+        indexes = [models.Index(fields=['-created'])]
+        ordering = ('-created',)
 # endregion

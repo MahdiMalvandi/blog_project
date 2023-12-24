@@ -36,6 +36,7 @@ urlpatterns = [
 
     path('profile/', profile, name='profile'),
     path('ticket/', ticket, name='ticket'),
+    path('ticket/<username>', ticket_answer, name='ticket answer'),
 
 ]
 
