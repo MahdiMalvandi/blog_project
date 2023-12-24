@@ -1,0 +1,191 @@
+{% extends 'parent/admin_base.html' %}
+
+{% load static %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+		<div class="main-container">
+			<div class="pd-ltr-20 xs-pd-20-10">
+				<div class="min-height-200px">
+					<div class="page-header">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="title">
+									<h4>Tickets</h4>
+								</div>
+								<nav aria-label="breadcrumb" role="navigation">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
+										</li>
+										<li class="breadcrumb-item active" aria-current="page">
+											Tickets
+										</li>
+									</ol>
+								</nav>
+							</div>
+						</div>
+					</div>
+					<div class="bg-white border-radius-4 box-shadow mb-30">
+						<div class="row no-gutters">
+							<div class="col-lg-3 col-md-4 col-sm-12">
+								<div class="chat-list bg-light-gray">
+									<div class="chat-search">
+										<span class="ti-search"></span>
+										<input type="text" placeholder="Search Contact" />
+									</div>
+									<div
+										class="notification-list chat-notification-list customscroll"
+									>
+										<ul>
+												{% for ticket in other_tickets %}
+											<li >
+												<a href="{% url 'admin_panel:ticket answer' ticket.pk %}">
+													{% if ticket.user.profile %}
+													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+                                                        {% else %}
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+													{% endif %}
+													<h3 class="clearfix">{{ ticket.user.get_full_name }}</h3>
+													<p>
+                                                        {{ ticket.type }}
+													</p>
+												</a>
+											</li>
+											{% endfor %}
+
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-9 col-md-8 col-sm-12">
+								<div class="chat-detail">
+									<div class="chat-profile-header clearfix">
+										<div class="left">
+											<div class="clearfix">
+												<div class="chat-profile-photo">
+
+											{% if ticket.user.profile %}
+													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+                                                        {% else %}
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+													{% endif %}
+												</div>
+												<div class="chat-profile-name">
+													<h3>{{ ticket.user.get_full_name }}</h3>
+													<span>{% if ticket.user.is_superuser %}
+													Manager
+                                                        {% elif ticket.user.is_staff %}
+                                                        Admin
+                                                        {% else %}
+                                                        User
+													{% endif %} </span>
+												</div>
+											</div>
+										</div>
+										<div class="right text-right d-flex align-items-center" style="justify-content: right;gap: 1rem">
+
+												<h5 class="title">{{ ticket.type }}</h5>
+
+
+							                <a class="btn btn-danger" href="{% url 'admin_panel:close ticket' ticket.pk %}">Close Ticket</a>
+										</div>
+									</div>
+
+									</div>
+									<div class="chat-box">
+										<div class="chat-desc customscroll">
+											<ul>
+
+												<li class="clearfix">
+													<span class="chat-img">
+														{% if ticket.user.profile %}
+													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+                                                        {% else %}
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+													{% endif %}
+													</span>
+													<div class="chat-body clearfix">
+
+														   <p>{{ ticket.body}}
+
+														   </p>
+
+														<div class="chat_time">{{ ticket.created|time}}</div>
+													</div>
+												</li>
+                                            {% if ticket.answers %}
+
+                                            {% for answer in ticket.answers.all %}
+                                            							<li class="clearfix admin_chat">
+													<span class="chat-img">
+														{% if answer.user.profile %}
+													<img src="{{ answer.user.profile.url }}" alt="{{ answer.user.get_full_name }}" />
+                                                        {% else %}
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ answer.user.get_full_name }}"/>
+													{% endif %}
+													</span>
+													<div class="chat-body clearfix">
+
+														   <p>{{ answer.body}}
+
+														   </p>
+
+														<div class="chat_time">{{ answer.created|time}}</div>
+													</div>
+												</li>
+                                            {% endfor %}
+
+                                            {% endif %}
+
+											</ul>
+										</div>
+										<div class="chat-footer">
+											<div class="chat_text_area ml-3">
+												<textarea placeholder="Type your message…"></textarea>
+											</div>
+											<div class="chat_send">
+												<button class="btn btn-link" type="submit">
+													<i class="icon-copy ion-paper-airplane"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+		<script src="{% static 'vendors/scripts/core.js' %}"></script>
+		<script src="{% static 'vendors/scripts/script.min.js' %}"></script>
+		<script src="{% static 'vendors/scripts/process.js' %}"></script>
+		<script src="{% static 'vendors/scripts/layout-settings.js' %}"></script>
+		<noscript
+			><iframe
+				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
+				height="0"
+				width="0"
+				style="display: none; visibility: hidden"
+			></iframe
+		></noscript>
+{% endblock %}

@@ -325,13 +325,24 @@ def profile(request):
     return render(request, 'admin_panel/profile.html')
 
 
-def ticket(request):
-    tickets = Ticket.objects.select_related('user').all()
+def tickets(request):
+    all_tickets = Ticket.objects.select_related('user').filter(answer=None)
     context = {
-        'tickets': tickets
+        'tickets': all_tickets
     }
     return render(request, 'admin_panel/tickets.html', context)
 
 
-def ticket_answer(request, username):
-    return ...
+def ticket_answer(request, pk):
+    ticket = get_object_or_404(Ticket, pk=pk)
+    other_tickets = Ticket.objects.select_related('user').filter(answer=None).exclude(pk=pk)
+
+    context = {
+        'other_tickets': other_tickets,
+        'ticket': ticket
+    }
+    return render(request, 'admin_panel/ticket_page.html', context)
+
+
+def close_ticket(request, pk):
+    return

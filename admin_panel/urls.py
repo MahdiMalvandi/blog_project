@@ -35,8 +35,9 @@ urlpatterns = [
 
 
     path('profile/', profile, name='profile'),
-    path('ticket/', ticket, name='ticket'),
-    path('ticket/<username>', ticket_answer, name='ticket answer'),
+    path('tickets/', tickets, name='ticket'),
+    path('tickets/<pk>', ticket_answer, name='ticket answer'),
+    path('tickets/close/<pk>', close_ticket, name='close ticket'),
 
 ]
 

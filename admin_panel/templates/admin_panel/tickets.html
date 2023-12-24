@@ -26,7 +26,7 @@ Admin Dashboard
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											Tickets
@@ -37,8 +37,8 @@ Admin Dashboard
 						</div>
 					</div>
 					<div class="bg-white border-radius-4 box-shadow mb-30">
-						<div class="row no-gutters">
-							<div class="col-lg-3 col-md-4 col-sm-12">
+
+							<div class="w-100">
 								<div class="chat-list bg-light-gray">
 									<div class="chat-search">
 										<span class="ti-search"></span>
@@ -47,78 +47,30 @@ Admin Dashboard
 									<div
 										class="notification-list chat-notification-list customscroll"
 									>
-										<ul>
-											<li>
-												<a href="#">
-													<img src="vendors/images/img.jpg" alt="" />
-													<h3 class="clearfix">John Doe</h3>
+										<ul class="row">
+											{% for ticket in tickets %}
+											<li class="col-sm-6 col-12">
+												<a href="{% url 'admin_panel:ticket answer' ticket.pk %}">
+													{% if ticket.user.profile %}
+													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+                                                        {% else %}
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+													{% endif %}
+													<h3 class="clearfix">{{ ticket.user.get_full_name }}</h3>
 													<p>
-														 bug
+                                                        {{ ticket.type }}
 													</p>
 												</a>
 											</li>
+											{% endfor %}
+
 
 										</ul>
 									</div>
 								</div>
 							</div>
-							<div class="col-lg-9 col-md-8 col-sm-12">
-								<div class="chat-detail">
-									<div class="chat-profile-header clearfix">
-										<div class="left">
-											<div class="clearfix">
-												<div class="chat-profile-photo">
-													<img src="vendors/images/profile-photo.jpg" alt="" />
-												</div>
-												<div class="chat-profile-name">
-													<h3>Rachel Curtis</h3>
-													<span>New York, USA</span>
-												</div>
-											</div>
-										</div>
-										<div class="right text-right">
 
-												<h5 class="title">Bug</h5>
 
-										</div>
-									</div>
-									<div class="chat-box">
-										<div class="chat-desc customscroll">
-											<ul>
-
-												<li class="clearfix">
-													<span class="chat-img">
-														<img src="vendors/images/chat-img1.jpg" alt="" />
-													</span>
-													<div class="chat-body clearfix">
-
-														   <p>hello i found a bug
-
-														   </p>
-
-														<div class="chat_time">09:40PM</div>
-													</div>
-												</li>
-
-											</ul>
-										</div>
-										<div class="chat-footer">
-											<div class="file-upload">
-												<a href="#"><i class="fa fa-paperclip"></i></a>
-											</div>
-											<div class="chat_text_area">
-												<textarea placeholder="Type your message…"></textarea>
-											</div>
-											<div class="chat_send">
-												<button class="btn btn-link" type="submit">
-													<i class="icon-copy ion-paper-airplane"></i>
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="footer-wrap pd-20 mb-20 card-box">

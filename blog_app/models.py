@@ -100,11 +100,14 @@ class Ticket(models.Model):
     )
     type = models.CharField(choices=type_of_tickets, max_length=25, default='Support')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
-    answer = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='ticket')
+    answer = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='answers')
     created = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=1000)
-
+    is_open = models.BooleanField(default=True)
     class Meta:
         indexes = [models.Index(fields=['-created'])]
         ordering = ('-created',)
+
+    def __str__(self):
+        return f'ticket {self.type}'
 # endregion
