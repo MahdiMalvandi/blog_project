@@ -300,3 +300,5 @@ def account_change_password(request):
 
     context = {'form': form}
     return render(request, 'blog_app/account_change_password.html', context)
+
+

@@ -24,4 +24,6 @@ urlpatterns = [
     path('admin/', include('admin_panel.urls'), name='admin_panel'),
     path('', include('blog_app.urls'), name='blog_app app'),
     path('ckeditor', include("ckeditor_uploader.urls")),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

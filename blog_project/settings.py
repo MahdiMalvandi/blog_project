@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
     'blog_app.apps.BlogConfig',
     'admin_panel.apps.AdminPanelConfig',
     'django.contrib.admin',
@@ -40,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'ckeditor',
+    'django_private_chat',
     'ckeditor_uploader',
-    'mathfilters'
+    'mathfilters',
+    'channels',
 ]
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
@@ -62,8 +65,9 @@ AUTH_USER_MODEL = "blog_app.User"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+
+    ,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,6 +82,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blog_project.wsgi.application'
+# ASGI_APPLICATION = 'blog_project.asgi.application'
+
+CHAT_WS_SERVER_HOST = 'localhost'
+CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PROTOCOL = 'ws'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

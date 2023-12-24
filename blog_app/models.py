@@ -16,6 +16,7 @@ class User(AbstractUser):
     bio = models.TextField(blank=True, null=True, max_length=1000)
     job = models.CharField(max_length=30, blank=True, null=True)
 
+
     def __str__(self):
         return f'{self.username}'
 
@@ -43,7 +44,6 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_posts')
     created = models.DateTimeField(auto_now_add=True)
     short_link = models.CharField(max_length=100)
-    likes = models.ManyToManyField(User, related_name='user_like', blank=True)
     slug = models.SlugField(max_length=1000, blank=True, null=True)
     thumbnail = models.ImageField(upload_to='article-thumbnail/', blank=True, null=True)
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, default=1)
@@ -54,11 +54,11 @@ class Post(models.Model):
     class Meta:
         ordering = ["-created"]
 
-    def save(self, *args, **kwargs):
-        super(Post, self).save(*args, **kwargs)
-        self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
-
-        super(Post, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     super(Post, self).save(*args, **kwargs)
+    #     self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
+    #
+    #     super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog_app:blog page', args=[self.slug])
@@ -88,7 +88,7 @@ class Comment(models.Model):
 # endregion
 
 
-# region url models
+# region room and chat
 
 
 # endregion
