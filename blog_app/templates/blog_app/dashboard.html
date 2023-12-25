@@ -10,43 +10,7 @@ Dashboard
 {% with user=request.user %}
     <section class="dashboard">
         <div class="container dashboard__container">
-            <button class="sidebar__toggle" id="show__sidebar-btn"><i class="uil uil-angle-right-b"></i></button>
-            <button class="sidebar__toggle" id="hide__sidebar-btn"><i class="uil uil-angle-left-b"></i></button>
-            <aside>
-                <ul>
-                    <li>
-                        <a href="{% url 'blog_app:profile' %}" class="active">
-                            <i class="uil uil-user"></i>
-                            <h5>Profile</h5>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'blog_app:account_change_password' %}" >
-                            <i class="uil uil-user"></i>
-                            <h5>Change Password</h5>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'blog_app:add post' %}">
-                            <i class="uil uil-pen"></i>
-                            <h5>Add Post</h5>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'blog_app:manage posts' %}">
-                            <i class="uil uil-postcard"></i>
-                            <h5>Manage Posts</h5>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'blog_app:change profile' %}" >
-                            <i class="uil uil-users-alt"></i>
-                            <h5>Change Profile</h5>
-                        </a>
-                    </li>
-                </ul>
-            </aside>
+            {% include 'partials/sidebar.html' with active='profile' %}
             <main>
                 <h2>Profile</h2>
                 <div class="profile-container">

@@ -57,7 +57,7 @@ Admin Dashboard
                                                    <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
 													{% endif %}
 													<h3 class="clearfix">{{ ticket.user.get_full_name }}</h3>
-													<p>
+													<p >
                                                         {{ ticket.type }}
 													</p>
 												</a>
@@ -98,12 +98,12 @@ Admin Dashboard
 												<h5 class="title">{{ ticket.type }}</h5>
 
 
+							                {% if ticket.is_open %}
 							                <a class="btn btn-danger" href="{% url 'admin_panel:close ticket' ticket.pk %}">Close Ticket</a>
+							                {% endif %}
 										</div>
 									</div>
-
-									</div>
-									<div class="chat-box">
+<div class="chat-box">
 										<div class="chat-desc customscroll">
 											<ul>
 
@@ -117,7 +117,7 @@ Admin Dashboard
 													</span>
 													<div class="chat-body clearfix">
 
-														   <p>{{ ticket.body}}
+														   <p class="d-inline-block">{{ ticket.body}}
 
 														   </p>
 
@@ -151,7 +151,8 @@ Admin Dashboard
 											</ul>
 										</div>
 										<div class="chat-footer">
-											<div class="chat_text_area ml-3">
+								                 {% if ticket.is_open %}
+                                            											<div class="chat_text_area ml-3">
 												<textarea placeholder="Type your message…"></textarea>
 											</div>
 											<div class="chat_send">
@@ -159,8 +160,13 @@ Admin Dashboard
 													<i class="icon-copy ion-paper-airplane"></i>
 												</button>
 											</div>
+                                                {% else %}
+                                                <p class="" style="display:grid;place-items: center;height: 100%;">This Ticket Was Closed</p>
+                                            {% endif %}
 										</div>
 									</div>
+									</div>
+
 								</div>
 							</div>
 						</div>

@@ -104,8 +104,9 @@ class Ticket(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=1000)
     is_open = models.BooleanField(default=True)
+
     class Meta:
-        indexes = [models.Index(fields=['-created'])]
+        indexes = [models.Index(fields=['is_open', '-created'])]
         ordering = ('-created',)
 
     def __str__(self):

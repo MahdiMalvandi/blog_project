@@ -857,6 +857,37 @@ font-size: .9rem;
 .reset_password_form{
   width: 50%;
 }
+
+.tickets-box-info {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 .5rem;
+  flex-wrap: wrap;
+}
+.ticket-box {
+  width:11rem;
+  border-radius: var(--card-border-radius-3);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0 .9rem;
+  align-items: center;
+}
+.ticket-box i {
+  font-size: 2.5rem;
+}
+.ticket-box:nth-child(1){
+  background-color: red;
+}
+.ticket-box:nth-child(2){
+  background-color: #c0b703;
+}
+.ticket-box:nth-child(3){
+  background-color: green;
+}
 @media screen and (max-width: 1700px) {
   .posts__container{
     grid-template-columns: repeat(3, 1fr);

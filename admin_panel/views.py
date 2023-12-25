@@ -339,10 +339,15 @@ def ticket_answer(request, pk):
 
     context = {
         'other_tickets': other_tickets,
-        'ticket': ticket
+        'ticket': ticket,
     }
     return render(request, 'admin_panel/ticket_page.html', context)
 
 
 def close_ticket(request, pk):
-    return
+    ticket = get_object_or_404(Ticket, pk=pk)
+
+    ticket.is_open = False
+    ticket.save()
+    print(ticket.is_open)
+    return redirect('admin_panel:ticket answer', pk=pk)

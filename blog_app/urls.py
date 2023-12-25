@@ -18,6 +18,8 @@ urlpatterns = [
     path('services/', views.services, name='services'),
     path('about_us/', views.about_us, name='about'),
     path('contact/', views.contact, name='contact'),
+    path('tickets/', views.tickets, name='tickets'),
+    path('tickets/add/', views.add_ticket, name='add ticket'),
 
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup, name='sign up'),

@@ -1,0 +1,93 @@
+{% extends 'parent/base.html' %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="dashboard">
+        <div class="container dashboard__container">
+            {% include 'partials/sidebar.html' with active='tickets' %}
+
+
+                    <div class="main">
+                        <h2>Profile</h2>
+                        <div class="ticket_section">
+
+                            <div class="tickets-box-info">
+                                <div class="ticket-box">
+                                    <div class="ticket-box__left">
+                                        <p class="">
+                                            Tickets
+                                        </p>
+                                        <h4 class="">8</h4>
+                                    </div>
+                                     <div class="ticket-box__right">
+                                        <i class="uil uil-ticket"></i>
+                                </div>
+                                </div>
+ <div class="ticket-box">
+                                    <div class="ticket-box__left">
+                                        <p class="">
+                                            Tickets
+                                        </p>
+                                        <h4 class="">8</h4>
+                                    </div>
+                                     <div class="ticket-box__right">
+                                       <i class="uil uil-envelope-open"></i>
+                                </div>
+                                </div>
+
+                                <div class="ticket-box">
+                                    <div class="ticket-box__left">
+                                        <p class="">
+                                            Tickets
+                                        </p>
+                                        <h4 class="">8</h4>
+                                    </div>
+                                     <div class="ticket-box__right">
+                                        <i class="uil uil-envelopes"></i>
+                                </div>
+                                </div>
+<a href="{% url 'blog_app:add ticket' %}">
+
+                                <div class="ticket-box" style="background:blue;">
+
+                                        <div class="ticket-box__left">
+                                        <p class="">
+                                            Add Ticket
+                                        </p>
+                                    </div>
+                                     <div class="ticket-box__right">
+                                        <i class="uil uil-comment-add"></i>
+                                </div>
+
+                                </div>
+ </a>
+                            </div>
+
+                                <div class="tickets-table-box">
+                                    <div class="tickets-table-top">
+                                        <h3 class="">Tickets</h3>
+                                    </div>
+                                    <div class="tickets-table-bottom">
+                                        <ul class="ticket-table">
+                                            <li class="ticket-item">
+                                                <p>#1023</p>
+                                                <p>Bug</p>
+                                                <p>1402/4/5</p>
+                                                <p>Closed</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+    </section>
+
+
+</main>
+{% endblock %}

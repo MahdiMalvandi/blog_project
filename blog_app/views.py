@@ -302,3 +302,13 @@ def account_change_password(request):
     return render(request, 'blog_app/account_change_password.html', context)
 
 
+def tickets(request):
+    all_tickets = Ticket.objects.select_related('user', 'answer').filter(user=request.user)
+    context = {
+        'tickets': all_tickets
+    }
+    return render(request, 'blog_app/tickets.html', context)
+
+
+def add_ticket(request):
+    return None
