@@ -6,8 +6,8 @@ from django.contrib.postgres.search import TrigramSimilarity
 from .forms import *
 from .decorators import custom_permission_required
 
-from blog_app.forms import AddCommentForm
-from blog_app.views import show_post, make_paginator, add_comment_base_view
+from blog_app.forms import AddCommentForm, AnswerForm
+from blog_app.views import show_post, make_paginator, add_comment_base_view, answer_message_base
 
 
 def search(request):
@@ -325,29 +325,32 @@ def profile(request):
     return render(request, 'admin_panel/profile.html')
 
 
-def tickets(request):
-    all_tickets = Ticket.objects.select_related('user').filter(answer=None)
+def rooms(request):
+    all_rooms = Room.objects.filter(is_open=True)
     context = {
-        'tickets': all_tickets
+        'rooms': all_rooms
     }
     return render(request, 'admin_panel/tickets.html', context)
 
 
-def ticket_answer(request, pk):
-    ticket = get_object_or_404(Ticket, pk=pk)
-    other_tickets = Ticket.objects.select_related('user').filter(answer=None).exclude(pk=pk)
+def room_chat(request, pk):
+    room = get_object_or_404(Room, pk=pk)
+    other_rooms = Room.objects.filter(is_open=True).exclude(pk=pk)
 
     context = {
-        'other_tickets': other_tickets,
-        'ticket': ticket,
+        'other_rooms': other_rooms,
+        'room': room,
     }
     return render(request, 'admin_panel/ticket_page.html', context)
 
 
-def close_ticket(request, pk):
-    ticket = get_object_or_404(Ticket, pk=pk)
+def close_room(request, pk):
+    room = get_object_or_404(Room, pk=pk)
 
-    ticket.is_open = False
-    ticket.save()
-    print(ticket.is_open)
-    return redirect('admin_panel:ticket answer', pk=pk)
+    room.is_open = False
+    room.save()
+    return redirect('admin_panel:room answer', pk=pk)
+
+
+def answer_message(request, pk):
+    return answer_message_base(request, pk, 'admin_panel:room answer')

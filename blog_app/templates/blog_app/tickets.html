@@ -18,9 +18,9 @@
                                 <div class="ticket-box">
                                     <div class="ticket-box__left">
                                         <p class="">
-                                            Tickets
+                                            All Tickets
                                         </p>
-                                        <h4 class="">8</h4>
+                                        <h4 class="">{{ rooms.count }}</h4>
                                     </div>
                                      <div class="ticket-box__right">
                                         <i class="uil uil-ticket"></i>
@@ -29,9 +29,9 @@
  <div class="ticket-box">
                                     <div class="ticket-box__left">
                                         <p class="">
-                                            Tickets
+                                            Closed Tickets
                                         </p>
-                                        <h4 class="">8</h4>
+                                        <h4 class="">{{ close_tickets_count }}</h4>
                                     </div>
                                      <div class="ticket-box__right">
                                        <i class="uil uil-envelope-open"></i>
@@ -41,9 +41,9 @@
                                 <div class="ticket-box">
                                     <div class="ticket-box__left">
                                         <p class="">
-                                            Tickets
+                                            Open Tickets
                                         </p>
-                                        <h4 class="">8</h4>
+                                        <h4 class="">{{ open_tickets_count }}</h4>
                                     </div>
                                      <div class="ticket-box__right">
                                         <i class="uil uil-envelopes"></i>
@@ -72,12 +72,23 @@
                                     </div>
                                     <div class="tickets-table-bottom">
                                         <ul class="ticket-table">
-                                            <li class="ticket-item">
-                                                <p><a href="">#1023</a></p>
-                                                <p>Bug</p>
-                                                <p>1402/4/5</p>
-                                                <p>Closed</p>
+                                            {% if rooms %}
+{% for room in rooms %}
+<li class="ticket-item">
+                                                <p>#{{ room.pk }}</p>
+                                                <p><a href="{% url 'blog_app:show ticket' pk=room.pk %}">{{ room.title }}</a></p>
+
+                                                <p>{{ room.type }}</p>
+                                                <p>{{ room.created }}</p>
+                                                <p>{% if not room.is_open%}
+                                                    Closed
+                                                    {% else%}
+                                                    Waiting
+                                                {% endif %} </p>
                                             </li>
+{% endfor %}
+
+                                            {% endif %}
 
 
                                         </ul>

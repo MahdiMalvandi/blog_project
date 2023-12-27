@@ -21,6 +21,7 @@ urlpatterns = [
     path('tickets/', views.tickets, name='tickets'),
     path('tickets/<pk>', views.show_ticket, name='show ticket'),
     path('tickets/add/', views.add_ticket, name='add ticket'),
+    path('tickets/answer/<pk>', views.answer_ticket, name='answer ticket'),
 
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup, name='sign up'),

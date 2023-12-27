@@ -21,7 +21,7 @@ Admin Dashboard
 						<div class="row">
 							<div class="col-md-6 col-sm-12">
 								<div class="title">
-									<h4>Tickets</h4>
+									<h4>Rooms</h4>
 								</div>
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
@@ -29,7 +29,7 @@ Admin Dashboard
 											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
-											Tickets
+											Rooms
 										</li>
 									</ol>
 								</nav>
@@ -48,17 +48,17 @@ Admin Dashboard
 										class="notification-list chat-notification-list customscroll"
 									>
 										<ul class="row">
-											{% for ticket in tickets %}
+											{% for room in rooms %}
 											<li class="col-sm-6 col-12">
-												<a href="{% url 'admin_panel:ticket answer' ticket.pk %}">
-													{% if ticket.user.profile %}
-													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+												<a href="{% url 'admin_panel:room answer' pk=room.pk %}">
+													{% if room.creator.profile %}
+													<img src="{{room.creator.url }}" alt="{{ room.creator.get_full_name}}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ room.creator.get_full_name }}"/>
 													{% endif %}
-													<h3 class="clearfix">{{ ticket.user.get_full_name }}</h3>
+													<h3 class="clearfix">{{ room.creator.get_full_name }}</h3>
 													<p>
-                                                        {{ ticket.type }}
+                                                        {{ room.title }}
 													</p>
 												</a>
 											</li>
@@ -73,12 +73,7 @@ Admin Dashboard
 
 					</div>
 				</div>
-				<div class="footer-wrap pd-20 mb-20 card-box">
-					DeskApp - Bootstrap 4 Admin Template By
-					<a href="https://github.com/dropways" target="_blank"
-						>Ankit Hingarajiya</a
-					>
-				</div>
+
 			</div>
 		</div>
 

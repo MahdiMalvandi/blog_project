@@ -22,7 +22,17 @@ class PostAdmin(admin.ModelAdmin):
         CommentTabularInline
     ]
 
+class MessagesTabularInline(admin.TabularInline):
+    model = Message
+    extra = 0
+
 
 admin.site.register(Category)
-admin.site.register(Ticket)
+
+
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    inlines = [
+        MessagesTabularInline
+    ]
 

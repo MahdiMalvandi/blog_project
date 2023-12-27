@@ -932,7 +932,8 @@ font-size: .9rem;
   margin: 0;
 }
 .message {
-  background: var(--color-gray-900);
+
+    background: var(--color-primary-variant);
 
   padding: 1rem 2rem 2rem 2rem;
   max-width:50%;
@@ -947,16 +948,20 @@ font-size: .9rem;
  font-size: .7rem;
   margin: .3rem 0 ;
 }
-.text {
-
-}
 .admin-message {
   border-radius: 1rem 0rem 1rem 1rem;
     align-self: flex-end;
-
+  background: var(--color-gray-900);
 }
 .admin-message .date , .admin-message .username{
   text-align: right;
+}
+.chat-footer-text-area{
+
+border-radius: 1rem;
+  width: 100%;
+  height: 10rem;
+  font-size: 1rem;
 }
 @media screen and (max-width: 1700px) {
   .posts__container{

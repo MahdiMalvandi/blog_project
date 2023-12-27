@@ -97,3 +97,19 @@ class AccountChangePasswordForm(forms.Form):
             return self.cleaned_data
         else:
             raise forms.ValidationError('Your Password in wrong')
+
+
+class AddNewMessageForm(forms.Form):
+    type_of_tickets = (
+        ('Bug', 'Bug'),
+        ('Proposal', 'Proposal'),
+        ('Support', 'Support'),
+        ('Criticism', 'Criticism'),
+    )
+    body = forms.CharField(max_length=100000)
+    title = forms.CharField(max_length=10000)
+    type = forms.ChoiceField(choices=type_of_tickets)
+
+
+class AnswerForm(forms.Form):
+    body = forms.CharField(max_length=100000)

@@ -21,7 +21,7 @@ Admin Dashboard
 						<div class="row">
 							<div class="col-md-6 col-sm-12">
 								<div class="title">
-									<h4>Tickets</h4>
+									<h4>Room</h4>
 								</div>
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
@@ -29,7 +29,7 @@ Admin Dashboard
 											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
-											Tickets
+											Room
 										</li>
 									</ol>
 								</nav>
@@ -48,17 +48,17 @@ Admin Dashboard
 										class="notification-list chat-notification-list customscroll"
 									>
 										<ul>
-												{% for ticket in other_tickets %}
+												{% for room in other_rooms %}
 											<li >
-												<a href="{% url 'admin_panel:ticket answer' ticket.pk %}">
-													{% if ticket.user.profile %}
-													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+												<a href="{% url 'admin_panel:room answer' pk=room.pk %}">
+													{% if room.messages.first.user.profile %}
+													<img src="{{room.messages.first.user.profile.url }}" alt="{{ room.messages.first.user.get_full_name}}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ room.messages.first.user.get_full_name }}"/>
 													{% endif %}
-													<h3 class="clearfix">{{ ticket.user.get_full_name }}</h3>
-													<p >
-                                                        {{ ticket.type }}
+													<h3 class="clearfix">{{ room.messages.first.user.get_full_name }}</h3>
+													<p>
+                                                        {{ room.title }}
 													</p>
 												</a>
 											</li>
@@ -75,17 +75,17 @@ Admin Dashboard
 											<div class="clearfix">
 												<div class="chat-profile-photo">
 
-											{% if ticket.user.profile %}
-													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+											{% if room.creator.profile %}
+													<img src="{{ room.creator.profile.url }}" alt="{{ room.creator.get_full_name }}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{  room.creator.get_full_name  }}"/>
 													{% endif %}
 												</div>
 												<div class="chat-profile-name">
-													<h3>{{ ticket.user.get_full_name }}</h3>
-													<span>{% if ticket.user.is_superuser %}
+													<h3>{{ room.creator.get_full_name}}</h3>
+													<span>{% if room.creator.is_superuser %}
 													Manager
-                                                        {% elif ticket.user.is_staff %}
+                                                        {% elif room.creator.is_staff %}
                                                         Admin
                                                         {% else %}
                                                         User
@@ -98,68 +98,74 @@ Admin Dashboard
 												<h5 class="title">{{ ticket.type }}</h5>
 
 
-							                {% if ticket.is_open %}
-							                <a class="btn btn-danger" href="{% url 'admin_panel:close ticket' ticket.pk %}">Close Ticket</a>
+							                {% if room.is_open %}
+							                <a class="btn btn-danger" href="{% url 'admin_panel:close room' room.pk %}">Close Ticket</a>
 							                {% endif %}
 										</div>
 									</div>
 <div class="chat-box">
 										<div class="chat-desc customscroll">
 											<ul>
-
-												<li class="clearfix">
+{% for message in room.messages.all %}
+												<li class="clearfix {% if message.user != room.creator %}admin_chat{% endif %} ">
 													<span class="chat-img">
-														{% if ticket.user.profile %}
-													<img src="{{ ticket.user.profile.url }}" alt="{{ ticket.user.get_full_name }}" />
+														{% if message.user.profile %}
+													<img src="{{ message.user.profile.url }}" alt="{{ message.user.get_full_name }}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ ticket.user.get_full_name }}"/>
+                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ message.user.get_full_name }}"/>
 													{% endif %}
 													</span>
 													<div class="chat-body clearfix">
 
-														   <p class="d-inline-block">{{ ticket.body}}
+														   <p class="d-inline-block">{{ message.body}}
 
 														   </p>
 
-														<div class="chat_time">{{ ticket.created|time}}</div>
+														<div class="chat_time">{{ message.created|time}}</div>
 													</div>
 												</li>
-                                            {% if ticket.answers %}
+{% endfor %}
 
-                                            {% for answer in ticket.answers.all %}
-                                            							<li class="clearfix admin_chat">
-													<span class="chat-img">
-														{% if answer.user.profile %}
-													<img src="{{ answer.user.profile.url }}" alt="{{ answer.user.get_full_name }}" />
-                                                        {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ answer.user.get_full_name }}"/>
-													{% endif %}
-													</span>
-													<div class="chat-body clearfix">
 
-														   <p>{{ answer.body}}
-
-														   </p>
-
-														<div class="chat_time">{{ answer.created|time}}</div>
-													</div>
-												</li>
-                                            {% endfor %}
-
-                                            {% endif %}
+{#                                            {% if ticket.answers %}#}
+{##}
+{#                                            {% for answer in ticket.answers.all %}#}
+{#                                            							<li class="clearfix admin_chat">#}
+{#													<span class="chat-img">#}
+{#														{% if answer.user.profile %}#}
+{#													<img src="{{ answer.user.profile.url }}" alt="{{ answer.user.get_full_name }}" />#}
+{#                                                        {% else %}#}
+{#                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ answer.user.get_full_name }}"/>#}
+{#													{% endif %}#}
+{#													</span>#}
+{#													<div class="chat-body clearfix">#}
+{##}
+{#														   <p>{{ answer.body}}#}
+{##}
+{#														   </p>#}
+{##}
+{#														<div class="chat_time">{{ answer.created|time}}</div>#}
+{#													</div>#}
+{#												</li>#}
+{#                                            {% endfor %}#}
+{##}
+{#                                            {% endif %}#}
 
 											</ul>
 										</div>
 										<div class="chat-footer">
-								                 {% if ticket.is_open %}
+								                 {% if room.is_open %}
+                                           <form method="post" action="{% url 'admin_panel:answer message' room.pk %}">
+                                           {% csrf_token %}
                                             											<div class="chat_text_area ml-3">
-												<textarea placeholder="Type your message…"></textarea>
+												<textarea placeholder="Type your message…" name="body"></textarea>
 											</div>
 											<div class="chat_send">
 												<button class="btn btn-link" type="submit">
 													<i class="icon-copy ion-paper-airplane"></i>
 												</button>
 											</div>
+                                           </form>
                                                 {% else %}
                                                 <p class="" style="display:grid;place-items: center;height: 100%;">This Ticket Was Closed</p>
                                             {% endif %}

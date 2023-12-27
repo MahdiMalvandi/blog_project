@@ -105,3 +105,5 @@ class UserPermissionForm(forms.Form):
                 initial=checkbox_initial,
                 required=False)
 
+
+

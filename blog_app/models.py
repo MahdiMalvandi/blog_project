@@ -53,11 +53,11 @@ class Post(models.Model):
     class Meta:
         ordering = ["-created"]
 
-    # def save(self, *args, **kwargs):
-    #     super(Post, self).save(*args, **kwargs)
-    #     self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
-    #
-    #     super(Post, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        super(Post, self).save(*args, **kwargs)
+        self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
+
+        super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog_app:blog page', args=[self.slug])
@@ -89,9 +89,10 @@ class Comment(models.Model):
 # endregion
 
 
-# region ticket
+# region Room
 
-class Ticket(models.Model):
+class Room(models.Model):
+    title = models.CharField(max_length=200)
     type_of_tickets = (
         ('Bug', 'Bug'),
         ('Proposal', 'Proposal'),
@@ -99,16 +100,34 @@ class Ticket(models.Model):
         ('Criticism', 'Criticism'),
     )
     type = models.CharField(choices=type_of_tickets, max_length=25, default='Support')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
-    answer = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='answers')
-    created = models.DateTimeField(auto_now_add=True)
-    body = models.TextField(max_length=1000)
     is_open = models.BooleanField(default=True)
+    creator = models.ForeignKey(User, related_name='rooms', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         indexes = [models.Index(fields=['is_open', '-created'])]
         ordering = ('-created',)
 
     def __str__(self):
-        return f'ticket {self.type}'
+        return f'Room {self.type}'
+
+
+# endregion
+
+
+# region Message
+
+class Message(models.Model):
+    user = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(max_length=100000)
+
+    class Meta:
+        indexes = [models.Index(fields=['created'])]
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'message {self.body}'
+
 # endregion

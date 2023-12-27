@@ -35,9 +35,10 @@ urlpatterns = [
 
 
     path('profile/', profile, name='profile'),
-    path('tickets/', tickets, name='ticket'),
-    path('tickets/<pk>', ticket_answer, name='ticket answer'),
-    path('tickets/close/<pk>', close_ticket, name='close ticket'),
+    path('rooms/', rooms, name='room'),
+    path('rooms/<pk>', room_chat, name='room answer'),
+    path('rooms/close/<pk>', close_room, name='close room'),
+    path('rooms/answer/<pk>', answer_message, name='answer message'),
 
 ]
 

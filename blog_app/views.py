@@ -12,34 +12,7 @@ from .forms import *
 from .models import *
 
 from admin_panel.decorators import custom_permission_required
-
-
-def make_paginator(request, posts, count=12):
-    paginator = Paginator(posts, count)
-    page = request.GET.get("page") if request.GET.get('page') else 1
-    try:
-        posts = paginator.page(page)
-    except EmptyPage:
-        posts = []
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    return posts
-
-
-def show_post(request, slug, template_name):
-    post = get_object_or_404(Post, slug=slug)
-    similar_posts = Post.objects.select_related('author', 'category').filter(category=post.category).exclude(
-        id=post.id)
-    short_link = request.build_absolute_uri('/')[:-1] + f'?q={post.id}'
-    comments = Comment.objects.select_related('user', 'post').filter(post=post, reply__post=None)
-    context = {
-        'post': post,
-
-        'similar_posts': similar_posts,
-        'short_link': short_link,
-        'comments': comments
-    }
-    return render(request, template_name, context)
+from .functions import *
 
 
 def home(request):
@@ -303,16 +276,37 @@ def account_change_password(request):
 
 
 def tickets(request):
-    all_tickets = Ticket.objects.select_related('user', 'answer').filter(user=request.user)
+    all_rooms = Room.objects.select_related('creator').filter(creator=request.user)
+    closed_tickets = Room.objects.select_related('creator').filter(creator=request.user, is_open=False).count()
+    open_tickets = Room.objects.select_related('creator').filter(creator=request.user, is_open=True).count()
     context = {
-        'tickets': all_tickets
+        'rooms': all_rooms,
+        'close_tickets_count': closed_tickets,
+        'open_tickets_count': open_tickets,
     }
     return render(request, 'blog_app/tickets.html', context)
 
 
 def add_ticket(request):
+    if request.method == 'POST':
+        form = AddNewMessageForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            room = Room.objects.create(type=cd['type'], title=cd['title'], creator=request.user)
+            room.save()
+            message = Message.objects.create(body=cd['body'], user=request.user, room=room)
+            message.save()
+            return redirect('blog_app:tickets')
     return render(request, 'blog_app/add-ticket.html')
 
 
 def show_ticket(request, pk):
-    return render(request, 'blog_app/show-ticket.html')
+    room = get_object_or_404(Room, pk=pk)
+    context = {
+        'room': room,
+    }
+    return render(request, 'blog_app/show-ticket.html', context)
+
+
+def answer_ticket(request, pk):
+    return answer_message_base(request, pk, 'blog_app:show ticket')
