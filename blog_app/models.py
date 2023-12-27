@@ -42,7 +42,7 @@ class Post(models.Model):
     description = models.TextField(max_length=10000)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_posts')
     created = models.DateTimeField(auto_now_add=True)
-    short_link = models.CharField(max_length=100)
+
     slug = models.SlugField(max_length=1000, blank=True, null=True)
     thumbnail = models.ImageField(upload_to='article-thumbnail/', blank=True, null=True)
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, default=1)

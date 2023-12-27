@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django_private_chat',
     'ckeditor_uploader',
     'mathfilters',
-    'channels',
+    'rest_framework',
 ]
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
@@ -82,11 +82,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blog_project.wsgi.application'
-# ASGI_APPLICATION = 'blog_project.asgi.application'
 
-CHAT_WS_SERVER_HOST = 'localhost'
-CHAT_WS_SERVER_PORT = 5002
-CHAT_WS_SERVER_PROTOCOL = 'ws'
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -139,6 +136,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
+
 
 
 if DEBUG:
