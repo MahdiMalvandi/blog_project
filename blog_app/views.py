@@ -311,4 +311,8 @@ def tickets(request):
 
 
 def add_ticket(request):
-    return None
+    return render(request, 'blog_app/add-ticket.html')
+
+
+def show_ticket(request, pk):
+    return render(request, 'blog_app/show-ticket.html')

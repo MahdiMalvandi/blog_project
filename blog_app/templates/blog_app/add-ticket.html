@@ -1,0 +1,51 @@
+{% extends 'parent/base.html' %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<main>
+
+    <section class="dashboard">
+        <div class="container dashboard__container">
+            {% include 'partials/sidebar.html' with active='tickets' %}
+
+
+                    <div class="main">
+                        <h2>Send Ticket</h2>
+                        <div class="form-box">
+                            <div class="form-box-bottom">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-input-box">
+                                        <label for="ticket-type" class="form-input-label">
+                                            Type
+                                        </label>
+                                        <select name="type" id="ticket-type" class="input-select">
+                                            <option value="bug" selected>Select Your Ticket Type</option>
+                                            <option value="bug">Bug</option>
+                                            <option value="bug">Bug</option>
+                                            <option value="bug">Bug</option>
+                                            <option value="bug">Bug</option>
+                                            <option value="bug">Bug</option>
+                                        </select>
+
+                                    </div>
+                                       <div class="form-input-box">
+                                        <label for="ticket-type" class="form-input-label">
+                                            Body
+                                        </label>
+                                        <textarea name="body" id="form-input-label" class="body-text-area"></textarea>
+
+                                    </div>
+                                    <input type="submit" value="Send" class="btn-send">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+        </div>
+    </section>
+
+</main>
+{% endblock %}
