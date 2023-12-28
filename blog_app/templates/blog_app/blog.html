@@ -39,7 +39,11 @@ Blogs
                 {% for post in posts %}
                     <article class="post">
                 <div class="post__thumbnail">
+                    {% if post.thumbnail %}
                     <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+                        {% else %}
+                        <img src="/images/article-thumbnail/default.png" alt="{{ post.title }}">
+                    {% endif %}
                 </div>
                 <div class="post__info">
                    <a href="{% url 'blog_app:category posts'   post.category.text %}" class="category__button">{{ post.category.text }}</a>
@@ -51,7 +55,7 @@ Blogs
                             {% if post.author.profile %}
                             <img src="{{ post.author.profile.url }}" alt="">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" alt="">
 
                             {% endif %}
                             </div>

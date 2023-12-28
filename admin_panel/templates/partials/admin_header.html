@@ -77,68 +77,25 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-right">
 							<div class="notification-list mx-h-350 customscroll">
-{#                                notification #}
+
 								<ul>
-									<li>
-										<a href="#">
-											<img src="vendors/images/img.jpg" alt="" />
-											<h3>John Doe</h3>
+                                    {% for room in last_rooms %}
+                                    <li>
+										<a href="{% url 'admin_panel:room answer' pk=room.pk %}">
+                                            {% if room.creator.profile %}
+											<img src="{{ room.creator.profile.url }}" alt="{{ room.creator.get_full_name }}" />
+                                            {% else %}
+											<img src="/images/users_avatar/user-avatar.jpg" alt="{{ room.creator.get_full_name }}" />
+
+                                            {% endif %}
+                                            <h3>{{ room.creator.get_full_name }}</h3>
 											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
+                                                {{ room.title|truncatewords:20}}
 											</p>
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<img src="vendors/images/photo1.jpg" alt="" />
-											<h3>Lea R. Frith</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="vendors/images/photo2.jpg" alt="" />
-											<h3>Erik L. Richards</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="vendors/images/photo3.jpg" alt="" />
-											<h3>John Doe</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="vendors/images/photo4.jpg" alt="" />
-											<h3>Renee I. Hansen</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="vendors/images/img.jpg" alt="" />
-											<h3>Vicki M. Coleman</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
+                                    {% endfor %}
+
 								</ul>
 							</div>
 						</div>
@@ -156,7 +113,7 @@
 								 {% if user.profile %}
                          <img src="{{ user.profile.url }}" class="h-100" alt="">
                         {% else %}
-                            <img src="../../../images/users_avatar/user-avatar.jpg" class="h-100" alt="">
+                            <img src="/images/users_avatar/user-avatar.jpg" class="h-100" alt="">
                         {% endif %}
 							</span>
 							<span class="user-name">{{ user.get_full_name }}</span>

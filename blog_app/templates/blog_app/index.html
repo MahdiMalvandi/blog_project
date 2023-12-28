@@ -6,23 +6,33 @@ Blog Site
 
 {% block content %}
 <main>
+{#
+images/users_avatar/user-avatar.jpg
+images/article-thumbnail/default.png
     <!-- feature post -->
     {% if most_popular_post %}
     <section class="featured">
+
         <div class="container  featured__container">
             <div class="post__thumbnail most_popular_thumbnail">
+                {% if most_popular_post.thumbnail %}
                 <img src="{{most_popular_post.thumbnail.url}}" alt="{{ most_popular_post.title }}">
+                    {% else %}
+                <img src="/images/article-thumbnail/default.png" alt="{{ most_popular_post.title }}">
+
+                {% endif %}
             </div>
             <div class="post__info">
+
                 <a href="{% url 'blog_app:category posts' most_popular_post.category %}" class="category__button">{{ most_popular_post.category }}</a>
                 <h2 class="post__title"><a href="{% url 'blog_app:blog page' most_popular_post.slug %}">{{ most_popular_post.title }}</a></h2>
                 <p class="post__body">{{ most_popular_post.description }}</p>
                 <div class="post__author">
                       <div class="post__author-avatar">
                             {% if most_popular_post.author.profile %}
-                            <img src="{{ most_popular_post.author.profile.url }}" alt="">
+                            <img src="{{ most_popular_post.author.profile.url }}" alt="" style="height: 100%;">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" alt="" style="height: 100%;">
 
                             {% endif %}
                             </div>
@@ -53,7 +63,12 @@ Blog Site
 
                         <article class="post">
                 <div class="post__thumbnail">
+                    {% if popular_post.thumbnail %}
                     <img src="{{ popular_post.thumbnail.url }}" alt="{{ popular_post.title }}">
+                        {% else %}
+                    <img src="/images/article-thumbnail/default.png" alt="{{ popular_post.title }}">
+
+                    {% endif %}
                 </div>
                 <div class="post__info">
                    <a href="{% url 'blog_app:category posts'   popular_post.category.text %}" class="category__button">{{ popular_post.category.text }}</a>
@@ -63,9 +78,9 @@ Blog Site
                         <div class="post__author">
                             <div class="post__author-avatar">
                             {% if popular_post.author.profile %}
-                            <img src="{{ popular_post.author.profile.url }}" alt="">
+                            <img src="{{ popular_post.author.profile.url }}" alt="{{ popular_post.author.get_full_name }}">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" alt="{{ popular_post.author.get_full_name }}">
 
                             {% endif %}
                             </div>
@@ -94,7 +109,14 @@ Blog Site
                     {% for latest_post in latest_posts %}
                         <article class="post">
                 <div class="post__thumbnail">
+                   {% if latest_post.thumbnail %}
+
                     <img src="{{ latest_post.thumbnail.url }}" alt="{{ latest_post.title }}">
+                       {% else %}
+                                                  <img src="/images/article-thumbnail/default.png" alt="{{ latest_post.title }}">
+
+
+                    {% endif %}
                 </div>
                 <div class="post__info">
                    <a href="{% url 'blog_app:category posts'   latest_post.category.text %}" class="category__button">{{ latest_post.category.text }}</a>
@@ -104,9 +126,9 @@ Blog Site
                         <div class="post__author">
                             <div class="post__author-avatar">
                             {% if latest_post.author.profile %}
-                            <img src="{{ latest_post.author.profile.url }}" alt="">
+                            <img src="{{ latest_post.author.profile.url }}" alt="{{ latest_post.author.get_full_name }}">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" alt="{{ latest_post.author.get_full_name }}">
 
                             {% endif %}
                             </div>

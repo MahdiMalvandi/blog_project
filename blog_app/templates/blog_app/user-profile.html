@@ -15,7 +15,7 @@
                     {% if user.profile %}
                     <img src="{{ user.profile.url }}" alt="{{ user.get_full_name }}'s profile" class="user-img">
                         {% else %}
-                        <img src="../../../images/users_avatar/user-avatar.jpg" alt="" class="user-img">
+                        <img src="/images/users_avatar/user-avatar.jpg" alt="" class="user-img">
                     {% endif %}
                 </div>
                 <h4 class="user-fullname">{{ user.get_full_name }}</h4>
@@ -31,7 +31,11 @@
                     {% for user_post in user.user_posts.all %}
                     <div class="user-post">
                         <div class="user-post__img-box">
+                            {% if user_post.thumbnail %}
                             <img src="{{ user_post.thumbnail.url }}" alt="{{ user_post.title }}" class="user-post__img">
+                                {% else %}
+                                <img src="/images/article-thumbnail/default.png" alt="{{ user_post.title }}" class="user-post__img">
+                            {% endif %}
                         </div>
                         <div class="user-post__detail">
                             <a href="{% url 'blog_app:blog page' user_post.slug %}">

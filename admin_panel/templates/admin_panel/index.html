@@ -138,14 +138,14 @@ Admin Dashboard
 									<i class="fa fa-stethoscope" aria-hidden="true"></i>
 								</div>
 								<div class="font-14 text-right">
-									<div><i class="icon-copy ion-arrow-down-c"></i> 3.69%</div>
+									<div><i class="icon-copy ion-arrow-down-c"></i> fake data</div>
 									<div class="font-12">Since last month</div>
 								</div>
 							</div>
 							<div class="d-flex justify-content-between align-items-end">
 								<div class="text-white">
 									<div class="font-14">Surgery</div>
-									<div class="font-24 weight-500">250</div>
+									<div class="font-24 weight-500">fake data</div>
 								</div>
 								<div class="max-width-150">
 									<div id="surgery-chart"></div>
@@ -179,7 +179,7 @@ Admin Dashboard
 												/>
                                                     {% else %}
                                                     <img
-													src="../../../images/users_avatar/user-avatar.jpg"
+													src="/images/users_avatar/user-avatar.jpg"
 													class="border-radius-100 box-shadow"
 													width="50"
 													height="50"
@@ -231,16 +231,16 @@ Admin Dashboard
                                     <li class="d-flex align-items-center justify-content-between">
 										<div class="name-avatar d-flex align-items-center pr-2">
 											<div class="avatar mr-2 flex-shrink-0">
-												{% if blog.thumbnail %}
+
 												<img
-													src="{{blog.thumbnail.url}}"
+													src="{% if blog.thumbnail %}{{blog.thumbnail.url}}{% else %}/images/article-thumbnail/default.png{% endif %}"
 													class="border-radius-100 box-shadow"
 													width="50"
 													height="50"
                                                     style="height:50px"
 													alt=""
 												/>
-												{% endif %}
+
 											</div>
 											<div class="txt">
 

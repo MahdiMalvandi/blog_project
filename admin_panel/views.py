@@ -87,7 +87,8 @@ def user_profile(request, username):
     if user == request.user:
         return redirect('admin_panel:profile')
 
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and request.user.is_staff and user.is_staff and not request.user.has_perm(
+            'auth.change_permission'):
         for field_name, field in form.fields.items():
             field.widget.attrs['disabled'] = True
 

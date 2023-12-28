@@ -91,6 +91,11 @@ class Comment(models.Model):
 
 # region Room
 
+class OpenRooms(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_open=True)
+
+
 class Room(models.Model):
     title = models.CharField(max_length=200)
     type_of_tickets = (
@@ -103,7 +108,8 @@ class Room(models.Model):
     is_open = models.BooleanField(default=True)
     creator = models.ForeignKey(User, related_name='rooms', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-
+    opens = OpenRooms()
+    objects = models.Manager()
     class Meta:
         indexes = [models.Index(fields=['is_open', '-created'])]
         ordering = ('-created',)

@@ -51,12 +51,12 @@ Admin Dashboard
 												{% for room in other_rooms %}
 											<li >
 												<a href="{% url 'admin_panel:room answer' pk=room.pk %}">
-													{% if room.messages.first.user.profile %}
-													<img src="{{room.messages.first.user.profile.url }}" alt="{{ room.messages.first.user.get_full_name}}" />
+													{% if room.creator.profile %}
+													<img src="{{room.creator.profile.url }}" alt="{{ room.creator.get_full_name}}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ room.messages.first.user.get_full_name }}"/>
+                                                   <img src="/images/users_avatar/user-avatar.jpg" alt="{{ room.creator.get_full_name }}"/>
 													{% endif %}
-													<h3 class="clearfix">{{ room.messages.first.user.get_full_name }}</h3>
+													<h3 class="clearfix">{{ room.messages.first.user.get_full_name }} </h3>
 													<p>
                                                         {{ room.title }}
 													</p>
@@ -78,11 +78,11 @@ Admin Dashboard
 											{% if room.creator.profile %}
 													<img src="{{ room.creator.profile.url }}" alt="{{ room.creator.get_full_name }}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{  room.creator.get_full_name  }}"/>
+                                                   <img src="/images/users_avatar/user-avatar.jpg" alt="{{  room.creator.get_full_name  }}"/>
 													{% endif %}
 												</div>
 												<div class="chat-profile-name">
-													<h3>{{ room.creator.get_full_name}}</h3>
+                                                    <a href="{% url 'admin_panel:user_page' room.creator %}"><h3>{{ room.creator.get_full_name}}</h3></a>
 													<span>{% if room.creator.is_superuser %}
 													Manager
                                                         {% elif room.creator.is_staff %}

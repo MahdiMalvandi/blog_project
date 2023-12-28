@@ -46,6 +46,7 @@ Admin Dashboard
 										{% endif %}
 									</ol>
 								</nav>
+
 							</div>
 						</div>
 					</div>
@@ -59,17 +60,19 @@ Admin Dashboard
                                                 {% for blog in blogs %}
                                                 <li>
 												<div class="row no-gutters">
-													{% if blog.thumbnail %}
+
 													<div class="col-lg-4 col-md-12 col-sm-12">
 														<div class="blog-img">
 															<img
-																src="{{ blog.thumbnail.url }}"
+																src="{% if blog.thumbnail %}{{ blog.thumbnail.url }}{% else %}/images/article-thumbnail/default.png{% endif %}"
 																alt="{{ blog.title }}"
 																class="bg_img"
 															/>
 														</div>
 													</div>
-													{% endif %}
+
+
+
 													<div class="col-lg-8 col-md-12 col-sm-12">
 														<div class="blog-caption">
 															<h4>

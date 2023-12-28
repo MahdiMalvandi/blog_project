@@ -19,9 +19,9 @@
                     <div class="post__author">
                         <div class="post__author-avatar">
                             {% if post.author.profile %}
-                            <img src="{{ post.author.profile.url }}" alt="">
+                            <img src="{{ post.author.profile.url }}" alt="{{ post.author.get_full_name }}">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" alt="{{ post.author.get_full_name }}">
 
                             {% endif %}
                         </div>
@@ -30,9 +30,15 @@
                             <small>{{ post.created }}</small>
                         </div>
                     </div>
+                {% if post.thumbnail %}
                     <div class="singlepost__thumbnail">
-                        <img src="{{ post.thumbnail.url }}" alt="" class="">
+
+                        <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
+
+
+
                     </div>
+                 {% endif %}
                     <p class="post__body">{{ post.description }}</p>
 
                     {{ post.body|safe }}
@@ -45,7 +51,7 @@
                                       {% if request.user.profile %}
                             <img src="{{ request.user.profile.url }}" alt="" class="user-info__image">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" class="user-info__image" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" class="user-info__image" alt="">
 
                             {% endif %}
                             <div class="user-info__data">
@@ -95,7 +101,7 @@
                             {% if comment.user.profile %}
                             <img src="{{ comment.user.profile.url }}" alt="" class="user-profile">
                             {% else %}
-                                <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
+                                <img src="/images/users_avatar/user-avatar.jpg" class="user-profile" alt="">
 
                             {% endif %}
 
@@ -157,7 +163,7 @@
                                                   {% if reply.user.profile %}
                                                     <img src="{{ reply.user.profile.url }}" alt="" class="user-profile">
                                                     {% else %}
-                                                        <img src="{% static 'images/user-avatar.jpg' %}" class="user-profile" alt="">
+                                                        <img src="/images/users_avatar/user-avatar.jpg" class="user-profile" alt="">
                                                     {% endif %}
                                                 <p class="user-position">{% if reply.user.is_superuser %}
                                     Manager

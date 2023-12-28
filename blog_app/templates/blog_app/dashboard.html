@@ -18,7 +18,7 @@ Dashboard
                         {% if user.profile %}
                         <img src="{{ user.profile.url }}" alt="{{ user.get_full_name }}'s profile" class="profile__img">
                             {% else %}
-                        <img src="../../../images/users_avatar/user-avatar.jpg"  alt="{{ user.get_full_name }}'s profile" class="profile__img">
+                        <img src="/images/users_avatar/user-avatar.jpg"  alt="{{ user.get_full_name }}'s profile" class="profile__img">
 
                         {% endif %}
                         <h5 class="user-full-name">{{ user.get_full_name }}</h5>

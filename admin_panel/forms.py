@@ -96,14 +96,13 @@ class UserPermissionForm(forms.Form):
         super(UserPermissionForm, self).__init__(*args, **kwargs)
         user_permissions = user.get_user_permissions()
         all_permissions = Permission.objects.all()
-
+        bad_permissions = ['ticket', 'session', 'dialog', 'message', 'content type', 'room', 'log entry', 'group']
         for permission in all_permissions:
-            checkbox_initial = f'{permission.content_type.app_label}.{permission.codename}' in user_permissions
 
-            self.fields['permission_{}'.format(permission.id)] = forms.BooleanField(
-                label=permission.name,
-                initial=checkbox_initial,
-                required=False)
+            if permission.content_type.name not in bad_permissions:
+                checkbox_initial = f'{permission.content_type.app_label}.{permission.codename}' in user_permissions
 
-
-
+                self.fields['permission_{}'.format(permission.id)] = forms.BooleanField(
+                    label=permission.name,
+                    initial=checkbox_initial,
+                    required=False)
