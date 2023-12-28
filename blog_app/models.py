@@ -110,6 +110,7 @@ class Room(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     opens = OpenRooms()
     objects = models.Manager()
+
     class Meta:
         indexes = [models.Index(fields=['is_open', '-created'])]
         ordering = ('-created',)

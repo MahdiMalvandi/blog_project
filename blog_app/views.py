@@ -288,16 +288,7 @@ def tickets(request):
 
 
 def add_ticket(request):
-    if request.method == 'POST':
-        form = AddNewMessageForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            room = Room.objects.create(type=cd['type'], title=cd['title'], creator=request.user)
-            room.save()
-            message = Message.objects.create(body=cd['body'], user=request.user, room=room)
-            message.save()
-            return redirect('blog_app:tickets')
-    return render(request, 'blog_app/add-ticket.html')
+    return add_message_base(request,  'blog_app:tickets', 'blog_app/add-ticket.html')
 
 
 def show_ticket(request, pk):
@@ -309,4 +300,4 @@ def show_ticket(request, pk):
 
 
 def answer_ticket(request, pk):
-    return answer_message_base(request, pk, 'blog_app:show ticket')
+    return add_message_base(request, pk, 'blog_app:show ticket')

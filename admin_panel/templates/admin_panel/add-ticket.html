@@ -1,0 +1,116 @@
+{% extends 'parent/admin_base.html' %}
+
+{% load static %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block content %}
+
+		<div class="main-container">
+			<div class="pd-ltr-20 xs-pd-20-10">
+				<div class="min-height-200px">
+					<div class="page-header">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="title">
+                                        <h4>Add Ticket</h4>
+
+								</div>
+								<nav aria-label="breadcrumb" role="navigation">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
+										</li>
+
+
+                                        	<li class="breadcrumb-item active" aria-current="page">
+											Add Ticket
+										</li>
+
+									</ol>
+								</nav>
+							</div>
+
+						</div>
+					</div>
+					<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
+						<div class="clearfix">
+							<div class="pull-left">
+
+                                    <h4 class="text-blue h4">Add Ticket</h4>
+
+							</div>
+						</div>
+						<form class="row" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+							<div class="form-group col-md-6 col-lg-4">
+								<label class="col-sm-12  col-form-label">Title</label>
+								<div class="col-sm-12">
+									<input
+										class="form-control"
+										type="text"
+                                        name="title"
+                                        {% if form.title.value %}
+                                        value="{{ form.title.value }}"
+                                        {% endif %}
+										placeholder="Enter The Title"
+									/>
+								</div>
+							</div>
+
+
+
+							<div class="form-group col-md-6 col-lg-4">
+								<label class="col-sm-12 col-form-label">Type</label>
+								<div class="col-sm-12 ">
+
+                                        <select name="type" id="ticket-type" class="custom-select col-12">
+                                            <option value="Bug">Bug</option>
+                                            <option value="Proposal">Proposal</option>
+                                            <option value="Support">Support</option>
+                                            <option value="Criticism">Criticism</option>
+                                        </select>
+								</div>
+							</div>
+
+                        							<div class="form-group col-md-6 col-lg-4">
+								<label class="col-sm-12 col-form-label">Body</label>
+								<div class="col-sm-12 ">
+								<textarea name="body"
+
+
+								 class="form-control">{% if form.body.value %}{{ form.body.value }}{% endif %}</textarea>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary align-self-center" style="height: 3rem;">Submit</button>
+
+						</form>
+					</div>
+				</div>
+
+			</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+		<script src="{% static 'vendors/scripts/core.js' %}"></script>
+		<script src="{% static 'vendors/scripts/script.min.js' %}"></script>
+		<script src="{% static 'vendors/scripts/process.js' %}"></script>
+		<script src="{% static 'vendors/scripts/layout-settings.js' %}"></script>
+		<noscript
+			><iframe
+				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
+				height="0"
+				width="0"
+				style="display: none; visibility: hidden"
+			></iframe
+		></noscript>
+{% endblock %}

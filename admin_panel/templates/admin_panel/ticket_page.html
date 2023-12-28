@@ -99,7 +99,11 @@ Admin Dashboard
 
 
 							                {% if room.is_open %}
+							                {% if request.user.is_superuser  %}
+                                                <a class="btn btn-danger" href="{% url 'admin_panel:close room' room.pk %}">Close Ticket</a>
+							                {% elif not room.creator.is_staff and request.user.is_staff %}
 							                <a class="btn btn-danger" href="{% url 'admin_panel:close room' room.pk %}">Close Ticket</a>
+							                {% endif %}
 							                {% endif %}
 										</div>
 									</div>
@@ -107,7 +111,14 @@ Admin Dashboard
 										<div class="chat-desc customscroll">
 											<ul>
 {% for message in room.messages.all %}
-												<li class="clearfix {% if message.user != room.creator %}admin_chat{% endif %} ">
+
+												<li class="clearfix
+{% if message.user != room.creator and message.user != request.user %}
+admin
+{% elif message.user != room.creator or message.user == request.user%}
+admin_chat
+
+{% endif %} ">
 													<span class="chat-img">
 														{% if message.user.profile %}
 													<img src="{{ message.user.profile.url }}" alt="{{ message.user.get_full_name }}" />

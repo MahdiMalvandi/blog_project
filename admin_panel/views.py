@@ -3,10 +3,11 @@ from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.postgres.search import TrigramSimilarity
 
+from blog_app.functions import add_message_base
 from .forms import *
 from .decorators import custom_permission_required
 
-from blog_app.forms import AddCommentForm, AnswerForm
+from blog_app.forms import AddCommentForm
 from blog_app.views import show_post, make_paginator, add_comment_base_view, answer_message_base
 
 
@@ -107,20 +108,6 @@ def user_profile(request, username):
     return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form})
 
 
-# def user_profile(request, username):
-#     user = get_object_or_404(User, username=username)
-#     if user == request.user:
-#         return redirect('admin_panel:profile')
-#     if user.is_superuser:
-#         permissions = 'all'
-#     else:
-#         # Get the permissions
-#         ...
-#     context = {
-#         'user': user,
-#         'permissions':permissions
-#     }
-#     return render(request, 'admin_panel/user-profile.html', context)
 
 
 def edit_user(request, username):
@@ -355,3 +342,29 @@ def close_room(request, pk):
 
 def answer_message(request, pk):
     return answer_message_base(request, pk, 'admin_panel:room answer')
+
+
+def search_room(request):
+    if 'query' in request.GET:
+        query = request.GET['query']
+        context = {
+            'query': query,
+        }
+        form = SearchForm(data=request.GET)
+        if form.is_valid():
+            result_by_title = Room.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(
+                    similarity__gt=0.1)
+            result_by_type = Room.objects.annotate(similarity=TrigramSimilarity('type', query)).filter(
+                similarity__gt=0.1)
+            result_by_user = Room.objects.annotate(similarity=TrigramSimilarity('creator__username', query)).filter(
+                similarity__gt=0.1)
+
+            results = (
+                    result_by_title | result_by_type | result_by_user ).order_by("-similarity")
+            context['rooms'] = results
+            return render(request, 'admin_panel/tickets.html', context)
+    return redirect('admin_panel:room')
+
+
+def add_room(request):
+    return add_message_base(request, 'admin_panel:room', 'admin_panel/add-ticket.html')

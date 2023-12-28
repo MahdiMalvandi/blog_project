@@ -41,18 +41,24 @@ Admin Dashboard
 							<div class="w-100">
 								<div class="chat-list bg-light-gray">
 									<div class="chat-search">
-										<span class="ti-search"></span>
-										<input type="text" placeholder="Search Contact" />
+                                        <form action="{% url 'admin_panel:search room' %}" class="d-flex align-items-center justify-content-between">
+										<div class="d-flex">
+                                            <button type="submit" class="ti-search font-20 border-0"></button>
+										<input type="search" name="query" placeholder="Search Contact" class="p-2" />
+                                        </div>
+                                            <a href="{% url 'admin_panel:add room' %}" class="btn btn-primary">Add Ticket</a>
+                                            </form>
 									</div>
 									<div
 										class="notification-list chat-notification-list customscroll"
 									>
 										<ul class="row">
+
 											{% for room in rooms %}
 											<li class="col-sm-6 col-12">
 												<a href="{% url 'admin_panel:room answer' pk=room.pk %}">
 													{% if room.creator.profile %}
-													<img src="{{room.creator.url }}" alt="{{ room.creator.get_full_name}}" />
+													<img src="{{room.creator.profile.url }}" alt="{{ room.creator.get_full_name}}" />
                                                         {% else %}
                                                    <img src="/images/users_avatar/user-avatar.jpg" alt="{{ room.creator.get_full_name }}"/>
 													{% endif %}

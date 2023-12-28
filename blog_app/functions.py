@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render, redirect
 
-from blog_app.forms import AnswerForm
+from blog_app.forms import AnswerForm, AddNewMessageForm
 from blog_app.models import Post, Comment, Room, Message
 
 
@@ -44,3 +44,16 @@ def answer_message_base(request, pk, next_page):
             message = Message.objects.create(body=cd['body'], user=request.user, room=room)
             message.save()
             return redirect(next_page, pk=pk)
+
+
+def add_message_base(request, next_page, template):
+    if request.method == 'POST':
+        form = AddNewMessageForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            room = Room.objects.create(type=cd['type'], title=cd['title'], creator=request.user)
+            room.save()
+            message = Message.objects.create(body=cd['body'], user=request.user, room=room)
+            message.save()
+            return redirect(next_page)
+    return render(request, template)
