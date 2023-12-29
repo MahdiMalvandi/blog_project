@@ -300,4 +300,4 @@ def show_ticket(request, pk):
 
 
 def answer_ticket(request, pk):
-    return add_message_base(request, pk, 'blog_app:show ticket')
+    return answer_message_base(request, pk, 'blog_app:show ticket')

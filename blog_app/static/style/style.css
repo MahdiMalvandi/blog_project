@@ -462,6 +462,9 @@ footer ul li {
 .categories__title::before {
   background: var(--color-green);
 }
+.category__text {
+  display: block;
+}
 .short-link-container__link-container {
   padding: 0.8rem;
   background: var(--color-gray-700);

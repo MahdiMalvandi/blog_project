@@ -7,7 +7,7 @@ from blog_app.functions import add_message_base
 from .forms import *
 from .decorators import custom_permission_required
 
-from blog_app.forms import AddCommentForm
+from blog_app.forms import AddCommentForm, ChangeProfileForm
 from blog_app.views import show_post, make_paginator, add_comment_base_view, answer_message_base
 
 
@@ -104,10 +104,7 @@ def user_profile(request, username):
                         user.user_permissions.add(permission)
                     else:
                         user.user_permissions.remove(permission)
-
     return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form})
-
-
 
 
 def edit_user(request, username):
@@ -121,7 +118,8 @@ def edit_user(request, username):
             messages.success(request, 'Edit User was successful')
 
             return redirect('admin_panel:users')
-    form = AddUserForm(instance=user)
+    else:
+        form = AddUserForm(instance=user)
     context = {
         'form': form,
         'edit': True,
@@ -144,7 +142,8 @@ def add_user(request):
             messages.success(request, 'The User was added successfully')
 
             return redirect('admin_panel:users')
-    form = AddUserForm()
+    else:
+        form = AddUserForm()
     context = {
         'form': form,
     }
@@ -178,7 +177,8 @@ def edit_post(request, slug):
             messages.success(request, 'Edit Post was successful')
 
             return redirect('admin_panel:blog detail', slug)
-    form = AddBlogForm(instance=post)
+    else:
+        form = AddBlogForm(instance=post)
     context = {
         'edit': True,
         'form': form,
@@ -203,7 +203,8 @@ def add_post(request):
             messages.success(request, 'The Post was added successfully')
 
             return redirect('admin_panel:blogs')
-    form = AddBlogForm()
+    else:
+        form = AddBlogForm()
     context = {
         'form': form,
     }
@@ -244,7 +245,8 @@ def edit_comment(request, pk):
             form.save()
             messages.success(request, 'Edit Comment was successful')
             return redirect('admin_panel:blog detail', comment.post.slug)
-    form = AddCommentForm(instance=comment)
+    else:
+        form = AddCommentForm(instance=comment)
     context = {
         'edit': True,
         'form': form,
@@ -275,7 +277,8 @@ def category(request):
             messages.success(request, 'The Category was added successfully')
 
             return redirect('admin_panel:category')
-    form = AddCategoryForm()
+    else:
+        form = AddCategoryForm()
     context = {
         'form': form,
     }
@@ -291,7 +294,8 @@ def edit_category(request, text):
             messages.success(request, 'Edit Category was successful')
 
             return redirect('admin_panel:category')
-    form = AddCategoryForm(instance=category_selected)
+    else:
+        form = AddCategoryForm(instance=category_selected)
     context = {
         'form': form
     }
@@ -310,7 +314,22 @@ def delete_category(request, text):
 
 
 def profile(request):
-    return render(request, 'admin_panel/profile.html')
+    if request.method == 'POST':
+        form = ChangeProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_panel:profile')
+    else:
+        form = ChangeProfileForm(instance=request.user)
+    context = {
+        'form': form
+    }
+    return render(request, 'admin_panel/profile.html', context)
+
+
+def delete_profile(request):
+    request.user.profile.delete()
+    return redirect('admin_panel:profile')
 
 
 def rooms(request):
@@ -353,14 +372,14 @@ def search_room(request):
         form = SearchForm(data=request.GET)
         if form.is_valid():
             result_by_title = Room.objects.annotate(similarity=TrigramSimilarity('title', query)).filter(
-                    similarity__gt=0.1)
+                similarity__gt=0.1)
             result_by_type = Room.objects.annotate(similarity=TrigramSimilarity('type', query)).filter(
                 similarity__gt=0.1)
             result_by_user = Room.objects.annotate(similarity=TrigramSimilarity('creator__username', query)).filter(
                 similarity__gt=0.1)
 
             results = (
-                    result_by_title | result_by_type | result_by_user ).order_by("-similarity")
+                    result_by_title | result_by_type | result_by_user).order_by("-similarity")
             context['rooms'] = results
             return render(request, 'admin_panel/tickets.html', context)
     return redirect('admin_panel:room')

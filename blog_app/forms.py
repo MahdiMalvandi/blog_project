@@ -80,6 +80,24 @@ class ChangeProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'username', 'job', 'bio', 'profile', 'email']
 
+    def clean_username(self):
+        new_username = self.cleaned_data['username']
+        old_username = self.instance.username
+
+        if new_username != old_username:
+            if User.objects.filter(username=new_username).exists():
+                raise forms.ValidationError('The username already exists')
+        return new_username
+
+    def clean_email(self):
+        new_email = self.cleaned_data['email']
+        old_email = self.instance.email
+
+        if new_email != old_email:
+            if User.objects.filter(email=new_email).exists():
+                raise forms.ValidationError('The email already exists')
+        return new_email
+
 
 class AccountChangePasswordForm(forms.Form):
     old_password = forms.CharField(max_length=100)

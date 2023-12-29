@@ -24,7 +24,7 @@ Admin Dashboard
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
+											<a href="{% url 'admin_panel:home page' %}">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											Profile
@@ -55,9 +55,11 @@ Admin Dashboard
 
 								</div>
 								<h5 class="text-center h5 mb-0">{{ user.get_full_name }}</h5>
+								{% if user.job %}
 								<p class="text-center text-muted font-14">
                                     {{ user.job}}
 								</p>
+								{% endif %}
 								<div class="profile-info">
 									<h5 class="mb-20 h5 text-blue">Contact Information</h5>
 									<ul>
@@ -104,7 +106,8 @@ Admin Dashboard
 												role="tabpanel"
 											>
 												<div class="profile-setting">
-													<form>
+													<form method="post" enctype="multipart/form-data">
+                                                    {% csrf_token %}
 														<div class="profile-edit-list p-4">
 
 																<h4 class="text-blue h5 mb-20">
@@ -115,6 +118,10 @@ Admin Dashboard
 																	<input
 																		class="form-control form-control-lg"
 																		type="text"
+                                                                        name="first_name"
+                                                                        {% if form.first_name.value %}
+                                                                        value="{{ form.first_name.value }}"
+                                                                        {% endif %}
 																	/>
 																</div>
 
@@ -123,6 +130,10 @@ Admin Dashboard
 																	<input
 																		class="form-control form-control-lg"
 																		type="text"
+                                                                        name="last_name"
+                                                                         {% if form.last_name.value %}
+                                                                        value="{{ form.last_name.value }}"
+                                                                        {% endif %}
 																	/>
 																</div>
 																<div class="form-group">
@@ -130,23 +141,60 @@ Admin Dashboard
 																	<input
 																		class="form-control form-control-lg"
 																		type="text"
+                                                                        name="username"
+                                                                         {% if form.username.value %}
+                                                                        value="{{ form.username.value }}"
+                                                                        {% endif %}
 																	/>
+                                                                {% if form.username.errors %}
+                                                                <div class="alert alert-danger mt-1">
+                                                                    {{ form.username.errors }}
+                                                                </div>
+                                                            {% endif %}
 																</div>
 																<div class="form-group">
 																	<label>Email</label>
 																	<input
 																		class="form-control form-control-lg"
 																		type="email"
+                                                                        name="email"
+                                                                         {% if form.email.value %}
+                                                                        value="{{ form.email.value }}"
+                                                                        {% endif %}
 																	/>
 																</div>
+                                                        {% if form.email.errors %}
+                                                                <div class="alert alert-danger mt-1">
+                                                                    {{ form.email.errors }}
+                                                                </div>
+                                                            {% endif %}
+                                                        <div class="form-group">
+																	<label>Job</label>
+																	<input
+																		class="form-control form-control-lg"
+																		type="text"
+                                                                        name="job"
+                                                                         {% if form.job.value %}
+                                                                        value="{{ form.job.value }}"
+                                                                        {% endif %}
+																	/>
+																</div>
+                                                        <div class="form-group">
+																	<label>Bio</label>
+                                                            <textarea name="bio" class="form-control form-control-lg">{% if form.bio.value %}{{ form.bio.value }}{% endif %}</textarea>
+																</div>
 																<div class="form-group">
+                                                                                {% if request.user.profile %}
+                                    <a href="{% url 'admin_panel:delete profile' %}" class="btn btn-danger mb-1">Delete Profile</a>
+                                        {% endif %}
 																	<label>Profile</label>
 																	<input
 																		class="form-control form-control-lg"
 																		type="file"
+                                                                        name="profile"
 																	/>
 																</div>
-
+                                                                   <input type="submit" class="btn btn-primary" value="Submit">
 
 
 														</div>

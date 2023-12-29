@@ -35,6 +35,7 @@ urlpatterns = [
 
 
     path('profile/', profile, name='profile'),
+    path('profile/delete-profile/', delete_profile, name='delete profile'),
     path('rooms/', rooms, name='room'),
     path('rooms/<pk>', room_chat, name='room answer'),
     path('rooms/add/', add_room, name='add room'),
