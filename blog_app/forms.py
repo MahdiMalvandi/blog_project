@@ -1,7 +1,5 @@
-import ckeditor_uploader
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
 
 from .models import *
 
@@ -25,6 +23,13 @@ class SignUpForm(UserCreationForm):
             raise forms.ValidationError("Email Already Exists")
         else:
             return email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username Already Exists")
+        else:
+            return username
 
 
 class LoginForm(forms.Form):

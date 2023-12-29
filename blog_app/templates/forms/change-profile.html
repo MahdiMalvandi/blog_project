@@ -29,9 +29,11 @@
             <input type="text" name="username" id="" class="text" placeholder="Enter Your User Name" {% if form.username.value %}
             value="{{ form.username.value }}"
             {% endif %} >
+        {{ form.username.errors }}
             <input type="email" name="email" id="" class="text" placeholder="Enter Your Email" {% if form.email.value %}
             value="{{ form.email.value }}"
             {% endif %} >
+        {{ form.email.errors }}
             <input type="text" name="job" id="" class="text" placeholder="Enter Your Job" {% if form.job.value %}
             value="{{ form.job.value }}"
             {% endif %} >

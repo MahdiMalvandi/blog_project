@@ -3,9 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.postgres.search import TrigramSimilarity
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count, Avg
-from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Count, Avg, Sum, F
 from django.urls import reverse_lazy
 from django.contrib.auth import update_session_auth_hash
 from .forms import *
@@ -21,13 +19,15 @@ def home(request):
         return redirect('blog_app:blog page', post.slug)
 
     most_popular_posts = Post.objects.select_related('author', 'category').annotate(
-        avg_points=Avg('post_comments__point'), comments_count=Count('post_comments')).order_by('avg_points',
-                                                                                                'comments_count')
+        avg_rating=Sum('post_comments__point') / Count('post_comments')
+    ).annotate(
+        total_score=F('avg_rating') * Count('post_comments')
+    )
 
     latest_posts = Post.objects.select_related('author', 'category').all().order_by('-created')
     context = {
-        'most_popular_post': most_popular_posts[:1].first(),
-        'popular_posts': most_popular_posts[1:5],
+        'most_popular_post': most_popular_posts.first(),
+        'popular_posts': most_popular_posts.order_by('total_score')[1:5],
         'latest_posts': latest_posts[:4],
     }
     return render(request, 'blog_app/index.html', context)
@@ -181,7 +181,8 @@ def post_edit(request, slug):
             form.author = post.author
             form.save()
             return redirect('blog_app:manage posts')
-    form = AddPostForm(instance=post)
+    else:
+        form = AddPostForm(instance=post)
     context = {
         'edit': True,
         'form': form,
@@ -198,7 +199,8 @@ def add_post(request):
             post.author = request.user
             post.save()
             return redirect('blog_app:manage posts')
-    form = AddPostForm()
+    else:
+        form = AddPostForm()
     context = {
         'form': form,
     }
@@ -235,7 +237,8 @@ def change_profile(request):
         if form.is_valid():
             form.save()
             return redirect('blog_app:profile')
-    form = ChangeProfileForm(instance=user)
+    else:
+        form = ChangeProfileForm(instance=user)
     context = {
         'form': form
     }
@@ -288,7 +291,7 @@ def tickets(request):
 
 
 def add_ticket(request):
-    return add_message_base(request,  'blog_app:tickets', 'blog_app/add-ticket.html')
+    return add_message_base(request, 'blog_app:tickets', 'blog_app/add-ticket.html')
 
 
 def show_ticket(request, pk):
