@@ -4,7 +4,7 @@
 	<head>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
-		<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+		<title>404</title>
 
 		<!-- Site favicon -->
 		<link
@@ -91,7 +91,11 @@
 						This is not the Web Page You are looking for
 					</p>
 					<div class="pt-20 mx-auto max-width-200">
-						<a href="{% url 'blog_app:home' %}" class="btn btn-primary btn-block btn-lg"
+						<a href="{% if user_type == 'admin' %}
+						{% url 'admin_panel:home page' %}
+						{% else %}
+						{% url 'blog_app:home' %}
+						{% endif %} " class="btn btn-primary btn-block btn-lg"
 							>Back To Home</a
 						>
 					</div>
