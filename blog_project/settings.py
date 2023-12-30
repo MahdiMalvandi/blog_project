@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*wn*b7v%(xow7&1z(^g=d0@huq(le8(!me@wp=@idyz3#9f^r8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -41,10 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'ckeditor',
-    'django_private_chat',
     'ckeditor_uploader',
     'mathfilters',
-    'rest_framework',
 ]
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
@@ -94,13 +94,14 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "blog_db",
-        'USER': 'mahdi',
-        'PASSWORD': 'mahdiml6',
-        'PORT': '5432'
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': "blog_db",
+    #     'USER': 'mahdi',
+    #     'PASSWORD': 'mahdiml6',
+    #     'PORT': '5432'
+    # }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 # Password validation
