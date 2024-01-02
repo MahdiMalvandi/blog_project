@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Permission
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 
@@ -37,6 +38,7 @@ class Category(models.Model):
 
 # region post model
 class Post(models.Model):
+
     title = models.CharField(max_length=1000)
     body = RichTextUploadingField()
     description = models.TextField(max_length=10000)
@@ -54,9 +56,7 @@ class Post(models.Model):
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):
-        super(Post, self).save(*args, **kwargs)
-        self.slug = self.title.replace(' ', '-') + '-' + str(self.pk)
-
+        self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

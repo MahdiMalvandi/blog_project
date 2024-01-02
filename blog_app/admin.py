@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import *
 
 
-
 class CommentTabularInline(admin.TabularInline):
     model = Comment
     extra = 0
@@ -16,10 +15,11 @@ class Admin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "author"]
-    fields = ["title", "body", "thumbnail", "author", "slug", "category"]
+    fields = ["title", "body", "thumbnail", "author", "slug", "category", "description"]
     inlines = [
         CommentTabularInline
     ]
+
 
 class MessagesTabularInline(admin.TabularInline):
     model = Message
@@ -34,4 +34,3 @@ class RoomAdmin(admin.ModelAdmin):
     inlines = [
         MessagesTabularInline
     ]
-
