@@ -38,6 +38,17 @@ class AddUserForm(forms.ModelForm):
 
         return email
 
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if password == '' and self.instance.pk:
+            return self.instance.password
+        elif password != '' and self.instance.pk:
+            return password
+        elif password == '' and not self.instance.pk:
+            return forms.ValidationError('Password Must not to be empty')
+        else:
+            return password
+
     def clean(self):
 
         position = self.cleaned_data['position']

@@ -81,6 +81,7 @@ def users_page(request):
     return render(request, 'admin_panel/users.html', context)
 
 
+@custom_permission_required('blog_app.view_user', message='You can not view users')
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     form = UserPermissionForm(user)
@@ -88,10 +89,16 @@ def user_profile(request, username):
     if user == request.user:
         return redirect('admin_panel:profile')
 
-    if not request.user.is_superuser and request.user.is_staff and user.is_staff and not request.user.has_perm(
-            'auth.change_permission'):
+    if not request.user.has_perm('auth.change_permission'):
+            for field_name, field in form.fields.items():
+                field.widget.attrs['disabled'] = True
+    print(request.user.is_staff)
+    print(request.user.is_staff and user.is_superuser or user.is_staff)
+    if request.user.is_staff and user.is_superuser or user.is_staff:
         for field_name, field in form.fields.items():
-            field.widget.attrs['disabled'] = True
+            if isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs['disabled'] = 'disabled'
+
 
     if request.method == 'POST':
         if request.user.is_staff or user == request.user:
@@ -107,6 +114,7 @@ def user_profile(request, username):
     return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form})
 
 
+@custom_permission_required('blog_app.change_user', message='You can not edit users')
 def edit_user(request, username):
     user = get_object_or_404(User, username=username)
     if user == request.user:
@@ -127,6 +135,7 @@ def edit_user(request, username):
     return render(request, 'admin_panel/add-user.html', context)
 
 
+@custom_permission_required('blog_app.delete_user', message='You can not delete users')
 def delete_user(request, username):
     user = get_object_or_404(User, username=username)
     user.delete()
@@ -134,6 +143,7 @@ def delete_user(request, username):
     return redirect('admin_panel:users')
 
 
+@custom_permission_required('blog_app.add_user', message='You can not add users')
 def add_user(request):
     if request.method == 'POST':
         form = AddUserForm(request.POST, request.FILES)
@@ -168,6 +178,7 @@ def post_detail(request, slug):
     return show_post(request, slug, 'admin_panel/blog-detail.html')
 
 
+@custom_permission_required('blog_app.change_post', message='You Can not edit posts')
 def edit_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.method == 'POST':
@@ -186,6 +197,7 @@ def edit_post(request, slug):
     return render(request, 'admin_panel/add-blog.html', context=context)
 
 
+@custom_permission_required('blog_app.delete_post', message='You Can not delete posts')
 def delete_post(request, slug):
     get_object_or_404(Post, slug=slug).delete()
     messages.success(request, 'The Post was deleted successfully')
@@ -193,6 +205,7 @@ def delete_post(request, slug):
     return redirect('admin_panel:blogs')
 
 
+@custom_permission_required('blog_app.add_post', message='You Can not add posts')
 def add_post(request):
     if request.method == 'POST':
         form = AddBlogForm(request.POST, request.FILES)
@@ -211,6 +224,7 @@ def add_post(request):
     return render(request, 'admin_panel/add-blog.html', context)
 
 
+@custom_permission_required('blog_app.change_post', message='You Can not edit posts')
 def delete_thumbnail_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
     post.thumbnail.delete()
@@ -219,6 +233,7 @@ def delete_thumbnail_post(request, slug):
     return redirect('admin_panel:edit post', slug)
 
 
+@custom_permission_required('blog_app.view_post', message='You Can not see this page')
 def posts_category(request, category_text):
     blogs = Post.objects.select_related('category', 'author').filter(category__text=category_text)
     context = {
@@ -232,11 +247,13 @@ def posts_category(request, category_text):
 
 # region comments views
 
+@custom_permission_required('blog_app.add_comment', message='You can not add comments')
 def add_comment(request, slug):
     messages.success(request, 'The Comment was added successfully')
     return add_comment_base_view(request, slug, 'admin_panel:blog detail')
 
 
+@custom_permission_required('blog_app.change_comment', message='You can not edit comments')
 def edit_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == 'POST':
@@ -254,6 +271,7 @@ def edit_comment(request, pk):
     return render(request, 'admin_panel/edit-comments.html', context)
 
 
+@custom_permission_required('blog_app.delete_comment', message='You can not delete comments')
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     slug = comment.post.slug
@@ -267,6 +285,7 @@ def delete_comment(request, pk):
 
 # region category views
 
+@custom_permission_required('blog_app.show_category', message='You can not View categories')
 def category(request):
     if request.method == 'POST':
         form = AddCategoryForm(request.POST)
@@ -285,6 +304,7 @@ def category(request):
     return render(request, 'admin_panel/category.html', context)
 
 
+@custom_permission_required('blog_app.edit_category', message='You can not edit categories')
 def edit_category(request, text):
     category_selected = Category.objects.get(text=text)
     if request.method == 'POST':
@@ -302,6 +322,7 @@ def edit_category(request, text):
     return render(request, 'admin_panel/edit-category.html', context)
 
 
+@custom_permission_required('blog_app.delete_category', message='You can not delete categories')
 def delete_category(request, text):
     category_selected = Category.objects.get(text=text)
     category_selected.delete()
@@ -313,6 +334,7 @@ def delete_category(request, text):
 # endregion
 
 
+@custom_permission_required('blog_app.change_user', message='You can not edit users')
 def profile(request):
     if request.method == 'POST':
         form = ChangeProfileForm(data=request.POST, instance=request.user, files=request.FILES)
@@ -327,11 +349,13 @@ def profile(request):
     return render(request, 'admin_panel/profile.html', context)
 
 
+@custom_permission_required('blog_app.change_user', message='You can not edit users')
 def delete_profile(request):
     request.user.profile.delete()
     return redirect('admin_panel:profile')
 
 
+@custom_permission_required('blog_app.view_room', message='You can not view rooms')
 def rooms(request):
     all_rooms = Room.objects.filter(is_open=True)
     context = {
@@ -340,6 +364,7 @@ def rooms(request):
     return render(request, 'admin_panel/tickets.html', context)
 
 
+@custom_permission_required('blog_app.view_room', message='You can not view rooms')
 def room_chat(request, pk):
     room = get_object_or_404(Room, pk=pk)
     other_rooms = Room.objects.filter(is_open=True).exclude(pk=pk)
@@ -351,6 +376,7 @@ def room_chat(request, pk):
     return render(request, 'admin_panel/ticket_page.html', context)
 
 
+@custom_permission_required('blog_app.change_room', message='You can not close rooms')
 def close_room(request, pk):
     room = get_object_or_404(Room, pk=pk)
 
@@ -359,6 +385,7 @@ def close_room(request, pk):
     return redirect('admin_panel:room answer', pk=pk)
 
 
+@custom_permission_required('blog_app.add_message', message='You can not add messages')
 def answer_message(request, pk):
     return answer_message_base(request, pk, 'admin_panel:room answer')
 
@@ -385,5 +412,6 @@ def search_room(request):
     return redirect('admin_panel:room')
 
 
+@custom_permission_required('blog_app.add_room', message='You can not add room')
 def add_room(request):
     return add_message_base(request, 'admin_panel:room', 'admin_panel/add-ticket.html')

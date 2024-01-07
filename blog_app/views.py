@@ -14,6 +14,7 @@ from .functions import *
 
 
 def home(request):
+
     if request.GET.get('q'):
         post = get_object_or_404(Post, id=request.GET.get('q'))
         return redirect('blog_app:blog page', post.slug)
