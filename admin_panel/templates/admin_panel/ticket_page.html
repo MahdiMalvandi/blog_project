@@ -116,7 +116,7 @@ admin_chat
 														{% if message.user.profile %}
 													<img src="{{ message.user.profile.url }}" alt="{{ message.user.get_full_name }}" />
                                                         {% else %}
-                                                   <img src="../../../images/users_avatar/user-avatar.jpg" alt="{{ message.user.get_full_name }}"/>
+                                                   <img src="/images/users_avatar/user-avatar.jpg" alt="{{ message.user.get_full_name }}"/>
 													{% endif %}
 													</span>
 													<div class="chat-body clearfix">
@@ -162,7 +162,7 @@ admin_chat
                                            <form method="post" action="{% url 'admin_panel:answer message' room.pk %}">
                                            {% csrf_token %}
                                             											<div class="chat_text_area ml-3">
-												<textarea placeholder="Type your message…" name="body"></textarea>
+												<textarea placeholder="Type your message…" name="body" required></textarea>
 											</div>
 											<div class="chat_send">
 												<button class="btn btn-link" type="submit">

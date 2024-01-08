@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import *
@@ -33,26 +34,28 @@ class SignUpForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=63)
-    password = forms.CharField(max_length=63)
+    username_or_email = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def clean(self):
-        cleaned_data = self.cleaned_data
+        cleaned_data = super().clean()
+        username_or_email = cleaned_data.get('username_or_email')
+        password = cleaned_data.get('password')
 
-        username = cleaned_data['username']
-        password = cleaned_data['password']
+        if username_or_email and password:
+            user = None
+            if '@' in username_or_email:
+                try:
+                    user = User.objects.get(email=username_or_email)
+                except User.DoesNotExist:
+                    pass
+            else:
+                user = authenticate(username=username_or_email, password=password)
 
-        # username clean
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise forms.ValidationError("Username does not exist")
+            if user is None or not user.check_password(password):
+                raise forms.ValidationError("Invalid username/email or password")
 
-        # password clean
-        if user.check_password(password):
-            return cleaned_data
-        else:
-            raise forms.ValidationError("Password does not match")
+        return cleaned_data
 
 
 class AddPostForm(forms.ModelForm):

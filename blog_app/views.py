@@ -14,7 +14,6 @@ from .functions import *
 
 
 def home(request):
-
     if request.GET.get('q'):
         post = get_object_or_404(Post, id=request.GET.get('q'))
         return redirect('blog_app:blog page', post.slug)
@@ -127,13 +126,19 @@ def signup(request):
 
 def login_view(request):
     if request.method == 'POST':
-
         form = LoginForm(request.POST)
         if form.is_valid():
+            username_or_email = form.cleaned_data['username_or_email']
+            password = form.cleaned_data['password']
 
-            user = authenticate(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password'])
+            user = None
+            if '@' in username_or_email:
+                try:
+                    user = User.objects.get(email=username_or_email)
+                except User.DoesNotExist:
+                    pass
+            else:
+                user = authenticate(username=username_or_email, password=password)
 
             if user is not None:
                 login(request, user)
@@ -142,8 +147,10 @@ def login_view(request):
                 if user.is_superuser:
                     return redirect('admin_panel:home page')
                 return redirect('blog_app:home')
+
     else:
         form = LoginForm()
+
     context = {
         'form': form
     }

@@ -41,7 +41,9 @@
                  {% endif %}
                     <p class="post__body">{{ post.description }}</p>
 
-                    {{ post.body|safe }}
+                    <div class="post__text">
+                        {{ post.body|safe }}
+                    </div>
                 </div>
                 <div class="comments">
                     <h2 class="comments__title title">Comments</h2>
@@ -224,8 +226,10 @@
                         <!-- new post start -->
                         {% if similar_posts %}
                         {% for similar_post in similar_posts %}
+                            <div class="news-post__content_container">
                             <div class="news-post__content">
                             <a href="{% url 'blog_app:blog page' similar_post.slug %}" class="new-post-content__text text-md">{{ similar_post.title }}</a>
+                            </div>
                             </div>
                         {% endfor %}
                             {% else %}

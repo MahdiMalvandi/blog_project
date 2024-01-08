@@ -81,12 +81,11 @@ class AddUserForm(forms.ModelForm):
 
 
 class AddBlogForm(forms.ModelForm):
+    title = forms.CharField(max_length=100)
+
     class Meta:
         model = Post
         fields = ['title', 'description', 'body', 'thumbnail', 'category']
-
-    def clean(self):
-        return self.cleaned_data
 
 
 class SearchForm(forms.Form):
@@ -107,7 +106,7 @@ class UserPermissionForm(forms.Form):
         super(UserPermissionForm, self).__init__(*args, **kwargs)
         user_permissions = user.get_user_permissions()
         all_permissions = Permission.objects.all()
-        bad_permissions = ['ticket', 'session', 'dialog', 'message', 'content type', 'room', 'log entry', 'group']
+        bad_permissions = ['ticket', 'session', 'dialog', 'content type', 'log entry', 'group']
         for permission in all_permissions:
 
             if permission.content_type.name not in bad_permissions:

@@ -52,11 +52,15 @@
                             </div>
                             <div class=" p-3">
 
-                          <form method="post" class="d-flex flex-wrap " style="gap: 1rem">
+
+    {% if can_edit %}
+                                  <form method="post" class="d-flex flex-wrap " style="gap: 1rem">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" class="btn btn-primary">
-</form>
+        </form>
+    {% endif %}
+
 
 {#                                  <div class="form-check form-switch ps-0">#}
 {#                                    <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault" checked disabled>#}
@@ -119,13 +123,13 @@
                                     <div class="card card-box" style="height: 25rem;">
                                         <img
                                             class="card-img-top h-50"
-                                            src="{% if post.thumbnail %}{{ post.thumbnail.url }}{% endif %}/images/article-thumbnail/default.png"
+                                            src="{% if post.thumbnail %}{{ post.thumbnail.url }}{% else %}/images/article-thumbnail/default.png{% endif %}"
                                             alt="{{ post.title}}"
                                         />
                                         <div class="card-body">
-                                            <h5 class="card-title weight-500">{{ post.title }}</h5>
-                                            <p class="card-text">
-                                                {{ post.description|truncatewords:20}}
+                                            <h5 class="card-title weight-500 overflow-hidden" style=" display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp:1;">{{ post.title  }}</h5>
+                                            <p class="card-text overflow-hidden" style=" display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp:3;">
+                                                {{ post.description}}
                                             </p>
                                             <a href="{% url 'admin_panel:blog detail' post.slug %}" class="btn btn-primary">Go</a>
                                         </div>
@@ -161,11 +165,13 @@
                           <div class="card-box ">
                           <div class=" mb-4">
                             <div class="pb-0 p-3 mt-4">
-                              <h4 class="mb-1">Blogs</h4>
+                              <h4 class="mb-1">Rooms</h4>
 
                             </div>
                             <div class="card-body p-3">
 
+                                {% if user.rooms %}
+                                
 
                                   <ul class="d-flex flex-wrap " style="gap: 1.5rem">
 											{% for room in user.rooms.all %}
@@ -179,6 +185,10 @@
 											{% endfor %}
 
                                   </ul>
+                                {% else %}
+                                    <p class="text-body">There is no post</p>
+                                {% endif %}
+
 
   </div>
 

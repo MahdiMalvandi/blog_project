@@ -215,6 +215,9 @@ nav button {
 
 .post__title {
   margin: .5rem 0 ;
+  overflow: hidden; display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 1;
 }
 .post__body {
   overflow: hidden; display: -webkit-box;
@@ -231,12 +234,7 @@ nav button {
   gap: 1rem;
   margin-top: 1.2rem;
 }
-.post__author-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--card-border-radius-3);
-  overflow: hidden;
-}
+
 /* featured */
 .featured {
   margin-top: 8rem;
@@ -402,6 +400,16 @@ footer ul li {
 .singlepost__container .post {
   width: 55%;
 }
+.post__text * {
+  width: 100% !important;
+  height: 100% !important;
+}
+.post__author-avatar {
+  width: 2.5rem !important;
+  height: 2.5rem;
+  border-radius: var(--card-border-radius-3);
+  overflow: hidden;
+}
 .blog-text,
 .short-link-container__short-link-box,
 .news-posts,
@@ -481,14 +489,17 @@ footer ul li {
 .news-posts__container {
   padding: 0 1rem;
 }
-.news-post__content {
+.news-post__content_container {
   border-bottom: 1px dashed var(--color-gray-200);
 }
 .text-md {
   font-size: 1rem;
 }
 .news-post__content {
-  padding: 1rem 0;
+  margin: 1rem 0;
+    overflow: hidden; display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 1;
 }
 .categories {
   display: flex;

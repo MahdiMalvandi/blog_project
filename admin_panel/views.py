@@ -83,6 +83,7 @@ def users_page(request):
 
 @custom_permission_required('blog_app.view_user', message='You can not view users')
 def user_profile(request, username):
+    user_can_edit = True
     user = get_object_or_404(User, username=username)
     form = UserPermissionForm(user)
 
@@ -90,15 +91,11 @@ def user_profile(request, username):
         return redirect('admin_panel:profile')
 
     if not request.user.has_perm('auth.change_permission'):
-            for field_name, field in form.fields.items():
-                field.widget.attrs['disabled'] = True
-    print(request.user.is_staff)
-    print(request.user.is_staff and user.is_superuser or user.is_staff)
-    if request.user.is_staff and user.is_superuser or user.is_staff:
-        for field_name, field in form.fields.items():
-            if isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs['disabled'] = 'disabled'
-
+        user_can_edit = False
+    elif request.user.is_staff and user.is_superuser:
+        user_can_edit = False
+    elif request.user.is_staff and not request.user.is_superuser and user.is_staff:
+        user_can_edit = False
 
     if request.method == 'POST':
         if request.user.is_staff or user == request.user:
@@ -111,14 +108,14 @@ def user_profile(request, username):
                         user.user_permissions.add(permission)
                     else:
                         user.user_permissions.remove(permission)
-    return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form})
+    return render(request, 'admin_panel/user-profile.html', {'user': user, 'form': form, 'can_edit': user_can_edit})
 
 
 @custom_permission_required('blog_app.change_user', message='You can not edit users')
 def edit_user(request, username):
     user = get_object_or_404(User, username=username)
-    if user == request.user:
-        return redirect('admin_panel:profile')
+    if user == request.user and request.method != 'POST':
+        return redirect('admin_panel:users')
     if request.method == 'POST':
         form = AddUserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
@@ -187,7 +184,7 @@ def edit_post(request, slug):
             form.save()
             messages.success(request, 'Edit Post was successful')
 
-            return redirect('admin_panel:blog detail', slug)
+            return redirect('admin_panel:blog detail', form.instance.slug)
     else:
         form = AddBlogForm(instance=post)
     context = {
@@ -285,7 +282,7 @@ def delete_comment(request, pk):
 
 # region category views
 
-@custom_permission_required('blog_app.show_category', message='You can not View categories')
+@custom_permission_required('blog_app.view_category', message='You can not View categories')
 def category(request):
     if request.method == 'POST':
         form = AddCategoryForm(request.POST)

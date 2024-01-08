@@ -26,7 +26,11 @@ class MessagesTabularInline(admin.TabularInline):
     extra = 0
 
 
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ["id", 'text', 'description', 'author']
+
+    fields = ['text', 'description', 'author']
 
 
 @admin.register(Room)

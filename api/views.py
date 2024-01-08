@@ -10,11 +10,13 @@ from rest_framework import permissions
 # region APIVIEW CBV
 class PostListView(APIView):
     def get(self, request):
-        serializer = PostSerializer(Post.objects.all(), many=True)
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = PostSerializer(data=request.data)
+        serializer = PostSerializer(data=request.data, context={'request': request})
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -23,29 +25,29 @@ class PostListView(APIView):
 
 class PostDetailView(APIView):
 
-    def get_post(self, request, pk):
+    def get_post(self, request, slug):
         try:
-            return Post.objects.get(pk=pk)
+            return Post.objects.get(slug=slug)
         except Post.DoesNotExist:
             return Response({'status': status.HTTP_404_NOT_FOUND})
 
-    def get(self, request, pk):
+    def get(self, request, slug):
 
-        post = self.get_post(request, pk)
+        post = self.get_post(request, slug)
 
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, pk):
-        post = self.get_post(request, pk)
+    def put(self, request, slug):
+        post = self.get_post(request, slug)
 
         serializer = PostSerializer(data=request.data, instance=post)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def delete(self, request, pk):
-        post = self.get_post(request, pk)
+    def delete(self, request, slug):
+        post = self.get_post(request, slug)
         post.delete()
         return Response({'message': 'deleting post successfully'}, status=status.HTTP_200_OK)
 
@@ -70,5 +72,5 @@ class PostDetailApiViewGenerics(generics.RetrieveUpdateDestroyAPIView):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 # endregion

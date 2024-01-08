@@ -52,7 +52,7 @@
 										<th>Username</th>
 										<th>Email</th>
 
-										<th class="datatable-nosort">Action</th>
+										<th class="datatable-nosort">Position</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -91,14 +91,18 @@
 													<a class="dropdown-item" href="{% url 'admin_panel:user_page' user.username %}"
 														><i class="dw dw-eye"></i> View</a
 													>
-													{% if request.user.is_superuser or not user.is_staff %}
+                                                    {% if request.user.is_superuser and user.is_superuser%}
+													{% elif request.user.is_superuser or not user.is_staff %}
 													<a class="dropdown-item" href="{% url 'admin_panel:edit user page' user.username %}"
 														><i class="dw dw-edit2"></i> Edit</a
 													>
+
+
 													{% if user != request.user %}
 													<a class="dropdown-item" href="{% url 'admin_panel:delete user' user.username %}"
 														><i class="dw dw-delete-3"></i> Delete</a
 													>
+
 
 													{% endif %}
 													{% endif %}
