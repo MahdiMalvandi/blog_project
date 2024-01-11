@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.views.static import serve
 
+
+
 urlpatterns = [
     path('admin2/', admin.site.urls),
     path('admin/', include('admin_panel.urls'), name='admin_panel'),

@@ -5,7 +5,7 @@ from blog_app.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','first_name', 'last_name', 'email', 'username', 'profile', 'job', 'bio')
+        fields = ('id', 'first_name', 'last_name', 'email', 'username', 'profile', 'job', 'bio')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -23,33 +23,38 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('title', 'body', 'description', 'author', 'created', 'slug', 'thumbnail', 'category')
 
 
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['author'] = {"username":instance.author.username, "email": instance.author.email}
-    #     return representation
+class PostCreateUpdateSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100, required=False)
+    author = serializers.CharField(max_length=100, required=False)
+    body = serializers.CharField(max_length=100, required=False)
+    description = serializers.CharField(max_length=100, required=False)
+    thumbnail = serializers.ImageField(required=False)
+    category = serializers.CharField(max_length=100, required=False)
 
-class PostCreateSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Post
-        fields = ('title', 'body', 'description', 'author', 'thumbnail', 'category',)
 
-    def validate(self,attr):
-        request = self.context.get('request')
 
-        if request and 'author' in request.data:
-            user_instance = User.objects.filter(username=request.data['author']).first()
-            if request:
-                return user_instance
-        return None
+    def create(self, validated_data):
+        image = validated_data['thumbnail'] if validated_data['thumbnail'] else None
 
-    def get_category(self, obj):
-        request = self.context.get('request')
+        author = User.objects.filter(username=validated_data['author']).first()
+        category = Category.objects.filter(text=validated_data['category']).first()
+        post = Post.objects.create(
+            title=validated_data['title'], author=author,
+            body=validated_data['body'], description=validated_data['description'],
+            category=category,
+            thumbnail=image
+        )
+        post.save()
+        return post
 
-        if request and 'category' in request.data:
-            category_instance = Category.objects.filter(text=request.data['category']).first()
-            if category_instance:
-                return CategorySerializer(category_instance).data
-        return None
+
+    def update(self, instance, validated_data):
+        fields_to_update = self.validated_data
+
+        for field, value in fields_to_update.items():
+             setattr(instance, field, value)
+
+        instance.save()
+        return instance
+

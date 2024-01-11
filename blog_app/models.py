@@ -56,7 +56,12 @@ class Post(models.Model):
         ordering = ["-created"]
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        print(Post.objects.filter(slug=slugify(self.title)))
+        if Post.objects.filter(slug=slugify(self.title)).exists():
+
+            self.slug = slugify(self.title) + f'-{self.id}'
+        else:
+            self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
