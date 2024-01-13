@@ -1,3 +1,4 @@
+from rest_framework.generics import get_object_or_404
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,8 +8,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework import permissions
 
+from rest_framework import generics
 
-# region APIVIEW CBV
+
 class PostListView(APIView):
     def get(self, request):
         posts = Post.objects.all()
@@ -29,72 +31,29 @@ class PostListView(APIView):
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-
     serializer_class = PostSerializer
     lookup_field = 'slug'
 
     def get_serializer_class(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ['create', 'update', 'partial_update']:
             return PostCreateUpdateSerializer
         return super().get_serializer_class()
 
-    @action(detail=False, methods=['get'])
-    def get_by_slug(self, request, slug=None):
-        post = Post.objects.get(slug=slug)
-        serializer = self.get_serializer(post)
-        return Response(serializer.data)
 
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentCreateUpdateSerializer
+    http_method_names = ['post', 'delete', 'get', 'put']
 
+    # def get_permissions(self):
+    #     if self.action == 'create':
+    #         permission_classes = [permissions.IsAuthenticated]
+    #     elif self.action in ['destroy']:
+    #         permission_classes = [permissions.IsAdminUser]
+    #     else:
+    #         permission_classes = [permissions.AllowAny]
+    #     return [permission() for permission in permission_classes]
 
-# class PostDetailView(APIView):
-#
-#     def get_post(self, request, slug):
-#         try:
-#             return Post.objects.get(slug=slug)
-#         except Post.DoesNotExist:
-#             return Response(data={'status': status.HTTP_404_NOT_FOUND})
-#
-#     def get(self, request, slug):
-#
-#         post = self.get_post(request, slug)
-#
-#         serializer = PostSerializer(post)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-#
-#     def put(self, request, slug):
-#         post = self.get_post(request, slug)
-#         serializer = PostCreateSerializer(data=request.data, instance=post)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response({'status': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    def list(self, request, *args, **kwargs):
+        return Response({'detail': 'You Can Get All of the Comments'}, status=405)
 
-
-    # def delete(self, request, slug):
-    #     post = self.get_post(request, slug)
-    #     post.delete()
-    #     return Response({'message': 'deleting post successfully'}, status=status.HTTP_200_OK)
-
-
-# endregion
-
-# region MIXINS
-class PostListViewGenerics(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-
-class PostDetailApiViewGenerics(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-
-# endregion
-
-# region VIEWSETS
-
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-# endregion

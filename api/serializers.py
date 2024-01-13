@@ -14,13 +14,51 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    replies = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'post', 'body', 'created', 'replies', 'point']
+
+    def get_replies(self, obj):
+        replies = Comment.objects.filter(reply=obj)
+        reply_serializer = CommentSerializer(replies, many=True)
+
+        return reply_serializer.data
+
+
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     category = CategorySerializer()
+    post_comments = CommentSerializer(many=True)
+    # short_link =
+    similar_posts = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ('title', 'body', 'description', 'author', 'created', 'slug', 'thumbnail', 'category')
+        fields = ('title', 'body', 'description', 'author', 'created', 'slug', 'thumbnail', 'category', 'post_comments','similar_posts')
+
+
+    # def get_short_link(self, instance ):
+    #     request = self.context.get('request', None)
+    #     if request is not None:
+    #         short_link = request.build_absolute_uri('/')[:-1] + f'?q={instance.id}'
+    #         return short_link
+    #     return None
+
+    def get_similar_posts(self, instance):
+        action = self.context['view'].action
+
+        # اگر عملیات درخواست "retrieve" باشد (یعنی درخواست جزئیات یک پست)
+        if action == 'retrieve':
+            similar_posts = Post.objects.select_related('author', 'category').filter(
+                category=instance.category).exclude(
+                id=instance.id)
+            return PostSerializer(similar_posts, many=True).data
+
+        return None
 
 
 class PostCreateUpdateSerializer(serializers.Serializer):
@@ -30,9 +68,6 @@ class PostCreateUpdateSerializer(serializers.Serializer):
     description = serializers.CharField(max_length=100, required=False)
     thumbnail = serializers.ImageField(required=False)
     category = serializers.CharField(max_length=100, required=False)
-
-
-
 
     def create(self, validated_data):
         image = validated_data['thumbnail'] if validated_data['thumbnail'] else None
@@ -48,13 +83,50 @@ class PostCreateUpdateSerializer(serializers.Serializer):
         post.save()
         return post
 
+    def update(self, instance, validated_data):
+        fields_to_update = self.validated_data
+
+        for field, value in fields_to_update.items():
+            setattr(instance, field, value)
+
+        instance.save()
+        return instance
+
+
+class CommentCreateUpdateSerializer(serializers.Serializer):
+    user = serializers.CharField(max_length=1000, required=False)
+    post = serializers.CharField(max_length=1000, required=False)
+    body = serializers.CharField(max_length=100000, required=False)
+    reply = serializers.CharField(max_length=1000, required=False)
+    point = serializers.CharField(max_length=100, required=False)
+
+    def create(self, validated_data):
+        reply = Comment.objects.get(pk=validated_data['reply']) if 'reply' in validated_data else None
+        user = User.objects.filter(username=validated_data['user']).first()
+        post_data = validated_data['post']
+        if isinstance(post_data, str):
+            post = Post.objects.get(slug=post_data)
+        elif isinstance(post_data, int):
+            post = Post.objects.get(pk=post_data)
+        else:
+            raise serializers.ValidationError('Invalid post data')
+
+        comment = Comment.objects.create(
+            user=user
+            , post=post
+            , body=validated_data['body']
+            , point=validated_data['point']
+            , reply=reply
+
+        )
+        comment.save()
+        return comment
 
     def update(self, instance, validated_data):
         fields_to_update = self.validated_data
 
         for field, value in fields_to_update.items():
-             setattr(instance, field, value)
+            setattr(instance, field, value)
 
         instance.save()
         return instance
-
