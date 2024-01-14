@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 import dj_database_url
@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'mathfilters',
     'rest_framework',
-    'api'
+    'api',
+    'rest_framework_simplejwt',
 ]
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
@@ -163,3 +164,13 @@ EMAIL_HOST_PASSWORD = 'mvzxrlzspgquwuht'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "AUTH_HEADER_TYPES": ("token",),
+}

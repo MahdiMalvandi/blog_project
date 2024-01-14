@@ -2,7 +2,7 @@ from rest_framework.generics import get_object_or_404
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -57,3 +57,39 @@ class CommentViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         return Response({'detail': 'You Can Get All of the Comments'}, status=405)
 
+
+class RoomView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            rooms = Room.opens.all()
+        else:
+            rooms = Room.objects.filter(creator=request.user)
+        serializer = RoomSerializer(rooms, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        # 1. ایجاد اتاق
+        room_data = {
+            "title": request.data.get("title"),
+            "type": request.data.get("type"),
+            "body": request.data.get("body"),
+        }
+        room_serializer = RoomSerializer(data=room_data, context={"request": request})
+        if room_serializer.is_valid():
+            room = room_serializer.save()
+
+            # 2. ایجاد اولین پیام برای اتاق
+            message_data = {"body": request.data.get("body"), "user": request.user, "room": room}
+
+            message_serializer = MessageSerializer(data=message_data)
+            if message_serializer.is_valid():
+                message_serializer.save()
+                return Response(room_serializer.data)
+            else:
+                # در صورت ناکامی بودن ایجاد پیام، اتاق را نیز حذف کنید.
+                room.delete()
+                return Response(message_serializer.errors)
+
+        return Response(room_serializer.errors)

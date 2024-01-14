@@ -38,8 +38,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('title', 'body', 'description', 'author', 'created', 'slug', 'thumbnail', 'category', 'post_comments','similar_posts')
-
+        fields = ('title', 'body', 'description', 'author', 'created', 'slug', 'thumbnail', 'category', 'post_comments',
+                  'similar_posts')
 
     # def get_short_link(self, instance ):
     #     request = self.context.get('request', None)
@@ -49,15 +49,13 @@ class PostSerializer(serializers.ModelSerializer):
     #     return None
 
     def get_similar_posts(self, instance):
-        action = self.context['view'].action
-
-        # اگر عملیات درخواست "retrieve" باشد (یعنی درخواست جزئیات یک پست)
-        if action == 'retrieve':
-            similar_posts = Post.objects.select_related('author', 'category').filter(
-                category=instance.category).exclude(
-                id=instance.id)
-            return PostSerializer(similar_posts, many=True).data
-
+        context = self.context.get('view')
+        if context is not None:
+            if context.action == 'retrieve':
+                similar_posts = Post.objects.select_related('author', 'category').filter(
+                    category=instance.category).exclude(
+                    id=instance.id)
+                return PostSerializer(similar_posts, many=True).data
         return None
 
 
@@ -130,3 +128,59 @@ class CommentCreateUpdateSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['user', 'room', 'body']
+
+    def create(self, validated_data):
+        user = User.objects.filter(username=validated_data['user']).first()
+        room_data = validated_data['room']
+
+        if isinstance(room_data, str):
+            room = Room.opens.filter(title=validated_data['room']).first()
+        elif isinstance(room_data, int):
+            room = Room.opens.filter(pk=validated_data['room']).first()
+        else:
+            raise serializers.ValidationError('Invalid room data')
+
+        message = Message.objects.create(
+            user=user,
+            room=room,
+            body=validated_data['body']
+        )
+        message.save()
+        return message
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    messages = serializers.SerializerMethodField()
+    creator = serializers.ReadOnlyField(source='creator.username')
+
+    class Meta:
+        model = Room
+        fields = ('title', 'type', 'creator', 'messages')
+
+    def get_messages(self, obj):
+        messages = Message.objects.filter(room=obj)
+        return MessageSerializer(messages, many=True).data
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        title = validated_data['title']
+        type_of_room = validated_data['type']
+
+        room = Room.objects.create(
+            creator=user,
+            title=title,
+            type=type_of_room
+        )
+
+        room.save()
+        return room
+
+
