@@ -9,9 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('id', 'text', 'author', 'description')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -32,7 +34,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     category = CategorySerializer()
-    post_comments = CommentSerializer(many=True)
+    post_comments = serializers.SerializerMethodField()
     # short_link =
     similar_posts = serializers.SerializerMethodField()
 
@@ -55,7 +57,14 @@ class PostSerializer(serializers.ModelSerializer):
                 similar_posts = Post.objects.select_related('author', 'category').filter(
                     category=instance.category).exclude(
                     id=instance.id)
-                return PostSerializer(similar_posts, many=True).data
+                return PostSerializer(similar_posts, many=True, context={'request': self.context['request']}).data
+        return None
+
+    def get_post_comments(self, instance):
+        if 'view' in self.context:
+            print('self context', self.context['view'].action)
+            if self.context['view'].action == 'retrieve':
+                return CommentSerializer(instance.post_comments.all(), many=True).data
         return None
 
 
@@ -131,22 +140,18 @@ class CommentCreateUpdateSerializer(serializers.Serializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
         fields = ['user', 'room', 'body']
 
-    def create(self, validated_data):
-        user = User.objects.filter(username=validated_data['user']).first()
-        room_data = validated_data['room']
+    def get_user(self, obj):
+        return UserSerializer(obj.user).data
 
-        if isinstance(room_data, str):
-            room = Room.opens.filter(title=validated_data['room']).first()
-        elif isinstance(room_data, int):
-            room = Room.opens.filter(pk=validated_data['room']).first()
-        else:
-            raise serializers.ValidationError('Invalid room data')
+    def create(self, validated_data):
+        user = self.context['request'].user
+        room = validated_data['room']
 
         message = Message.objects.create(
             user=user,
@@ -159,11 +164,12 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
-    creator = serializers.ReadOnlyField(source='creator.username')
+    pk = serializers.IntegerField(source='id', read_only=True)
+    creator = UserSerializer(read_only=True)
 
     class Meta:
         model = Room
-        fields = ('title', 'type', 'creator', 'messages')
+        fields = ('pk', 'title', 'type', 'creator', 'messages')
 
     def get_messages(self, obj):
         messages = Message.objects.filter(room=obj)
@@ -182,5 +188,3 @@ class RoomSerializer(serializers.ModelSerializer):
 
         room.save()
         return room
-
-
