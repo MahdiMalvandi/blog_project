@@ -1,4 +1,5 @@
 from django.contrib.postgres.search import TrigramSimilarity
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
@@ -19,6 +20,10 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     lookup_field = 'slug'
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             return PostCreateUpdateSerializer
@@ -136,4 +141,11 @@ class SearchView(APIView):
 class UserProfileView(APIView):
     def get(self, request, username):
         user = get_object_or_404(User, username=username)
-        # develope user profile page and his posts and activity
+        user_posts = user.user_posts.all()
+        user_serializer = UserSerializer(user)
+        user_posts_serializer = PostSerializer(user_posts, many=True)
+        response = {
+            'user': user_serializer.data,
+            'user_posts': user_posts_serializer.data
+        }
+        return Response(response)
