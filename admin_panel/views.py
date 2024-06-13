@@ -301,7 +301,7 @@ def category(request):
     return render(request, 'admin_panel/category.html', context)
 
 
-@custom_permission_required('blog_app.edit_category', message='You can not edit categories')
+@custom_permission_required('blog_app.change_category', message='You can not edit categories')
 def edit_category(request, text):
     category_selected = Category.objects.get(text=text)
     if request.method == 'POST':
@@ -354,7 +354,7 @@ def delete_profile(request):
 
 @custom_permission_required('blog_app.view_room', message='You can not view rooms')
 def rooms(request):
-    all_rooms = Room.objects.filter(is_open=True)
+    all_rooms = Room.objects.all().order_by('is_open')
     context = {
         'rooms': all_rooms
     }
@@ -363,8 +363,9 @@ def rooms(request):
 
 @custom_permission_required('blog_app.view_room', message='You can not view rooms')
 def room_chat(request, pk):
-    room = get_object_or_404(Room, pk=pk)
-    other_rooms = Room.objects.filter(is_open=True).exclude(pk=pk)
+    room = Room.objects.filter(pk=pk).first()
+
+    other_rooms = Room.objects.all().exclude(pk=pk).order_by('is_open')
 
     context = {
         'other_rooms': other_rooms,

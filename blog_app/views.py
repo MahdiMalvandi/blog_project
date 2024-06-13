@@ -303,7 +303,7 @@ def add_ticket(request):
 
 
 def show_ticket(request, pk):
-    room = get_object_or_404(Room, pk=pk)
+    room = Room.objects.filter(pk=pk).first()
     context = {
         'room': room,
     }

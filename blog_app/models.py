@@ -117,7 +117,6 @@ class Room(models.Model):
     objects = models.Manager()
 
     class Meta:
-        indexes = [models.Index(fields=['is_open', '-created'])]
         ordering = ('-created',)
 
     def __str__(self):

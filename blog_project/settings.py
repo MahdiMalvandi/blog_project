@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'mathfilters',
     'rest_framework_swagger',
     'drf_yasg',
-    'api',
     'rest_framework_simplejwt',
 ]
 CKEDITOR_UPLOAD_PATH = 'uploads/'
@@ -92,21 +91,11 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "blog_db",
-        'USER': 'mahdi',
-        'PASSWORD': 'mahdiml6',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 # Password validation
